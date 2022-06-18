@@ -48,8 +48,8 @@ class _EndOfGameState extends State<EndOfGame> {
                               SizeConfig.blockSizeHorizontal * 2),
                           child: Text(
                             notifier.gameWon
-                                ? "UnDees Saved!"
-                                : "You got a WEDGIE!",
+                                ? "UnDees SAVED!"
+                                : "YOU GOT A WEDGIE!",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontFamily: "Boogaloo",
@@ -80,7 +80,7 @@ class _EndOfGameState extends State<EndOfGame> {
                           ),
                         ),
                         Expanded(
-                            flex: 4,
+                            flex: 3,
                             child: StatsBarChart(
                               orientation: orientation,
                             )),
