@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hang7/animations/route.dart';
+
 import 'package:hang7/constants/key_state.dart';
 import 'package:hang7/data/key_map.dart';
 import 'package:hang7/game_layouts.dart/game_board.dart';
+
 import 'package:hang7/providers/controller.dart';
+import 'package:hang7/welcome_page.dart';
 import 'package:hang7/widgets/app_colors.dart';
 import 'package:hang7/widgets/size_config.dart';
 import 'package:hang7/widgets/stats_bar_chart.dart';
@@ -20,6 +23,14 @@ class EndOfGame extends StatefulWidget {
 }
 
 class _EndOfGameState extends State<EndOfGame> {
+  late bool winner;
+
+  @override
+  void initState() {
+    super.initState();
+    winner = Provider.of<Controller>(context, listen: false).gameWon;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<Controller>(builder: (_, notifier, __) {
@@ -37,29 +48,29 @@ class _EndOfGameState extends State<EndOfGame> {
                 child: SafeArea(
                   child: Padding(
                     padding: EdgeInsets.symmetric(
-                        horizontal: SizeConfig.safeBlockHorizontal * 15),
+                        horizontal: SizeConfig.safeBlockHorizontal * 10),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Expanded(
-                            child: Padding(
+                        Padding(
                           padding: EdgeInsets.all(
                               SizeConfig.blockSizeHorizontal * 2),
                           child: Text(
-                            notifier.gameWon
-                                ? "UnDees SAVED!"
-                                : "YOU GOT A WEDGIE!",
+                            winner ? "UnDees SAVED!" : "YOU GOT A ",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontFamily: "Boogaloo",
                                 fontSize: SizeConfig.blockSizeVertical * 4),
                           ),
-                        )),
-                        Expanded(
-                          flex: 1,
-                          child: notifier.gameWon
-                              ? Image.asset("assets/images/fullBasket.png")
+                        ),
+                        SizedBox(
+                          height: SizeConfig.blockSizeVertical * 10,
+                          child: winner
+                              ? Image.asset(
+                                  "assets/images/fullBasket.png",
+                                  fit: BoxFit.fitHeight,
+                                )
                               : Image.asset("assets/images/wedgie.png"),
                         ),
                         Padding(
@@ -86,25 +97,66 @@ class _EndOfGameState extends State<EndOfGame> {
                             )),
                         Expanded(
                             flex: 1,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    primary: AppColors.green,
-                                  ),
-                                  onPressed: () {
-                                    keysMap.updateAll((key, value) =>
-                                        value = KeyState.unselected);
-                                    notifier.resetGame();
-                                    Navigator.push(context,
-                                        RotationRoute(page: const GameBoard()));
-                                  },
-                                  child: const Text(
-                                    'New Game',
-                                    style: TextStyle(
-                                      fontSize: 30,
-                                    ),
-                                  )),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        primary: AppColors.green,
+                                      ),
+                                      onPressed: () {
+                                        keysMap.updateAll((key, value) =>
+                                            value = KeyState.unselected);
+
+                                        notifier.resetGame();
+                                        Navigator.push(
+                                            context,
+                                            SlideRoute(
+                                                page: const WelcomePage()));
+                                      },
+                                      child: Text(
+                                        'Main Menu',
+                                        style: TextStyle(
+                                          fontSize: orientation ==
+                                                  Orientation.portrait
+                                              ? SizeConfig.blockSizeHorizontal *
+                                                  6
+                                              : SizeConfig.blockSizeVertical *
+                                                  6,
+                                        ),
+                                      )),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        primary: AppColors.green,
+                                      ),
+                                      onPressed: () {
+                                        keysMap.updateAll((key, value) =>
+                                            value = KeyState.unselected);
+
+                                        notifier.resetGame();
+                                        Navigator.push(
+                                            context,
+                                            RotationRoute(
+                                                page: const GameBoard()));
+                                      },
+                                      child: Text(
+                                        'New Game',
+                                        style: TextStyle(
+                                          fontSize: orientation ==
+                                                  Orientation.portrait
+                                              ? SizeConfig.blockSizeHorizontal *
+                                                  6
+                                              : SizeConfig.blockSizeVertical *
+                                                  6,
+                                        ),
+                                      )),
+                                ),
+                              ],
                             ))
                       ],
                     ),

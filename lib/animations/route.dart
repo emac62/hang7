@@ -31,3 +31,29 @@ class RotationRoute extends PageRouteBuilder {
           ),
         );
 }
+
+class SlideRoute extends PageRouteBuilder {
+  final Widget page;
+  SlideRoute({required this.page})
+      : super(
+            pageBuilder: (
+              BuildContext context,
+              Animation<double> animation,
+              Animation<double> secondaryAnimation,
+            ) =>
+                page,
+            transitionDuration: const Duration(milliseconds: 1000),
+            transitionsBuilder: (
+              BuildContext context,
+              Animation<double> animation,
+              Animation<double> secondaryAnimation,
+              Widget child,
+            ) =>
+                SlideTransition(
+                  position: Tween(
+                          begin: const Offset(0.0, -1.0),
+                          end: const Offset(0.0, 0.0))
+                      .animate(animation),
+                  child: child,
+                ));
+}

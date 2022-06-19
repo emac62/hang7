@@ -180,6 +180,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
               if (notifier.isPhone) {
                 isPhone = true;
                 isTablet = false;
+                debugPrint("isPhone: $isPhone");
               } else {
                 isPhone = false;
                 isTablet = true;
@@ -611,7 +612,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                               Border.all(color: Colors.transparent, width: 2)),
                       width: SizeConfig.blockSizeHorizontal * 100,
                       height: notifier.isPhone
-                          ? SizeConfig.blockSizeVertical * 15
+                          ? SizeConfig.blockSizeVertical * 18
                           : orientation == Orientation.portrait
                               ? SizeConfig.blockSizeVertical * 20
                               : SizeConfig.blockSizeVertical * 18,

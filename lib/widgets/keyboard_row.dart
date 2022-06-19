@@ -54,8 +54,12 @@ class KeyboardRow extends StatelessWidget {
                             color: backgroundColor,
                             child: InkWell(
                               onTap: () {
-                                Provider.of<Controller>(context, listen: false)
-                                    .onUserInput(letter: e.key);
+                                (e.value == KeyState.selected ||
+                                        e.value == KeyState.contains)
+                                    ? null
+                                    : Provider.of<Controller>(context,
+                                            listen: false)
+                                        .onUserInput(letter: e.key);
                               },
                               child: Center(
                                 child: Padding(

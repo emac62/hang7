@@ -6,6 +6,7 @@ import 'package:hang7/options.dart';
 import 'package:hang7/providers/controller.dart';
 import 'package:hang7/providers/settings_provider.dart';
 import 'package:hang7/splash.dart';
+import 'package:hang7/welcome_page.dart';
 import 'package:hang7/widgets/material_color.dart';
 import 'package:provider/provider.dart';
 
@@ -48,6 +49,7 @@ class Hang7 extends StatelessWidget {
           "/gameBoard": (context) => const GameBoard(),
           "/options": (context) => const Options(),
           "/endOfGame": (context) => const EndOfGame(),
+          "/welcome": (context) => const WelcomePage()
         },
       ),
     );
