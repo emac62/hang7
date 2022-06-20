@@ -52,6 +52,9 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
   late bool isTablet;
   late bool isPhone;
 
+  late String undeeColor;
+  late Image undeeImage;
+
   resetControllers() {
     showMenu = false;
     showUndee1 = false;
@@ -75,10 +78,10 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
     currentWord = wordGroup1[r].toUpperCase();
   }
 
-  seeSP() async {
+  getUndeeColor() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var gameStats = prefs.getStringList('gameStats');
-    debugPrint(gameStats.toString());
+    undeeColor = prefs.getString('changeColor')!;
+    debugPrint("UndeeColor: $undeeColor");
   }
 
   @override
@@ -90,7 +93,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
           .setCurrentWord(word: currentWord);
       Provider.of<Controller>(context, listen: false).getDevice();
     });
-    seeSP();
+    getUndeeColor();
     debugPrint("init: $currentWord");
   }
 
@@ -180,7 +183,6 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
               if (notifier.isPhone) {
                 isPhone = true;
                 isTablet = false;
-                debugPrint("isPhone: $isPhone");
               } else {
                 isPhone = false;
                 isTablet = true;
@@ -564,7 +566,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                                     CrossAxisAlignment.center,
                                                 children: [
                                                   Text(
-                                                    "You got a Wedgie!",
+                                                    "You got a",
                                                     style: TextStyle(
                                                         fontFamily: "Boogaloo",
                                                         fontSize: isPhone

@@ -53,16 +53,35 @@ class _EndOfGameState extends State<EndOfGame> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        SizedBox(
+                          height: SizeConfig.blockSizeVertical * 2,
+                        ),
                         Padding(
                           padding: EdgeInsets.all(
                               SizeConfig.blockSizeHorizontal * 2),
-                          child: Text(
-                            winner ? "UnDees SAVED!" : "YOU GOT A ",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontFamily: "Boogaloo",
-                                fontSize: SizeConfig.blockSizeVertical * 4),
-                          ),
+                          child: winner
+                              ? Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text("Coins Earned: ",
+                                        style: TextStyle(
+                                            fontSize:
+                                                SizeConfig.blockSizeVertical *
+                                                    4)),
+                                    Text("10",
+                                        style: TextStyle(
+                                            fontSize:
+                                                SizeConfig.blockSizeVertical *
+                                                    4))
+                                  ],
+                                )
+                              : Text(
+                                  "YOU GOT A ",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize:
+                                          SizeConfig.blockSizeVertical * 4),
+                                ),
                         ),
                         SizedBox(
                           height: SizeConfig.blockSizeVertical * 10,
@@ -71,7 +90,28 @@ class _EndOfGameState extends State<EndOfGame> {
                                   "assets/images/fullBasket.png",
                                   fit: BoxFit.fitHeight,
                                 )
-                              : Image.asset("assets/images/wedgie.png"),
+                              : Image.asset(
+                                  "assets/images/wedgie.png",
+                                  fit: BoxFit.fitHeight,
+                                ),
+                        ),
+                        SizedBox(
+                          height: SizeConfig.blockSizeVertical * 1,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("Coins in the Bank: ",
+                                style: TextStyle(
+                                    fontSize:
+                                        SizeConfig.blockSizeVertical * 4)),
+                            Text("100",
+                                style: TextStyle(
+                                    fontSize: SizeConfig.blockSizeVertical * 4))
+                          ],
+                        ),
+                        SizedBox(
+                          height: SizeConfig.blockSizeVertical * 1,
                         ),
                         Padding(
                           padding: EdgeInsets.all(

@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:hang7/providers/controller.dart';
+import 'package:hang7/providers/settings_provider.dart';
 import 'package:hang7/widgets/size_config.dart';
 import 'package:provider/provider.dart';
 
 class UndeeAnimation extends StatefulWidget {
-  const UndeeAnimation(
-      {Key? key,
-      required this.duration,
-      required this.selected,
-      required this.fromLeft,
-      required this.imgSize,
-      required this.orientation})
-      : super(key: key);
+  const UndeeAnimation({
+    Key? key,
+    required this.duration,
+    required this.selected,
+    required this.fromLeft,
+    required this.imgSize,
+    required this.orientation,
+  }) : super(key: key);
   final int duration;
   final bool selected;
   final double fromLeft;
@@ -27,8 +28,31 @@ class _UndeeAnimationState extends State<UndeeAnimation> {
   double fromTopPhoneStart = 0;
   double fromTopPhoneEnd = 0;
   double fromTopTablet = 0;
+  late Image undeeImage;
 
-  getClothesLinePositionStart() {}
+  setUndees() {
+    String pickedColor =
+        Provider.of<SettingsProvider>(context, listen: false).changeColor;
+    debugPrint("pickedColor: $pickedColor");
+    switch (pickedColor) {
+      case "Pink":
+        undeeImage = Image.asset("assets/images/pinkUndees.png");
+        break;
+      case "White":
+        undeeImage = Image.asset("assets/images/whiteUndees.png");
+        break;
+      case "DarkBlue":
+        undeeImage = Image.asset("assets/images/blueUndees.png");
+        break;
+      default:
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setUndees();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +75,7 @@ class _UndeeAnimationState extends State<UndeeAnimation> {
                     : SizeConfig.blockSizeHorizontal * 85,
             duration: Duration(milliseconds: widget.duration),
             curve: Curves.bounceOut,
-            child: Image.asset("assets/images/undees.png"));
+            child: undeeImage);
       },
     );
   }
