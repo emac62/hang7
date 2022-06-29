@@ -6,6 +6,7 @@ import 'package:hang7/options.dart';
 import 'package:hang7/widgets/app_colors.dart';
 import 'package:hang7/widgets/game_stats_alert.dart';
 import 'package:hang7/widgets/size_config.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);
@@ -15,6 +16,21 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
+  int? coins;
+
+  void loadCoins() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      coins = (prefs.getInt('coins') ?? 0);
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadCoins();
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -68,7 +84,7 @@ class _WelcomePageState extends State<WelcomePage> {
             margin: EdgeInsets.only(top: SizeConfig.safeBlockVertical * 5),
             width: SizeConfig.blockSizeHorizontal * 90,
             child: Image.asset(
-              'assets/images/icon.png',
+              'assets/images/wpGraphic.png',
               fit: BoxFit.fitHeight,
             ),
           ),
@@ -164,7 +180,8 @@ class _WelcomePageState extends State<WelcomePage> {
                           debugPrint("Stats pressed");
                           showDialog(
                               context: context,
-                              builder: (_) => const GameStatsAlert(
+                              builder: (_) => GameStatsAlert(
+                                    coins: coins ?? 0,
                                     orientation: Orientation.portrait,
                                   ));
                         },
@@ -270,11 +287,11 @@ class _WelcomePageState extends State<WelcomePage> {
               height: orientation == Orientation.portrait ? 300 : 250,
               child: orientation == Orientation.portrait
                   ? Image.asset(
-                      'assets/images/icon.png',
+                      'assets/images/wpGraphic.png',
                       fit: BoxFit.fitHeight,
                     )
                   : Image.asset(
-                      'assets/images/icon.png',
+                      'assets/images/wpGraphic.png',
                       fit: BoxFit.fitHeight,
                     )),
           // ,
@@ -392,7 +409,8 @@ class _WelcomePageState extends State<WelcomePage> {
                                 debugPrint("Stats pressed");
                                 showDialog(
                                     context: context,
-                                    builder: (_) => const GameStatsAlert(
+                                    builder: (_) => GameStatsAlert(
+                                          coins: coins ?? 0,
                                           orientation: Orientation.portrait,
                                         ));
                               },

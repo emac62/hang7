@@ -7,8 +7,11 @@ import 'package:hang7/widgets/stats_row.dart';
 import 'package:provider/provider.dart';
 
 class GameStatsAlert extends StatelessWidget {
-  const GameStatsAlert({Key? key, required this.orientation}) : super(key: key);
+  const GameStatsAlert(
+      {Key? key, required this.orientation, required this.coins})
+      : super(key: key);
   final Orientation orientation;
+  final int coins;
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +53,7 @@ class GameStatsAlert extends StatelessWidget {
               Expanded(
                   flex: 2,
                   child: StatsRow(
+                    coins: coins,
                     orientation: orientation,
                   )),
               Expanded(

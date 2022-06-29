@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:hang7/animations/coin_spin.dart';
 import 'package:hang7/animations/route.dart';
 
 import 'package:hang7/constants/key_state.dart';
 import 'package:hang7/data/key_map.dart';
 import 'package:hang7/game_layouts.dart/game_board.dart';
-
 import 'package:hang7/providers/controller.dart';
+import 'package:hang7/providers/settings_provider.dart';
 import 'package:hang7/welcome_page.dart';
 import 'package:hang7/widgets/app_colors.dart';
 import 'package:hang7/widgets/size_config.dart';
 import 'package:hang7/widgets/stats_bar_chart.dart';
 import 'package:hang7/widgets/stats_row.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EndOfGame extends StatefulWidget {
   const EndOfGame({
     Key? key,
+    required this.coinsEarned,
   }) : super(key: key);
+  final int coinsEarned;
 
   @override
   State<EndOfGame> createState() => _EndOfGameState();
@@ -24,16 +28,26 @@ class EndOfGame extends StatefulWidget {
 
 class _EndOfGameState extends State<EndOfGame> {
   late bool winner;
+  int? coins;
+
+  void loadCoins() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      coins = (prefs.getInt('coins') ?? 0);
+    });
+  }
 
   @override
   void initState() {
     super.initState();
+    loadCoins();
     winner = Provider.of<Controller>(context, listen: false).gameWon;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<Controller>(builder: (_, notifier, __) {
+    return Consumer2<Controller, SettingsProvider>(
+        builder: (context, notifier, settings, __) {
       return OrientationBuilder(
         builder: ((context, orientation) {
           return Scaffold(
@@ -43,161 +57,131 @@ class _EndOfGameState extends State<EndOfGame> {
                         begin: Alignment.center,
                         end: Alignment.bottomCenter,
                         colors: [Color(0xFF66B8FE), AppColors.lightGray])),
-                height: SizeConfig.safeBlockVertical * 100,
+                height: SizeConfig.safeBlockVertical * 90,
                 width: SizeConfig.safeBlockHorizontal * 100,
                 child: SafeArea(
                   child: Padding(
                     padding: EdgeInsets.symmetric(
                         horizontal: SizeConfig.safeBlockHorizontal * 10),
                     child: Column(
+                      mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SizedBox(
-                          height: SizeConfig.blockSizeVertical * 2,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(
-                              SizeConfig.blockSizeHorizontal * 2),
-                          child: winner
-                              ? Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text("Coins Earned: ",
-                                        style: TextStyle(
-                                            fontSize:
-                                                SizeConfig.blockSizeVertical *
-                                                    4)),
-                                    Text("10",
-                                        style: TextStyle(
-                                            fontSize:
-                                                SizeConfig.blockSizeVertical *
-                                                    4))
-                                  ],
-                                )
-                              : Text(
-                                  "YOU GOT A ",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize:
-                                          SizeConfig.blockSizeVertical * 4),
-                                ),
-                        ),
-                        SizedBox(
-                          height: SizeConfig.blockSizeVertical * 10,
-                          child: winner
-                              ? Image.asset(
-                                  "assets/images/fullBasket.png",
-                                  fit: BoxFit.fitHeight,
-                                )
-                              : Image.asset(
-                                  "assets/images/wedgie.png",
-                                  fit: BoxFit.fitHeight,
-                                ),
-                        ),
-                        SizedBox(
-                          height: SizeConfig.blockSizeVertical * 1,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("Coins in the Bank: ",
-                                style: TextStyle(
-                                    fontSize:
-                                        SizeConfig.blockSizeVertical * 4)),
-                            Text("100",
-                                style: TextStyle(
-                                    fontSize: SizeConfig.blockSizeVertical * 4))
-                          ],
-                        ),
-                        SizedBox(
-                          height: SizeConfig.blockSizeVertical * 1,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(
-                              SizeConfig.blockSizeHorizontal * 2),
-                          child: Text(
-                            'STATISTICS',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontFamily: "Boogaloo",
-                                fontSize: SizeConfig.blockSizeVertical * 4),
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.all(
+                                SizeConfig.blockSizeHorizontal * 2),
+                            child: winner
+                                ? Text('${widget.coinsEarned} coins won!',
+                                    style: TextStyle(
+                                        fontSize:
+                                            SizeConfig.blockSizeVertical * 4))
+                                : Text(
+                                    "YOU GOT A ",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize:
+                                            SizeConfig.blockSizeVertical * 4),
+                                  ),
                           ),
                         ),
                         Expanded(
-                          flex: 1,
+                          child: SizedBox(
+                            height: SizeConfig.blockSizeVertical * 8,
+                            child: winner
+                                ? const CoinSpinAnimation()
+                                : Image.asset(
+                                    "assets/images/wedgie.png",
+                                    fit: BoxFit.fitHeight,
+                                  ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Text("$coins Coins in the Basket",
+                              style: TextStyle(
+                                  fontSize:
+                                      SizeConfig.blockSizeVertical * 3.5)),
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.all(
+                                SizeConfig.blockSizeHorizontal * 2),
+                            child: Text(
+                              'STATISTICS',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontFamily: "Boogaloo",
+                                  fontSize: SizeConfig.blockSizeVertical * 4),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
                           child: StatsRow(
+                            coins: coins ?? 0,
                             orientation: orientation,
                           ),
                         ),
                         Expanded(
-                            flex: 3,
+                            flex: 4,
                             child: StatsBarChart(
                               orientation: orientation,
                             )),
                         Expanded(
-                            flex: 1,
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        primary: AppColors.green,
-                                      ),
-                                      onPressed: () {
-                                        keysMap.updateAll((key, value) =>
-                                            value = KeyState.unselected);
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    primary: AppColors.green,
+                                  ),
+                                  onPressed: () {
+                                    keysMap.updateAll((key, value) =>
+                                        value = KeyState.unselected);
 
-                                        notifier.resetGame();
-                                        Navigator.push(
-                                            context,
-                                            SlideRoute(
-                                                page: const WelcomePage()));
-                                      },
-                                      child: Text(
-                                        'Main Menu',
-                                        style: TextStyle(
-                                          fontSize: orientation ==
-                                                  Orientation.portrait
-                                              ? SizeConfig.blockSizeHorizontal *
-                                                  6
-                                              : SizeConfig.blockSizeVertical *
-                                                  6,
-                                        ),
-                                      )),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        primary: AppColors.green,
-                                      ),
-                                      onPressed: () {
-                                        keysMap.updateAll((key, value) =>
-                                            value = KeyState.unselected);
+                                    notifier.resetGame();
+                                    Navigator.push(context,
+                                        SlideRoute(page: const WelcomePage()));
+                                  },
+                                  child: Text(
+                                    'Main Menu',
+                                    style: TextStyle(
+                                      fontSize: orientation ==
+                                              Orientation.portrait
+                                          ? SizeConfig.blockSizeHorizontal * 6
+                                          : SizeConfig.blockSizeVertical * 6,
+                                    ),
+                                  )),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    primary: AppColors.green,
+                                  ),
+                                  onPressed: () {
+                                    keysMap.updateAll((key, value) =>
+                                        value = KeyState.unselected);
 
-                                        notifier.resetGame();
-                                        Navigator.push(
-                                            context,
-                                            RotationRoute(
-                                                page: const GameBoard()));
-                                      },
-                                      child: Text(
-                                        'New Game',
-                                        style: TextStyle(
-                                          fontSize: orientation ==
-                                                  Orientation.portrait
-                                              ? SizeConfig.blockSizeHorizontal *
-                                                  6
-                                              : SizeConfig.blockSizeVertical *
-                                                  6,
-                                        ),
-                                      )),
-                                ),
-                              ],
-                            ))
+                                    notifier.resetGame();
+                                    Navigator.push(context,
+                                        SlideRoute(page: const GameBoard()));
+                                  },
+                                  child: Text(
+                                    'New Game',
+                                    style: TextStyle(
+                                      fontSize: orientation ==
+                                              Orientation.portrait
+                                          ? SizeConfig.blockSizeHorizontal * 6
+                                          : SizeConfig.blockSizeVertical * 6,
+                                    ),
+                                  )),
+                            ),
+                          ],
+                        ))
                       ],
                     ),
                   ),

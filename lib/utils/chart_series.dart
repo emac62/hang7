@@ -1,6 +1,6 @@
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:hang7/data/chart_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 
 Future<List<charts.Series<ChartModel, String>>> getSeries() async {
   List<ChartModel> data = [];

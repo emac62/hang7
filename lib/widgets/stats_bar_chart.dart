@@ -1,8 +1,8 @@
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:hang7/data/chart_model.dart';
 import 'package:hang7/utils/chart_series.dart';
 import 'package:hang7/widgets/size_config.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 
 class StatsBarChart extends StatelessWidget {
   const StatsBarChart({

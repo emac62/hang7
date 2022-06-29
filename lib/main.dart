@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hang7/end_of_game.dart';
+
 import 'package:hang7/game_layouts.dart/game_board.dart';
 import 'package:hang7/options.dart';
 import 'package:hang7/providers/controller.dart';
@@ -48,7 +48,6 @@ class Hang7 extends StatelessWidget {
           "/": (context) => const SplashScreen(),
           "/gameBoard": (context) => const GameBoard(),
           "/options": (context) => const Options(),
-          "/endOfGame": (context) => const EndOfGame(),
           "/welcome": (context) => const WelcomePage()
         },
       ),

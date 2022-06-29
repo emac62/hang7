@@ -10,6 +10,7 @@ class SettingsProvider with ChangeNotifier {
     _withAnimation = true;
     _withSound = true;
     _changeColor = "Pink";
+
     loadPreferences();
   }
 

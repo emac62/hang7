@@ -17,7 +17,7 @@ showHelpDialog(context) {
                       fontFamily: "Boogaloo",
                       color: AppColors.darkBlue,
                       letterSpacing: 1.25,
-                      fontSize: SizeConfig.blockSizeVertical * 7),
+                      fontSize: SizeConfig.blockSizeVertical * 5),
                 ),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -35,7 +35,7 @@ showHelpDialog(context) {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Text(
-                        "Each _ represents a letter in the word. Choose a letter from the keyboard. If the letter is in the word, it will be replace the _ in the word. If it is not in the word, 1 pair of UnDees will be hung on the clothes line for all to see! ",
+                        "Each _ represents a letter in the word. Choose a letter from the keyboard. If the letter is in the word, it will be replace the _ in the word. If it is not in the word, 1 pair of UnDees will be hung on the clothes line for all to see! Solve the word before you run out.",
                         style: TextStyle(
                             letterSpacing: 1.25,
                             color: AppColors.darkBlue,
@@ -45,7 +45,16 @@ showHelpDialog(context) {
                       ),
                     ),
                     Text(
-                      "Solve the word before you run out.",
+                      "10 coins are awarded for each win. 1 coin is awarded for every undee left in the basket. Regardless of winning, 10 bonus points are awarded for playing your 1st, 10th and 25th games.",
+                      style: TextStyle(
+                          letterSpacing: 1.25,
+                          color: AppColors.darkBlue,
+                          fontSize: orientation == Orientation.portrait
+                              ? SizeConfig.blockSizeHorizontal * 4.5
+                              : SizeConfig.blockSizeHorizontal * 3),
+                    ),
+                    Text(
+                      "In the future, coins will be able to purchase various styles of undees and different word packs.",
                       style: TextStyle(
                           letterSpacing: 1.25,
                           color: AppColors.darkBlue,

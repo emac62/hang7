@@ -52,8 +52,9 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
   late bool isTablet;
   late bool isPhone;
 
-  late String undeeColor;
+  String? undeeColor;
   late Image undeeImage;
+  int coins = 0;
 
   resetControllers() {
     showMenu = false;
@@ -80,8 +81,9 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
 
   getUndeeColor() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    undeeColor = prefs.getString('changeColor')!;
+    undeeColor = prefs.getString('changeColor');
     debugPrint("UndeeColor: $undeeColor");
+    coins = prefs.getInt('coins') ?? 0;
   }
 
   @override
@@ -167,7 +169,11 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                 SchedulerBinding.instance.addPostFrameCallback((_) {
                   Future.delayed(const Duration(milliseconds: 7000), () {
                     Navigator.push(
-                        context, RotationRoute(page: const EndOfGame()));
+                        context,
+                        RotationRoute(
+                            page: const EndOfGame(
+                          coinsEarned: 0,
+                        )));
                   });
                 });
               }
@@ -176,7 +182,11 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                 SchedulerBinding.instance.addPostFrameCallback((_) {
                   Future.delayed(const Duration(milliseconds: 4000), () {
                     Navigator.push(
-                        context, RotationRoute(page: const EndOfGame()));
+                        context,
+                        RotationRoute(
+                            page: EndOfGame(
+                          coinsEarned: (10 + notifier.remainingGuesses),
+                        )));
                   });
                 });
               }
@@ -224,24 +234,21 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                   });
                                 }),
                           ),
-                          // Positioned(
-                          //   top: 8,
-                          //   left: 8,
-                          //   child: ElevatedButton(
-                          //       style: ElevatedButton.styleFrom(
-                          //           shape: const CircleBorder(),
-                          //           padding: const EdgeInsets.all(10),
-                          //           primary: AppColors.backgroundColor),
-                          //       child: const Icon(
-                          //         Icons.lightbulb_outlined,
-                          //         color: AppColors.lightGray,
-                          //       ),
-                          //       onPressed: () {
-                          //         setState(() {
-                          //           toggleMenu();
-                          //         });
-                          //       }),
-                          // ),
+                          Positioned(
+                            top: 25,
+                            left: 20,
+                            child: Text(
+                              '$coins Coins',
+                              style: TextStyle(
+                                letterSpacing: 1.5,
+                                fontSize: isPhone
+                                    ? SizeConfig.blockSizeHorizontal * 4
+                                    : orientation == Orientation.portrait
+                                        ? SizeConfig.blockSizeHorizontal * 3
+                                        : SizeConfig.blockSizeHorizontal * 2,
+                              ),
+                            ),
+                          ),
                           Positioned(
                             top: 8,
                             right: isPhone
@@ -269,6 +276,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                             showDialog(
                                                 context: context,
                                                 builder: (_) => GameStatsAlert(
+                                                      coins: coins,
                                                       orientation: orientation,
                                                     ));
                                           },
