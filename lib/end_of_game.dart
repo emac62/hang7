@@ -100,10 +100,15 @@ class _EndOfGameState extends State<EndOfGame> {
                           ),
                         ),
                         Expanded(
-                          child: Text("$coins Coins in the Basket",
-                              style: TextStyle(
-                                  fontSize:
-                                      SizeConfig.blockSizeVertical * 3.5)),
+                          child: winner
+                              ? Text("$coins Coins in the Basket",
+                                  style: TextStyle(
+                                      fontSize:
+                                          SizeConfig.blockSizeVertical * 3.5))
+                              : Text("Better luck next game!",
+                                  style: TextStyle(
+                                      fontSize:
+                                          SizeConfig.blockSizeVertical * 3.5)),
                         ),
                         Expanded(
                           child: Padding(

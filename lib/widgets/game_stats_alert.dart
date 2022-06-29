@@ -18,6 +18,7 @@ class GameStatsAlert extends StatelessWidget {
     return Consumer<Controller>(builder: (_, notifier, __) {
       return AlertDialog(
         backgroundColor: Colors.transparent,
+        insetPadding: EdgeInsets.zero,
         content: Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
@@ -30,7 +31,7 @@ class GameStatsAlert extends StatelessWidget {
                     AppColors.backgroundColor,
                   ])),
           width: notifier.isPhone
-              ? SizeConfig.blockSizeHorizontal * 95
+              ? SizeConfig.blockSizeHorizontal * 100
               : SizeConfig.blockSizeHorizontal * 75,
           child: Column(
             children: [
