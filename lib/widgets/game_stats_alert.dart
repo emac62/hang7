@@ -29,7 +29,9 @@ class GameStatsAlert extends StatelessWidget {
                     AppColors.lightGray,
                     AppColors.backgroundColor,
                   ])),
-          width: SizeConfig.blockSizeHorizontal * 75,
+          width: notifier.isPhone
+              ? SizeConfig.blockSizeHorizontal * 95
+              : SizeConfig.blockSizeHorizontal * 75,
           child: Column(
             children: [
               Align(
