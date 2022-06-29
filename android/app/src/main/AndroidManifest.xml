@@ -1,7 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.blB.hang7">
+    <uses-permission android:name="android.permission.VIBRATE" />
    <application
-        android:label="hang7"
+        android:label="Hang 7"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hang7/constants/key_state.dart';
 import 'package:hang7/data/key_map.dart';
 import 'package:hang7/providers/controller.dart';
@@ -54,6 +55,7 @@ class KeyboardRow extends StatelessWidget {
                             color: backgroundColor,
                             child: InkWell(
                               onTap: () {
+                                HapticFeedback.lightImpact();
                                 (e.value == KeyState.selected ||
                                         e.value == KeyState.contains)
                                     ? null

@@ -90,7 +90,7 @@ class _OptionsState extends State<Options> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Play animations?',
+                              '**Play animations?',
                               style: TextStyle(
                                 fontSize: notifier.isPhone
                                     ? SizeConfig.blockSizeHorizontal * 5
@@ -128,7 +128,7 @@ class _OptionsState extends State<Options> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('Play sound effects? ',
+                            Text('**Play sound effects? ',
                                 style: TextStyle(
                                   fontSize: notifier.isPhone
                                       ? SizeConfig.blockSizeHorizontal * 5
@@ -158,94 +158,99 @@ class _OptionsState extends State<Options> {
                       Padding(
                         padding:
                             EdgeInsets.all(SizeConfig.blockSizeHorizontal * 2),
-                        child: Column(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  flex: 4,
-                                  child: Text('UnDees Colour:',
-                                      style: TextStyle(
-                                        fontSize: notifier.isPhone
-                                            ? SizeConfig.blockSizeHorizontal * 5
-                                            : orientation ==
-                                                    Orientation.portrait
-                                                ? SizeConfig
-                                                        .blockSizeHorizontal *
-                                                    5
-                                                : SizeConfig.blockSizeVertical *
-                                                    5,
-                                      )),
-                                ),
-                                Flexible(
-                                  flex: 1,
-                                  child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                          elevation: 10,
-                                          shape: const CircleBorder(),
-                                          padding: const EdgeInsets.all(12),
-                                          primary: AppColors.darkBlue),
-                                      child: settingsProvider.changeColor ==
-                                              "DarkBlue"
+                            SizedBox(
+                              height: SizeConfig.blockSizeHorizontal * 12,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    flex: 4,
+                                    child: Text('UnDees Colour:',
+                                        style: TextStyle(
+                                          fontSize: notifier.isPhone
+                                              ? SizeConfig.blockSizeHorizontal *
+                                                  5
+                                              : orientation ==
+                                                      Orientation.portrait
+                                                  ? SizeConfig
+                                                          .blockSizeHorizontal *
+                                                      5
+                                                  : SizeConfig
+                                                          .blockSizeVertical *
+                                                      5,
+                                        )),
+                                  ),
+                                  const Text(
+                                      'Colour will not change during a game.')
+                                ],
+                              ),
+                            ),
+                            Flexible(
+                              flex: 1,
+                              child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      elevation: 10,
+                                      shape: const CircleBorder(),
+                                      padding: const EdgeInsets.all(12),
+                                      primary: AppColors.darkBlue),
+                                  child:
+                                      settingsProvider.changeColor == "DarkBlue"
                                           ? const Text("✓")
                                           : null,
-                                      onPressed: () {
-                                        setState(() {
-                                          settingsProvider
-                                              .setChangeColor("DarkBlue");
-                                        });
-                                      }),
-                                ),
-                                Flexible(
-                                  flex: 1,
-                                  child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        elevation: 10,
-                                        shape: const CircleBorder(),
-                                        padding: const EdgeInsets.all(12),
-                                        primary: Colors.white,
-                                      ),
-                                      child: settingsProvider.changeColor ==
-                                              "White"
-                                          ? const Text(
-                                              "✓",
-                                              style: TextStyle(
-                                                  color: AppColors.darkBlue),
-                                            )
-                                          : null,
-                                      onPressed: () {
-                                        setState(() {
-                                          settingsProvider
-                                              .setChangeColor("White");
-                                        });
-                                      }),
-                                ),
-                                Flexible(
-                                  flex: 1,
-                                  child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        elevation: 10,
-                                        shape: const CircleBorder(),
-                                        padding: const EdgeInsets.all(12),
-                                        primary: const Color(0xffEBA6C8),
-                                      ),
-                                      child: settingsProvider.changeColor ==
-                                              "Pink"
-                                          ? const Text(
-                                              "✓",
-                                              style: TextStyle(
-                                                  color: AppColors.darkBlue),
-                                            )
-                                          : null,
-                                      onPressed: () {
-                                        setState(() {
-                                          settingsProvider
-                                              .setChangeColor("Pink");
-                                        });
-                                      }),
-                                ),
-                              ],
+                                  onPressed: () {
+                                    setState(() {
+                                      settingsProvider
+                                          .setChangeColor("DarkBlue");
+                                    });
+                                  }),
+                            ),
+                            Flexible(
+                              flex: 1,
+                              child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    elevation: 10,
+                                    shape: const CircleBorder(),
+                                    padding: const EdgeInsets.all(12),
+                                    primary: Colors.white,
+                                  ),
+                                  child: settingsProvider.changeColor == "White"
+                                      ? const Text(
+                                          "✓",
+                                          style: TextStyle(
+                                              color: AppColors.darkBlue),
+                                        )
+                                      : null,
+                                  onPressed: () {
+                                    setState(() {
+                                      settingsProvider.setChangeColor("White");
+                                    });
+                                  }),
+                            ),
+                            Flexible(
+                              flex: 1,
+                              child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    elevation: 10,
+                                    shape: const CircleBorder(),
+                                    padding: const EdgeInsets.all(12),
+                                    primary: const Color(0xffEBA6C8),
+                                  ),
+                                  child: settingsProvider.changeColor == "Pink"
+                                      ? const Text(
+                                          "✓",
+                                          style: TextStyle(
+                                              color: AppColors.darkBlue),
+                                        )
+                                      : null,
+                                  onPressed: () {
+                                    setState(() {
+                                      settingsProvider.setChangeColor("Pink");
+                                    });
+                                  }),
                             ),
                           ],
                         ),
@@ -298,7 +303,8 @@ class _OptionsState extends State<Options> {
                                     )))
                           ],
                         ),
-                      )
+                      ),
+                      const Text("** Features coming soon!")
                     ],
                   ),
                 ),

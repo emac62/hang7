@@ -221,7 +221,7 @@ class _WelcomePageState extends State<WelcomePage> {
                           showAboutDialog(
                               context: context,
                               applicationIcon: Image.asset(
-                                'assets/images/icon.png',
+                                'assets/images/seven.png',
                                 height: 60,
                                 width: 60,
                               ),
@@ -444,11 +444,11 @@ class _WelcomePageState extends State<WelcomePage> {
                                 showAboutDialog(
                                     context: context,
                                     applicationIcon: Image.asset(
-                                      'assets/images/icon.png',
+                                      'assets/images/seven.png',
                                       height: 60,
                                       width: 60,
                                     ),
-                                    applicationName: "Hang7",
+                                    applicationName: "Hang 7",
                                     applicationVersion: "1.0.0",
                                     applicationLegalese:
                                         '©2022 borderlineBoomer',
