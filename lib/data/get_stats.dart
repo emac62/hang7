@@ -20,7 +20,6 @@ calculateStats({required bool gameWon, required int remainingGuesses}) async {
     maxStreak = int.parse(savedStats[4]);
     totalUndeesLeft = int.parse(savedStats[5]);
     avgUndeesLeft = int.parse(savedStats[6]);
-    coins = int.parse(savedStats[7]);
   }
   coins = prefs.getInt('coins') ?? 0;
   debugPrint("calculateSats: int gamesPlayed: $gamesPlayed");
@@ -55,7 +54,6 @@ calculateStats({required bool gameWon, required int remainingGuesses}) async {
     maxStreak.toString(),
     totalUndeesLeft.toString(),
     avgUndeesLeft.toString(),
-    coins.toString()
   ]);
 
   debugPrint("calculateStats: gameStats ${prefs.getStringList('gameStats')}");

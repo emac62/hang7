@@ -19,8 +19,10 @@ class EndOfGame extends StatefulWidget {
   const EndOfGame({
     Key? key,
     required this.coinsEarned,
+    required this.prefs,
   }) : super(key: key);
   final int coinsEarned;
+  final SharedPreferences prefs;
 
   @override
   State<EndOfGame> createState() => _EndOfGameState();
@@ -143,8 +145,12 @@ class _EndOfGameState extends State<EndOfGame> {
                                         value = KeyState.unselected);
 
                                     notifier.resetGame();
-                                    Navigator.push(context,
-                                        SlideRoute(page: const WelcomePage()));
+                                    Navigator.push(
+                                        context,
+                                        SlideRoute(
+                                            page: WelcomePage(
+                                          prefs: widget.prefs,
+                                        )));
                                   },
                                   child: Text(
                                     'Main Menu',
@@ -167,8 +173,12 @@ class _EndOfGameState extends State<EndOfGame> {
                                         value = KeyState.unselected);
 
                                     notifier.resetGame();
-                                    Navigator.push(context,
-                                        SlideRoute(page: const GameBoard()));
+                                    Navigator.push(
+                                        context,
+                                        SlideRoute(
+                                            page: GameBoard(
+                                          prefs: widget.prefs,
+                                        )));
                                   },
                                   child: Text(
                                     'New Game',

@@ -9,7 +9,8 @@ import 'package:hang7/widgets/size_config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class WelcomePage extends StatefulWidget {
-  const WelcomePage({Key? key}) : super(key: key);
+  const WelcomePage({Key? key, required this.prefs}) : super(key: key);
+  final SharedPreferences prefs;
 
   @override
   State<WelcomePage> createState() => _WelcomePageState();
@@ -28,7 +29,9 @@ class _WelcomePageState extends State<WelcomePage> {
   @override
   void initState() {
     super.initState();
-    loadCoins();
+    setState(() {
+      coins = (widget.prefs.getInt('coins') ?? 0);
+    });
   }
 
   @override
@@ -160,7 +163,11 @@ class _WelcomePageState extends State<WelcomePage> {
                         ),
                         onPressed: () {
                           Navigator.push(
-                              context, RotationRoute(page: const GameBoard()));
+                              context,
+                              RotationRoute(
+                                  page: GameBoard(
+                                prefs: widget.prefs,
+                              )));
                         },
                         child: Text(
                           "Play",
@@ -201,7 +208,11 @@ class _WelcomePageState extends State<WelcomePage> {
                         ),
                         onPressed: () {
                           Navigator.push(
-                              context, RotationRoute(page: const Options()));
+                              context,
+                              RotationRoute(
+                                  page: Options(
+                                prefs: widget.prefs,
+                              )));
                         },
                         child: Text(
                           "Options",
@@ -391,8 +402,12 @@ class _WelcomePageState extends State<WelcomePage> {
                         children: [
                           TextButton(
                               onPressed: () {
-                                Navigator.push(context,
-                                    RotationRoute(page: const GameBoard()));
+                                Navigator.push(
+                                    context,
+                                    RotationRoute(
+                                        page: GameBoard(
+                                      prefs: widget.prefs,
+                                    )));
                               },
                               child: Text(
                                 "Play",
@@ -426,8 +441,12 @@ class _WelcomePageState extends State<WelcomePage> {
                               )),
                           TextButton(
                               onPressed: () {
-                                Navigator.push(context,
-                                    RotationRoute(page: const Options()));
+                                Navigator.push(
+                                    context,
+                                    RotationRoute(
+                                        page: Options(
+                                      prefs: widget.prefs,
+                                    )));
                               },
                               child: Text(
                                 "Options",

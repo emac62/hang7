@@ -9,7 +9,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Options extends StatefulWidget {
-  const Options({Key? key}) : super(key: key);
+  const Options({Key? key, required this.prefs}) : super(key: key);
+  final SharedPreferences prefs;
 
   @override
   State<Options> createState() => _OptionsState();
@@ -31,7 +32,9 @@ class _OptionsState extends State<Options> {
   @override
   void initState() {
     super.initState();
-    loadCoins();
+    setState(() {
+      coins = (widget.prefs.getInt('coins') ?? 0);
+    });
   }
 
   final Uri _url = Uri.parse('https://dailyquote.ca');

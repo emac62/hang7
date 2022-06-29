@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hang7/providers/controller.dart';
-import 'package:hang7/providers/settings_provider.dart';
 import 'package:hang7/widgets/size_config.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UndeeAnimation extends StatefulWidget {
   const UndeeAnimation({
@@ -12,11 +12,13 @@ class UndeeAnimation extends StatefulWidget {
     required this.fromLeft,
     required this.imgSize,
     required this.orientation,
+    required this.prefs,
   }) : super(key: key);
   final int duration;
   final bool selected;
   final double fromLeft;
   final Orientation orientation;
+  final SharedPreferences prefs;
 
   final double imgSize;
 
@@ -31,21 +33,22 @@ class _UndeeAnimationState extends State<UndeeAnimation> {
   late Image undeeImage;
 
   setUndees() {
-    String pickedColor =
-        Provider.of<SettingsProvider>(context, listen: false).changeColor;
+    String pickedColor = widget.prefs.getString('changeColor') ?? "Pink";
     debugPrint("pickedColor: $pickedColor");
-    switch (pickedColor) {
-      case "Pink":
-        undeeImage = Image.asset("assets/images/pinkUndees.png");
-        break;
-      case "White":
-        undeeImage = Image.asset("assets/images/whiteUndees.png");
-        break;
-      case "DarkBlue":
-        undeeImage = Image.asset("assets/images/blueUndees.png");
-        break;
-      default:
-    }
+    setState(() {
+      switch (pickedColor) {
+        case "Pink":
+          undeeImage = Image.asset("assets/images/pinkUndees.png");
+          break;
+        case "White":
+          undeeImage = Image.asset("assets/images/whiteUndees.png");
+          break;
+        case "DarkBlue":
+          undeeImage = Image.asset("assets/images/blueUndees.png");
+          break;
+        default:
+      }
+    });
   }
 
   @override

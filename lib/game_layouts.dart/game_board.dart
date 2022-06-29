@@ -25,7 +25,9 @@ import '../widgets/size_config.dart';
 class GameBoard extends StatefulWidget {
   const GameBoard({
     Key? key,
+    required this.prefs,
   }) : super(key: key);
+  final SharedPreferences prefs;
 
   @override
   State<GameBoard> createState() => GameBoardState();
@@ -95,7 +97,8 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
           .setCurrentWord(word: currentWord);
       Provider.of<Controller>(context, listen: false).getDevice();
     });
-    getUndeeColor();
+    undeeColor = widget.prefs.getString('changeColor');
+    coins = widget.prefs.getInt("coins") ?? 0;
     debugPrint("init: $currentWord");
   }
 
@@ -171,8 +174,9 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                     Navigator.push(
                         context,
                         RotationRoute(
-                            page: const EndOfGame(
+                            page: EndOfGame(
                           coinsEarned: 0,
+                          prefs: widget.prefs,
                         )));
                   });
                 });
@@ -185,6 +189,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                         context,
                         RotationRoute(
                             page: EndOfGame(
+                          prefs: widget.prefs,
                           coinsEarned: (10 + notifier.remainingGuesses),
                         )));
                   });
@@ -288,7 +293,9 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                             Navigator.push(
                                                 context,
                                                 RotationRoute(
-                                                    page: const Options()));
+                                                    page: Options(
+                                                  prefs: widget.prefs,
+                                                )));
                                           },
                                           icon: Icons.settings),
                                       menuButton(
@@ -450,6 +457,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                   ),
                                 ),
                                 UndeeAnimation(
+                                  prefs: widget.prefs,
                                   duration: 2000,
                                   selected: showUndee1,
                                   fromLeft: isPhone
@@ -461,6 +469,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                   orientation: orientation,
                                 ),
                                 UndeeAnimation(
+                                  prefs: widget.prefs,
                                   duration: 1750,
                                   selected: showUndee2,
                                   fromLeft: isPhone
@@ -472,6 +481,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                   orientation: orientation,
                                 ),
                                 UndeeAnimation(
+                                  prefs: widget.prefs,
                                   duration: 1500,
                                   selected: showUndee3,
                                   fromLeft: isPhone
@@ -483,6 +493,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                   orientation: orientation,
                                 ),
                                 UndeeAnimation(
+                                  prefs: widget.prefs,
                                   duration: 1250,
                                   selected: showUndee4,
                                   fromLeft: isPhone
@@ -494,6 +505,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                   orientation: orientation,
                                 ),
                                 UndeeAnimation(
+                                  prefs: widget.prefs,
                                   duration: 1000,
                                   selected: showUndee5,
                                   fromLeft: isPhone
@@ -505,6 +517,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                   orientation: orientation,
                                 ),
                                 UndeeAnimation(
+                                  prefs: widget.prefs,
                                   duration: 750,
                                   selected: showUndee6,
                                   fromLeft: isPhone
@@ -516,6 +529,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                   orientation: orientation,
                                 ),
                                 UndeeAnimation(
+                                  prefs: widget.prefs,
                                   duration: 500,
                                   selected: showUndee7,
                                   fromLeft: isPhone

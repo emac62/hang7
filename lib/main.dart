@@ -9,25 +9,26 @@ import 'package:hang7/splash.dart';
 import 'package:hang7/welcome_page.dart';
 import 'package:hang7/widgets/material_color.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final double screenWidth =
       MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.width;
-  final double screenHeight =
-      MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.height;
-  debugPrint("screenWidth: $screenWidth");
-  debugPrint("screenHeight: $screenHeight");
+
   if (screenWidth < 600) {
     await SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   }
-
-  runApp(const Hang7());
+  var prefs = await SharedPreferences.getInstance();
+  runApp(Hang7(
+    prefs: prefs,
+  ));
 }
 
 class Hang7 extends StatelessWidget {
-  const Hang7({Key? key}) : super(key: key);
+  const Hang7({Key? key, required this.prefs}) : super(key: key);
+  final SharedPreferences prefs;
 
   // This widget is the root of your application.
   @override
@@ -45,10 +46,14 @@ class Hang7 extends StatelessWidget {
           fontFamily: "Boogaloo",
         ),
         routes: {
-          "/": (context) => const SplashScreen(),
-          "/gameBoard": (context) => const GameBoard(),
-          "/options": (context) => const Options(),
-          "/welcome": (context) => const WelcomePage()
+          "/": (context) => SplashScreen(
+                prefs: prefs,
+              ),
+          "/gameBoard": (context) => GameBoard(
+                prefs: prefs,
+              ),
+          "/options": (context) => Options(prefs: prefs),
+          "/welcome": (context) => WelcomePage(prefs: prefs)
         },
       ),
     );
