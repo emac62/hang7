@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:hang7/animations/route.dart';
-import 'package:hang7/welcome_page.dart';
+import 'package:hang7/pages/welcome_page.dart';
 import 'package:hang7/widgets/app_colors.dart';
 import 'package:hang7/widgets/size_config.dart';
 import 'package:shared_preferences/shared_preferences.dart';

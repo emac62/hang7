@@ -45,7 +45,7 @@ showHelpDialog(context) {
                       ),
                     ),
                     Text(
-                      "10 coins are awarded for each win. 1 coin is awarded for every undee left in the basket. Regardless of winning, 10 bonus points are awarded for playing your 1st, 10th and 25th games.",
+                      "10 coins are awarded for each win. 1 coin is awarded for every undee left in the basket. Regardless of winning, 10 bonus points are awarded for playing your 25th, 50th, 75th and 100th games.",
                       style: TextStyle(
                           letterSpacing: 1.25,
                           color: AppColors.darkBlue,

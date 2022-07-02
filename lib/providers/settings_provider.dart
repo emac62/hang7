@@ -5,11 +5,13 @@ class SettingsProvider with ChangeNotifier {
   late bool _withSound;
   late bool _withAnimation;
   late String _changeColor;
+  late String _wordGroup;
 
   SettingsProvider() {
     _withAnimation = true;
     _withSound = true;
     _changeColor = "Pink";
+    _wordGroup = "Random Words Pack 1";
 
     loadPreferences();
   }
@@ -17,12 +19,14 @@ class SettingsProvider with ChangeNotifier {
   bool get withAnimation => _withAnimation;
   bool get withSound => _withSound;
   String get changeColor => _changeColor;
+  String get wordGroup => _wordGroup;
 
   savePreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool("withAnimation", _withAnimation);
     prefs.setBool("withSound", _withSound);
     prefs.setString("changeColor", _changeColor);
+    prefs.setString("wordGroup", _wordGroup);
   }
 
   void setWithAnimation(bool withAnimation) {
@@ -43,14 +47,22 @@ class SettingsProvider with ChangeNotifier {
     savePreferences();
   }
 
+  void setWordGroup(String wordGroup) {
+    _wordGroup = wordGroup;
+    notifyListeners();
+    savePreferences();
+  }
+
   loadPreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool? withAnimation = prefs.getBool('withAnimation');
     bool? withSound = prefs.getBool('withSound');
     String? changeColor = prefs.getString('changeColor');
+    String? wordGroup = prefs.getString('wordGroup');
 
     if (withSound != null) setWithSound(withSound);
     if (withAnimation != null) setWithAnimation(withAnimation);
     if (changeColor != null) setChangeColor(changeColor);
+    if (wordGroup != null) setWordGroup(wordGroup);
   }
 }

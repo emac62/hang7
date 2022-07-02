@@ -15,7 +15,7 @@ class StatsBarChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(
-          vertical: SizeConfig.blockSizeHorizontal * 2,
+          vertical: SizeConfig.blockSizeHorizontal * 1,
           horizontal: orientation == Orientation.landscape
               ? SizeConfig.blockSizeHorizontal * 15
               : SizeConfig.blockSizeHorizontal * 1),
@@ -26,7 +26,7 @@ class StatsBarChart extends StatelessWidget {
           if (snapshot.hasData) {
             series = snapshot.data as List<charts.Series<ChartModel, String>>;
             return Padding(
-              padding: EdgeInsets.all(SizeConfig.blockSizeVertical * 3),
+              padding: EdgeInsets.all(SizeConfig.blockSizeVertical * 1),
               child: charts.BarChart(
                 series,
                 vertical: false,
@@ -48,7 +48,9 @@ class StatsBarChart extends StatelessWidget {
                 behaviors: [
                   charts.ChartTitle("UnDees Left!",
                       titleStyleSpec: const charts.TextStyleSpec(
-                          fontFamily: "Boogaloo", fontSize: 24))
+                        fontFamily: "Boogaloo",
+                        fontSize: 24,
+                      ))
                 ],
               ),
             );

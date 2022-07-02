@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hang7/providers/controller.dart';
+import 'package:hang7/utils/get_current_undee.dart';
 import 'package:hang7/widgets/size_config.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -32,29 +33,10 @@ class _UndeeAnimationState extends State<UndeeAnimation> {
   double fromTopTablet = 0;
   late Image undeeImage;
 
-  setUndees() {
-    String pickedColor = widget.prefs.getString('changeColor') ?? "Pink";
-    debugPrint("pickedColor: $pickedColor");
-    setState(() {
-      switch (pickedColor) {
-        case "Pink":
-          undeeImage = Image.asset("assets/images/pinkUndees.png");
-          break;
-        case "White":
-          undeeImage = Image.asset("assets/images/whiteUndees.png");
-          break;
-        case "DarkBlue":
-          undeeImage = Image.asset("assets/images/blueUndees.png");
-          break;
-        default:
-      }
-    });
-  }
-
   @override
   void initState() {
     super.initState();
-    setUndees();
+    undeeImage = Image.asset(setUndees(widget.prefs));
   }
 
   @override

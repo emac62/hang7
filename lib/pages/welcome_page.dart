@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hang7/animations/route.dart';
 import 'package:hang7/constants/help.dart';
-import 'package:hang7/game_layouts.dart/game_board.dart';
-import 'package:hang7/options.dart';
+import 'package:hang7/pages/game_board.dart';
+import 'package:hang7/pages/options.dart';
 import 'package:hang7/widgets/app_colors.dart';
 import 'package:hang7/widgets/game_stats_alert.dart';
 import 'package:hang7/widgets/size_config.dart';

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hang7/widgets/size_config.dart';
 
 class StatsBox extends StatelessWidget {
   const StatsBox({
@@ -17,10 +18,10 @@ class StatsBox extends StatelessWidget {
         children: [
           Expanded(
             child: FittedBox(
-              fit: BoxFit.scaleDown,
+              fit: BoxFit.contain,
               alignment: const Alignment(0, 1),
               child: Padding(
-                padding: const EdgeInsets.all(1),
+                padding: const EdgeInsets.all(0.5),
                 child: Text(
                   value.toString(),
                   style: Theme.of(context).textTheme.bodyText2?.copyWith(
@@ -35,13 +36,15 @@ class StatsBox extends StatelessWidget {
             child: FittedBox(
               alignment: const Alignment(0, -1),
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                padding: const EdgeInsets.fromLTRB(4, 0, 4, 4),
                 child: Text(
                   heading,
-                  style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                        fontWeight: FontWeight.normal,
-                        fontSize: 12,
-                      ),
+                  style:
+                      TextStyle(fontSize: SizeConfig.blockSizeVertical * 3.5),
+                  // style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                  //       fontWeight: FontWeight.normal,
+                  //       fontSize: 12,
+                  //     ),
                   textAlign: TextAlign.center,
                 ),
               ),

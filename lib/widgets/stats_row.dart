@@ -14,6 +14,7 @@ class StatsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String gamesPlayed = "0";
     return FutureBuilder(
       future: getGameStats(),
       builder: (context, AsyncSnapshot snapshot) {
@@ -21,10 +22,11 @@ class StatsRow extends StatelessWidget {
         List<String> results = ['0', '0', '0', '0', '0', '0', '0'];
         if (snapshot.hasData) {
           results = snapshot.data as List<String>;
-          var gamesPlayed = results[0];
-          if (gamesPlayed == '1' ||
-              gamesPlayed == '10' ||
-              gamesPlayed == '25') {
+          gamesPlayed = results[0];
+          if (gamesPlayed == '25' ||
+              gamesPlayed == '50' ||
+              gamesPlayed == '75' ||
+              gamesPlayed == '100') {
             bonus = true;
           }
         }
@@ -58,7 +60,17 @@ class StatsRow extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: bonus ? const Text("10 Bonus Coins") : const Text(""),
+                child: bonus
+                    ? Text(
+                        "10 Bonus Coins for $gamesPlayed games played.",
+                        style: TextStyle(
+                            fontSize: SizeConfig.blockSizeVertical * 3),
+                      )
+                    : Text(
+                        "",
+                        style: TextStyle(
+                            fontSize: SizeConfig.blockSizeVertical * 3),
+                      ),
               )
             ],
           ),

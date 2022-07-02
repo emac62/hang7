@@ -60,7 +60,7 @@ class GameStatsAlert extends StatelessWidget {
                     orientation: orientation,
                   )),
               Expanded(
-                  flex: 6,
+                  flex: 4,
                   child: StatsBarChart(
                     orientation: orientation,
                   )),

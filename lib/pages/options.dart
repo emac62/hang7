@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:hang7/animations/route.dart';
+import 'package:hang7/pages/change_undees.dart';
+import 'package:hang7/pages/change_words.dart';
+import 'package:hang7/pages/game_board.dart';
 import 'package:hang7/providers/controller.dart';
 import 'package:hang7/providers/settings_provider.dart';
+import 'package:hang7/utils/get_current_undee.dart';
 import 'package:hang7/widgets/app_colors.dart';
 import 'package:hang7/widgets/game_stats_alert.dart';
 import 'package:hang7/widgets/size_config.dart';
@@ -19,21 +24,19 @@ class Options extends StatefulWidget {
 class _OptionsState extends State<Options> {
   bool showAnimations = true;
   bool playSound = true;
+  String wordGroup = "";
+
+  late Image undeesImage;
 
   int? coins;
-
-  void loadCoins() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      coins = (prefs.getInt('coins') ?? 0);
-    });
-  }
 
   @override
   void initState() {
     super.initState();
     setState(() {
       coins = (widget.prefs.getInt('coins') ?? 0);
+      undeesImage = Image.asset(setUndees(widget.prefs));
+      wordGroup = (widget.prefs.getString('wordGroup')) ?? "Word Pack 1";
     });
   }
 
@@ -82,13 +85,11 @@ class _OptionsState extends State<Options> {
                   padding: EdgeInsets.symmetric(
                       horizontal: SizeConfig.blockSizeHorizontal * 10),
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      SizedBox(
-                        height: SizeConfig.blockSizeVertical * 5,
-                      ),
                       Padding(
                         padding:
-                            EdgeInsets.all(SizeConfig.blockSizeHorizontal * 2),
+                            EdgeInsets.all(SizeConfig.blockSizeHorizontal * 1),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -127,7 +128,7 @@ class _OptionsState extends State<Options> {
                       ),
                       Padding(
                         padding:
-                            EdgeInsets.all(SizeConfig.blockSizeHorizontal * 2),
+                            EdgeInsets.all(SizeConfig.blockSizeHorizontal * 1),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -158,106 +159,96 @@ class _OptionsState extends State<Options> {
                           ],
                         ),
                       ),
-                      Padding(
-                        padding:
-                            EdgeInsets.all(SizeConfig.blockSizeHorizontal * 2),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SizedBox(
-                              height: SizeConfig.blockSizeHorizontal * 12,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    flex: 4,
-                                    child: Text('UnDees Colour:',
-                                        style: TextStyle(
-                                          fontSize: notifier.isPhone
+                      GestureDetector(
+                          child: Padding(
+                            padding: EdgeInsets.all(
+                                SizeConfig.blockSizeHorizontal * 1),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("My Current Undees:",
+                                    style: TextStyle(
+                                      fontSize: notifier.isPhone
+                                          ? SizeConfig.blockSizeHorizontal * 5
+                                          : orientation == Orientation.portrait
                                               ? SizeConfig.blockSizeHorizontal *
                                                   5
-                                              : orientation ==
-                                                      Orientation.portrait
-                                                  ? SizeConfig
-                                                          .blockSizeHorizontal *
-                                                      5
-                                                  : SizeConfig
-                                                          .blockSizeVertical *
-                                                      5,
-                                        )),
-                                  ),
-                                  const Text(
-                                      'Colour will not change during a game.')
-                                ],
-                              ),
+                                              : SizeConfig.blockSizeVertical *
+                                                  5,
+                                    )),
+                                SizedBox(
+                                    height: SizeConfig.blockSizeVertical * 8,
+                                    child: undeesImage),
+                                Icon(
+                                  Icons.arrow_right_outlined,
+                                  color: AppColors.darkBlue,
+                                  size: notifier.isPhone
+                                      ? SizeConfig.blockSizeHorizontal * 8
+                                      : orientation == Orientation.portrait
+                                          ? SizeConfig.blockSizeHorizontal * 5
+                                          : SizeConfig.blockSizeVertical * 5,
+                                ),
+                              ],
                             ),
-                            Flexible(
-                              flex: 1,
-                              child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      elevation: 10,
-                                      shape: const CircleBorder(),
-                                      padding: const EdgeInsets.all(12),
-                                      primary: AppColors.darkBlue),
-                                  child:
-                                      settingsProvider.changeColor == "DarkBlue"
-                                          ? const Text("✓")
-                                          : null,
-                                  onPressed: () {
-                                    setState(() {
-                                      settingsProvider
-                                          .setChangeColor("DarkBlue");
-                                    });
-                                  }),
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                RotationRoute(
+                                    page: ChangeUndees(
+                                  prefs: widget.prefs,
+                                )));
+                          }),
+                      GestureDetector(
+                          child: Padding(
+                            padding: EdgeInsets.all(
+                                SizeConfig.blockSizeHorizontal * 1),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Current Word Pack:",
+                                    style: TextStyle(
+                                      fontSize: notifier.isPhone
+                                          ? SizeConfig.blockSizeHorizontal * 5
+                                          : orientation == Orientation.portrait
+                                              ? SizeConfig.blockSizeHorizontal *
+                                                  5
+                                              : SizeConfig.blockSizeVertical *
+                                                  5,
+                                    )),
+                                Text(
+                                    widget.prefs.getString('wordGroup') ??
+                                        "Word Pack 1",
+                                    style: TextStyle(
+                                      fontSize: notifier.isPhone
+                                          ? SizeConfig.blockSizeHorizontal * 5
+                                          : orientation == Orientation.portrait
+                                              ? SizeConfig.blockSizeHorizontal *
+                                                  5
+                                              : SizeConfig.blockSizeVertical *
+                                                  5,
+                                    )),
+                                Icon(
+                                  Icons.arrow_right_outlined,
+                                  color: AppColors.darkBlue,
+                                  size: notifier.isPhone
+                                      ? SizeConfig.blockSizeHorizontal * 8
+                                      : orientation == Orientation.portrait
+                                          ? SizeConfig.blockSizeHorizontal * 5
+                                          : SizeConfig.blockSizeVertical * 5,
+                                ),
+                              ],
                             ),
-                            Flexible(
-                              flex: 1,
-                              child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    elevation: 10,
-                                    shape: const CircleBorder(),
-                                    padding: const EdgeInsets.all(12),
-                                    primary: Colors.white,
-                                  ),
-                                  child: settingsProvider.changeColor == "White"
-                                      ? const Text(
-                                          "✓",
-                                          style: TextStyle(
-                                              color: AppColors.darkBlue),
-                                        )
-                                      : null,
-                                  onPressed: () {
-                                    setState(() {
-                                      settingsProvider.setChangeColor("White");
-                                    });
-                                  }),
-                            ),
-                            Flexible(
-                              flex: 1,
-                              child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    elevation: 10,
-                                    shape: const CircleBorder(),
-                                    padding: const EdgeInsets.all(12),
-                                    primary: const Color(0xffEBA6C8),
-                                  ),
-                                  child: settingsProvider.changeColor == "Pink"
-                                      ? const Text(
-                                          "✓",
-                                          style: TextStyle(
-                                              color: AppColors.darkBlue),
-                                        )
-                                      : null,
-                                  onPressed: () {
-                                    setState(() {
-                                      settingsProvider.setChangeColor("Pink");
-                                    });
-                                  }),
-                            ),
-                          ],
-                        ),
-                      ),
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                RotationRoute(
+                                    page: ChangeWordPack(
+                                  prefs: widget.prefs,
+                                )));
+                          }),
+                      //
                       Padding(
                         padding:
                             EdgeInsets.all(SizeConfig.blockSizeHorizontal * 2),
@@ -307,7 +298,38 @@ class _OptionsState extends State<Options> {
                           ],
                         ),
                       ),
-                      const Text("** Features coming soon!")
+                      const Text("** Features coming soon!"),
+                      Expanded(
+                        child: Center(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              elevation: 10,
+                              padding: EdgeInsets.all(
+                                notifier.isPhone
+                                    ? SizeConfig.blockSizeHorizontal * 2
+                                    : orientation == Orientation.portrait
+                                        ? SizeConfig.blockSizeHorizontal * 2
+                                        : SizeConfig.blockSizeVertical * 2,
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  RotationRoute(
+                                      page: GameBoard(
+                                    prefs: widget.prefs,
+                                  )));
+                            },
+                            child: Text(
+                              "Play",
+                              style: TextStyle(
+                                  fontSize: SizeConfig.blockSizeVertical * 3),
+                            ),
+                          ),
+                        ),
+                      )
                     ],
                   ),
                 ),

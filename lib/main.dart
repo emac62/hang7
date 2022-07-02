@@ -1,12 +1,13 @@
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:hang7/game_layouts.dart/game_board.dart';
-import 'package:hang7/options.dart';
+import 'package:hang7/pages/game_board.dart';
+import 'package:hang7/pages/options.dart';
 import 'package:hang7/providers/controller.dart';
 import 'package:hang7/providers/settings_provider.dart';
-import 'package:hang7/splash.dart';
-import 'package:hang7/welcome_page.dart';
+import 'package:hang7/pages/splash.dart';
+import 'package:hang7/pages/welcome_page.dart';
 import 'package:hang7/widgets/material_color.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,8 +22,11 @@ Future main() async {
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   }
   var prefs = await SharedPreferences.getInstance();
-  runApp(Hang7(
-    prefs: prefs,
+  runApp(DevicePreview(
+    enabled: false,
+    builder: (context) => Hang7(
+      prefs: prefs,
+    ),
   ));
 }
 
@@ -39,6 +43,9 @@ class Hang7 extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => SettingsProvider()),
       ],
       child: MaterialApp(
+        useInheritedMediaQuery: true,
+        locale: DevicePreview.locale(context),
+        builder: DevicePreview.appBuilder,
         title: 'Hang 7',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
