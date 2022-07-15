@@ -41,6 +41,8 @@ class Controller extends ChangeNotifier {
       isTablet = false;
       isPhone = true;
     }
+    debugPrint("isPhone: $isPhone, isTablet: $isTablet");
+    debugPrint("width: $width, height: $height");
     notifyListeners();
   }
 

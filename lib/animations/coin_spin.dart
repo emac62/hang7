@@ -18,6 +18,8 @@ class _CoinSpinAnimationState extends State<CoinSpinAnimation>
   double degrees = 0;
   bool showCoinBasket = false;
 
+  late Timer _timer;
+
   Widget frontSide() {
     return Container(
         decoration: BoxDecoration(
@@ -36,23 +38,26 @@ class _CoinSpinAnimationState extends State<CoinSpinAnimation>
 
   @override
   void initState() {
-    // Timer.periodic(const Duration(milliseconds: 100), (timer) => {timerCall()});
     Future.delayed(const Duration(milliseconds: 2000), () {
-      Timer.periodic(const Duration(milliseconds: 50), (timer) {
-        setState(() {
-          if (timer.tick >= 46) {
-            timer.cancel();
-            showCoinBasket = true;
-          }
-        });
+      _timer = Timer.periodic(const Duration(milliseconds: 50), (timer) {
+        if (mounted) {
+          setState(() {
+            if (timer.tick >= 46) {
+              timer.cancel();
+              showCoinBasket = true;
+            }
+          });
+        }
       });
     });
 
     super.initState();
   }
 
-  void timerCall() {
-    setState(() {});
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
   }
 
   @override

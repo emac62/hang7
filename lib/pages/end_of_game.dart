@@ -31,11 +31,13 @@ class EndOfGame extends StatefulWidget {
 class _EndOfGameState extends State<EndOfGame> {
   late bool winner;
   int? coins;
+  bool withAnimation = true;
 
   void loadCoins() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       coins = (prefs.getInt('coins') ?? 0);
+      withAnimation = (prefs.getBool('withAnimation') ?? true);
     });
   }
 
@@ -98,16 +100,20 @@ class _EndOfGameState extends State<EndOfGame> {
                           ),
                         ),
                         Expanded(
-                          child: SizedBox(
-                            height: SizeConfig.blockSizeVertical * 8,
-                            child: winner
-                                ? const CoinSpinAnimation()
-                                : Image.asset(
-                                    "assets/images/wedgie.png",
-                                    fit: BoxFit.fitHeight,
-                                  ),
-                          ),
-                        ),
+                            child: SizedBox(
+                          height: SizeConfig.blockSizeVertical * 8,
+                          child: !winner
+                              ? Image.asset(
+                                  "assets/images/wedgie.png",
+                                  fit: BoxFit.fitHeight,
+                                )
+                              : settings.withAnimation
+                                  ? const CoinSpinAnimation()
+                                  : Image.asset(
+                                      'assets/images/BasketOfCoins.png',
+                                      fit: BoxFit.fitHeight,
+                                    ),
+                        )),
                         Expanded(
                           child: winner
                               ? Text(
@@ -144,7 +150,6 @@ class _EndOfGameState extends State<EndOfGame> {
                                 border: Border.all(
                                     color: Colors.transparent, width: 2)),
                             child: StatsRow(
-                              coins: coins ?? 0,
                               orientation: orientation,
                             ),
                           ),
@@ -174,12 +179,19 @@ class _EndOfGameState extends State<EndOfGame> {
                                         value = KeyState.unselected);
 
                                     notifier.resetGame();
-                                    Navigator.push(
-                                        context,
-                                        SlideRoute(
-                                            page: WelcomePage(
-                                          prefs: widget.prefs,
-                                        )));
+                                    withAnimation
+                                        ? Navigator.pushReplacement(
+                                            context,
+                                            SlideRoute(
+                                                page: WelcomePage(
+                                              prefs: widget.prefs,
+                                            )))
+                                        : Navigator.pushReplacement(
+                                            context,
+                                            FadeRoute(
+                                                page: WelcomePage(
+                                              prefs: widget.prefs,
+                                            )));
                                   },
                                   child: Text(
                                     'Main Menu',
@@ -201,12 +213,19 @@ class _EndOfGameState extends State<EndOfGame> {
                                           value = KeyState.unselected);
 
                                       notifier.resetGame();
-                                      Navigator.push(
-                                          context,
-                                          SlideRoute(
-                                              page: GameBoard(
-                                            prefs: widget.prefs,
-                                          )));
+                                      withAnimation
+                                          ? Navigator.pushReplacement(
+                                              context,
+                                              SlideRoute(
+                                                  page: GameBoard(
+                                                prefs: widget.prefs,
+                                              )))
+                                          : Navigator.pushReplacement(
+                                              context,
+                                              FadeRoute(
+                                                  page: GameBoard(
+                                                prefs: widget.prefs,
+                                              )));
                                     },
                                     child: Text(
                                       'New Game',

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 String setUndees(SharedPreferences prefs) {
@@ -23,4 +24,32 @@ String setUndees(SharedPreferences prefs) {
     default:
       return "assets/images/pinkUndees.png";
   }
+}
+
+getMyUndeesImages(SharedPreferences prefs) {
+  List<Widget> myUndees = [];
+  List<String> myStrUndees = prefs.getStringList('undeeColours') ?? ["Pink"];
+  for (var i = 0; i < myStrUndees.length; i++) {
+    switch (myStrUndees[i]) {
+      case "Pink":
+        myUndees.add(Image.asset("assets/images/pinkUndees.png"));
+        break;
+      case "White":
+        myUndees.add(Image.asset("assets/images/whiteUndees.png"));
+        break;
+      case "DarkBlue":
+        myUndees.add(Image.asset("assets/images/blueUndees.png"));
+        break;
+      case "DarkBlueTighties":
+        myUndees.add(Image.asset("assets/images/blueTighties.png"));
+        break;
+      case "WhiteTighties":
+        myUndees.add(Image.asset("assets/images/whiteTighties.png"));
+        break;
+      case "GrayTighties":
+        myUndees.add(Image.asset("assets/images/grayTighties.png"));
+        break;
+    }
+  }
+  return myUndees;
 }

@@ -12,6 +12,7 @@ import 'package:hang7/data/key_map.dart';
 import 'package:hang7/pages/end_of_game.dart';
 import 'package:hang7/pages/options.dart';
 import 'package:hang7/providers/controller.dart';
+import 'package:hang7/providers/settings_provider.dart';
 import 'package:hang7/widgets/keyboard_row.dart';
 import 'package:hang7/widgets/game_stats_alert.dart';
 import 'package:hang7/widgets/word_grid.dart';
@@ -77,15 +78,28 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
   }
 
   getWord() {
-    final r = Random().nextInt(wordGroup1.length);
-    currentWord = wordGroup1[r].toUpperCase();
-  }
-
-  getUndeeColor() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    undeeColor = prefs.getString('changeColor');
-    debugPrint("UndeeColor: $undeeColor");
-    coins = prefs.getInt('coins') ?? 0;
+    String group = widget.prefs.getString('wordGroup') ?? "Random 1";
+    List<String> words = [];
+    switch (group) {
+      case "Random 1":
+        words = wordGroup1;
+        break;
+      case "Random 2":
+        words = wordGroup2;
+        break;
+      case "Random 3":
+        words = wordGroup3;
+        break;
+      case "Random 4":
+        words = wordGroup4;
+        break;
+      case "Random 5":
+        words = wordGroup5;
+        break;
+      default:
+    }
+    final r = Random().nextInt(words.length);
+    currentWord = words[r].toUpperCase();
   }
 
   @override
@@ -153,6 +167,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    var settingsProvider = Provider.of<SettingsProvider>(context);
     return OrientationBuilder(
       builder: ((context, orientation) {
         return Scaffold(
@@ -171,13 +186,21 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
 
                 SchedulerBinding.instance.addPostFrameCallback((_) {
                   Future.delayed(const Duration(milliseconds: 7000), () {
-                    Navigator.push(
-                        context,
-                        RotationRoute(
-                            page: EndOfGame(
-                          coinsEarned: 0,
-                          prefs: widget.prefs,
-                        )));
+                    settingsProvider.withAnimation
+                        ? Navigator.push(
+                            context,
+                            RotationRoute(
+                                page: EndOfGame(
+                              coinsEarned: 0,
+                              prefs: widget.prefs,
+                            )))
+                        : Navigator.push(
+                            context,
+                            FadeRoute(
+                                page: EndOfGame(
+                              coinsEarned: 0,
+                              prefs: widget.prefs,
+                            )));
                   });
                 });
               }
@@ -185,13 +208,21 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                 debugPrint("gameBoard: Game Won");
                 SchedulerBinding.instance.addPostFrameCallback((_) {
                   Future.delayed(const Duration(milliseconds: 4000), () {
-                    Navigator.push(
-                        context,
-                        RotationRoute(
-                            page: EndOfGame(
-                          prefs: widget.prefs,
-                          coinsEarned: (10 + notifier.remainingGuesses),
-                        )));
+                    settingsProvider.withAnimation
+                        ? Navigator.push(
+                            context,
+                            RotationRoute(
+                                page: EndOfGame(
+                              prefs: widget.prefs,
+                              coinsEarned: (10 + notifier.remainingGuesses),
+                            )))
+                        : Navigator.push(
+                            context,
+                            FadeRoute(
+                                page: EndOfGame(
+                              prefs: widget.prefs,
+                              coinsEarned: (10 + notifier.remainingGuesses),
+                            )));
                   });
                 });
               }
@@ -286,18 +317,28 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                                     ));
                                           },
                                           icon: Icons.bar_chart),
-                                      menuButton(
-                                          orientation: orientation,
-                                          onPressed: () {
-                                            toggleMenu();
-                                            Navigator.push(
-                                                context,
-                                                RotationRoute(
-                                                    page: Options(
-                                                  prefs: widget.prefs,
-                                                )));
-                                          },
-                                          icon: Icons.settings),
+                                      notifier.gameCompleted
+                                          ? menuButton(
+                                              orientation: orientation,
+                                              onPressed: () {
+                                                toggleMenu();
+
+                                                settingsProvider.withAnimation
+                                                    ? Navigator.push(
+                                                        context,
+                                                        RotationRoute(
+                                                            page: Options(
+                                                          prefs: widget.prefs,
+                                                        )))
+                                                    : Navigator.push(
+                                                        context,
+                                                        FadeRoute(
+                                                            page: Options(
+                                                          prefs: widget.prefs,
+                                                        )));
+                                              },
+                                              icon: Icons.settings)
+                                          : const Text(""),
                                       menuButton(
                                         orientation: orientation,
                                         onPressed: () {

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hang7/providers/settings_provider.dart';
+import 'package:provider/provider.dart';
 
 class Dance extends StatefulWidget {
   const Dance(
@@ -60,9 +62,12 @@ class _DanceState extends State<Dance> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return SlideTransition(
-      position: _animation,
-      child: widget.child,
-    );
+    var settingsProvider = Provider.of<SettingsProvider>(context);
+    return settingsProvider.withAnimation
+        ? SlideTransition(
+            position: _animation,
+            child: widget.child,
+          )
+        : widget.child;
   }
 }

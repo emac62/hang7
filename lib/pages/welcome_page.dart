@@ -6,7 +6,10 @@ import 'package:hang7/pages/options.dart';
 import 'package:hang7/widgets/app_colors.dart';
 import 'package:hang7/widgets/game_stats_alert.dart';
 import 'package:hang7/widgets/size_config.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../providers/controller.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({Key? key, required this.prefs}) : super(key: key);
@@ -18,19 +21,17 @@ class WelcomePage extends StatefulWidget {
 
 class _WelcomePageState extends State<WelcomePage> {
   int? coins;
-
-  void loadCoins() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      coins = (prefs.getInt('coins') ?? 0);
-    });
-  }
+  bool withAnimation = true;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<Controller>(context, listen: false).getDevice();
+    });
     setState(() {
       coins = (widget.prefs.getInt('coins') ?? 0);
+      withAnimation = widget.prefs.getBool('withAnimation') ?? true;
     });
   }
 
@@ -294,17 +295,21 @@ class _WelcomePageState extends State<WelcomePage> {
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(
-              height: orientation == Orientation.portrait ? 300 : 250,
-              child: orientation == Orientation.portrait
-                  ? Image.asset(
-                      'assets/images/wpGraphic.png',
-                      fit: BoxFit.fitHeight,
-                    )
-                  : Image.asset(
-                      'assets/images/wpGraphic.png',
-                      fit: BoxFit.fitHeight,
-                    )),
+          Padding(
+            padding: EdgeInsets.symmetric(
+                vertical: SizeConfig.blockSizeVertical * 2.5),
+            child: SizedBox(
+                height: orientation == Orientation.portrait ? 300 : 250,
+                child: orientation == Orientation.portrait
+                    ? Image.asset(
+                        'assets/images/wpGraphic.png',
+                        fit: BoxFit.fitHeight,
+                      )
+                    : Image.asset(
+                        'assets/images/wpGraphic.png',
+                        fit: BoxFit.fitHeight,
+                      )),
+          ),
           // ,
           Expanded(
             child: Row(
@@ -392,7 +397,7 @@ class _WelcomePageState extends State<WelcomePage> {
                               AppColors.green,
                             ])),
                     width: orientation == Orientation.portrait
-                        ? SizeConfig.blockSizeHorizontal * 45
+                        ? SizeConfig.blockSizeHorizontal * 40
                         : SizeConfig.blockSizeHorizontal * 25,
                     child: Padding(
                       padding: const EdgeInsets.only(right: 20),
@@ -402,12 +407,19 @@ class _WelcomePageState extends State<WelcomePage> {
                         children: [
                           TextButton(
                               onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    RotationRoute(
-                                        page: GameBoard(
-                                      prefs: widget.prefs,
-                                    )));
+                                withAnimation
+                                    ? Navigator.push(
+                                        context,
+                                        RotationRoute(
+                                            page: GameBoard(
+                                          prefs: widget.prefs,
+                                        )))
+                                    : Navigator.push(
+                                        context,
+                                        FadeRoute(
+                                            page: GameBoard(
+                                          prefs: widget.prefs,
+                                        )));
                               },
                               child: Text(
                                 "Play",
@@ -441,12 +453,19 @@ class _WelcomePageState extends State<WelcomePage> {
                               )),
                           TextButton(
                               onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    RotationRoute(
-                                        page: Options(
-                                      prefs: widget.prefs,
-                                    )));
+                                withAnimation
+                                    ? Navigator.push(
+                                        context,
+                                        RotationRoute(
+                                            page: Options(
+                                          prefs: widget.prefs,
+                                        )))
+                                    : Navigator.push(
+                                        context,
+                                        FadeRoute(
+                                            page: Options(
+                                          prefs: widget.prefs,
+                                        )));
                               },
                               child: Text(
                                 "Options",

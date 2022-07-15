@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:hang7/providers/controller.dart';
+import 'package:hang7/providers/settings_provider.dart';
 import 'package:hang7/widgets/app_colors.dart';
 import 'package:hang7/widgets/size_config.dart';
 import 'package:provider/provider.dart';
@@ -38,6 +39,7 @@ class _LetterTileState extends State<LetterTile>
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+    var settingsProvider = Provider.of<SettingsProvider>(context);
     return Consumer<Controller>(builder: (_, notifier, __) {
       String text = "";
       text = notifier.separatedBlankWord[widget.index];
@@ -57,36 +59,49 @@ class _LetterTileState extends State<LetterTile>
         isTablet = true;
       }
 
-      return AnimatedBuilder(
-        animation: _animationController,
-        builder: (_, child) {
-          double flip = 0;
-          if (_animationController.value > 0.5) {
-            flip = pi;
-          }
-          return Transform(
-            alignment: Alignment.center,
-            transform: Matrix4.identity()
-              ..rotateX(_animationController.value * pi)
-              ..rotateX(flip),
-            child: Container(
-              decoration: BoxDecoration(
-                  border: Border.all(color: Colors.transparent, width: 2)),
-              child: Text(
-                text,
-                style: TextStyle(
-                    fontFamily: "Boogaloo",
-                    color: _fontColor,
-                    fontSize: isPhone
-                        ? SizeConfig.blockSizeVertical * 7.5
-                        : widget.orientation == Orientation.portrait
-                            ? SizeConfig.blockSizeVertical * 10
-                            : SizeConfig.blockSizeVertical * 8),
-              ),
-            ),
-          );
-        },
-      );
+      return settingsProvider.withAnimation
+          ? AnimatedBuilder(
+              animation: _animationController,
+              builder: (_, child) {
+                double flip = 0;
+                if (_animationController.value > 0.5) {
+                  flip = pi;
+                }
+                return Transform(
+                  alignment: Alignment.center,
+                  transform: Matrix4.identity()
+                    ..rotateX(_animationController.value * pi)
+                    ..rotateX(flip),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        border:
+                            Border.all(color: Colors.transparent, width: 2)),
+                    child: Text(
+                      text,
+                      style: TextStyle(
+                          fontFamily: "Boogaloo",
+                          color: _fontColor,
+                          fontSize: isPhone
+                              ? SizeConfig.blockSizeVertical * 7.5
+                              : widget.orientation == Orientation.portrait
+                                  ? SizeConfig.blockSizeVertical * 10
+                                  : SizeConfig.blockSizeVertical * 8),
+                    ),
+                  ),
+                );
+              },
+            )
+          : Text(
+              text,
+              style: TextStyle(
+                  fontFamily: "Boogaloo",
+                  color: _fontColor,
+                  fontSize: isPhone
+                      ? SizeConfig.blockSizeVertical * 7.5
+                      : widget.orientation == Orientation.portrait
+                          ? SizeConfig.blockSizeVertical * 10
+                          : SizeConfig.blockSizeVertical * 8),
+            );
     });
   }
 }

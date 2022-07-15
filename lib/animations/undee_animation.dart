@@ -32,11 +32,13 @@ class _UndeeAnimationState extends State<UndeeAnimation> {
   double fromTopPhoneEnd = 0;
   double fromTopTablet = 0;
   late Image undeeImage;
+  bool withAnimation = true;
 
   @override
   void initState() {
     super.initState();
     undeeImage = Image.asset(setUndees(widget.prefs));
+    withAnimation = widget.prefs.getBool('withAnimation') ?? true;
   }
 
   @override
@@ -44,23 +46,39 @@ class _UndeeAnimationState extends State<UndeeAnimation> {
     SizeConfig().init(context);
     return Consumer<Controller>(
       builder: (_, notifier, __) {
-        return AnimatedPositioned(
-            width: widget.selected ? widget.imgSize : 0,
-            top: widget.selected
-                ? notifier.isPhone
-                    ? SizeConfig.blockSizeVertical * 9.5
-                    : widget.orientation == Orientation.portrait
-                        ? SizeConfig.blockSizeVertical * 6
-                        : SizeConfig.blockSizeVertical * 9
-                : SizeConfig.blockSizeVertical * 20,
-            left: widget.selected
-                ? widget.fromLeft
-                : notifier.isTablet
-                    ? SizeConfig.blockSizeHorizontal * 75
-                    : SizeConfig.blockSizeHorizontal * 85,
-            duration: Duration(milliseconds: widget.duration),
-            curve: Curves.bounceOut,
-            child: undeeImage);
+        return withAnimation
+            ? AnimatedPositioned(
+                width: widget.selected ? widget.imgSize : 0,
+                top: widget.selected
+                    ? notifier.isPhone
+                        ? SizeConfig.blockSizeVertical * 9.5
+                        : widget.orientation == Orientation.portrait
+                            ? SizeConfig.blockSizeVertical * 6
+                            : SizeConfig.blockSizeVertical * 9
+                    : SizeConfig.blockSizeVertical * 20,
+                left: widget.selected
+                    ? widget.fromLeft
+                    : notifier.isTablet
+                        ? SizeConfig.blockSizeHorizontal * 75
+                        : SizeConfig.blockSizeHorizontal * 85,
+                duration: Duration(milliseconds: widget.duration),
+                curve: Curves.bounceOut,
+                child: undeeImage)
+            : Positioned(
+                width: widget.selected ? widget.imgSize : 0,
+                top: widget.selected
+                    ? notifier.isPhone
+                        ? SizeConfig.blockSizeVertical * 9.5
+                        : widget.orientation == Orientation.portrait
+                            ? SizeConfig.blockSizeVertical * 6
+                            : SizeConfig.blockSizeVertical * 9
+                    : SizeConfig.blockSizeVertical * 20,
+                left: widget.selected
+                    ? widget.fromLeft
+                    : notifier.isTablet
+                        ? SizeConfig.blockSizeHorizontal * 75
+                        : SizeConfig.blockSizeHorizontal * 85,
+                child: undeeImage);
       },
     );
   }

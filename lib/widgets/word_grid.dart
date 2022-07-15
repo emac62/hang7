@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hang7/animations/dance.dart';
 import 'package:hang7/providers/controller.dart';
+import 'package:hang7/providers/settings_provider.dart';
 import 'package:hang7/widgets/letter_tile.dart';
 import 'package:hang7/widgets/size_config.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +23,7 @@ class _WordGridState extends State<WordGrid> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+
     return GridView.builder(
       physics: const NeverScrollableScrollPhysics(),
       padding: EdgeInsets.symmetric(
@@ -41,6 +43,7 @@ class _WordGridState extends State<WordGrid> {
                   : 0.5),
       itemCount: 7,
       itemBuilder: (context, index) {
+        var settingsProvider = Provider.of<SettingsProvider>(context);
         return Consumer<Controller>(
           builder: (_, notifier, __) {
             bool animate = false;
@@ -59,13 +62,18 @@ class _WordGridState extends State<WordGrid> {
                   border: Border.all(color: Colors.transparent, width: 2)),
               child: Align(
                 alignment: Alignment.bottomCenter,
-                child: Dance(
-                    animate: animate,
-                    delay: danceDelay,
-                    child: LetterTile(
-                      index: index,
-                      orientation: widget.orientation,
-                    )),
+                child: settingsProvider.withAnimation
+                    ? Dance(
+                        animate: animate,
+                        delay: danceDelay,
+                        child: LetterTile(
+                          index: index,
+                          orientation: widget.orientation,
+                        ))
+                    : LetterTile(
+                        index: index,
+                        orientation: widget.orientation,
+                      ),
               ),
             );
           },

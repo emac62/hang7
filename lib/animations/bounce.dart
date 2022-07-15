@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hang7/providers/settings_provider.dart';
+import 'package:provider/provider.dart';
 
 class Bounce extends StatefulWidget {
   const Bounce({required this.child, required this.animate, Key? key})
@@ -50,9 +52,12 @@ class _BounceState extends State<Bounce> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return ScaleTransition(
-      scale: _animation,
-      child: widget.child,
-    );
+    var settingsProvider = Provider.of<SettingsProvider>(context);
+    return settingsProvider.withAnimation
+        ? ScaleTransition(
+            scale: _animation,
+            child: widget.child,
+          )
+        : widget.child;
   }
 }

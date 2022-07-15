@@ -56,7 +56,6 @@ class GameStatsAlert extends StatelessWidget {
               Expanded(
                   flex: 2,
                   child: StatsRow(
-                    coins: coins,
                     orientation: orientation,
                   )),
               Expanded(

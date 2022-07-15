@@ -22,9 +22,8 @@ calculateStats({required bool gameWon, required int remainingGuesses}) async {
     avgUndeesLeft = int.parse(savedStats[6]);
   }
   coins = prefs.getInt('coins') ?? 0;
-  debugPrint("calculateSats: int gamesPlayed: $gamesPlayed");
+
   gamesPlayed += 1;
-  debugPrint("calculateSats: gamesPlayed: $gamesPlayed");
 
   if (gamesPlayed == 1 || gamesPlayed == 10 || gamesPlayed == 25) {
     coins = coins + 10;

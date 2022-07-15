@@ -7,10 +7,8 @@ class StatsRow extends StatelessWidget {
   const StatsRow({
     Key? key,
     required this.orientation,
-    required this.coins,
   }) : super(key: key);
   final Orientation orientation;
-  final int coins;
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +53,6 @@ class StatsRow extends StatelessWidget {
                     StatsBox(
                         heading: "Average\nUndees\nLeft",
                         value: int.parse(results[6])),
-                    StatsBox(heading: "Banked\nCoins", value: coins)
                   ],
                 ),
               ),

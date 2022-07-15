@@ -19,14 +19,22 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(
-        const Duration(seconds: 2),
-        () => Navigator.push(
-            context,
-            RotationRoute(
-                page: WelcomePage(
-              prefs: widget.prefs,
-            ))));
+    final bool withAnimation = widget.prefs.getBool('withAnimation') ?? true;
+    Timer(const Duration(seconds: 2), () {
+      withAnimation
+          ? Navigator.push(
+              context,
+              RotationRoute(
+                  page: WelcomePage(
+                prefs: widget.prefs,
+              )))
+          : Navigator.push(
+              context,
+              FadeRoute(
+                  page: WelcomePage(
+                prefs: widget.prefs,
+              )));
+    });
   }
 
   @override
