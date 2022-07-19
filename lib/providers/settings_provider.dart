@@ -5,14 +5,14 @@ class SettingsProvider with ChangeNotifier {
   late bool _withSound;
   late bool _withAnimation;
   late String _changeColor;
-  late String _wordGroup;
+  late String _wordPack;
   late List<String> _undeeColours;
 
   SettingsProvider() {
     _withAnimation = true;
     _withSound = true;
     _changeColor = "Pink";
-    _wordGroup = "Random 1";
+    _wordPack = "WordPack 1";
     _undeeColours = ["Pink"];
 
     loadPreferences();
@@ -21,7 +21,7 @@ class SettingsProvider with ChangeNotifier {
   bool get withAnimation => _withAnimation;
   bool get withSound => _withSound;
   String get changeColor => _changeColor;
-  String get wordGroup => _wordGroup;
+  String get wordPack => _wordPack;
   List get undeeColours => _undeeColours;
 
   savePreferences() async {
@@ -29,7 +29,7 @@ class SettingsProvider with ChangeNotifier {
     prefs.setBool("withAnimation", _withAnimation);
     prefs.setBool("withSound", _withSound);
     prefs.setString("changeColor", _changeColor);
-    prefs.setString("wordGroup", _wordGroup);
+    prefs.setString("wordPack", _wordPack);
     prefs.setStringList('undeeColours', _undeeColours);
   }
 
@@ -51,8 +51,8 @@ class SettingsProvider with ChangeNotifier {
     savePreferences();
   }
 
-  void setWordGroup(String wordGroup) {
-    _wordGroup = wordGroup;
+  void setWordPack(String wordPack) {
+    _wordPack = wordPack;
     notifyListeners();
     savePreferences();
   }
@@ -66,13 +66,13 @@ class SettingsProvider with ChangeNotifier {
     bool? withAnimation = prefs.getBool('withAnimation');
     bool? withSound = prefs.getBool('withSound');
     String? changeColor = prefs.getString('changeColor');
-    String? wordGroup = prefs.getString('wordGroup');
+    String? wordPack = prefs.getString('wordPack');
     List<String>? undeeColours = prefs.getStringList('undeeColours');
 
     if (withSound != null) setWithSound(withSound);
     if (withAnimation != null) setWithAnimation(withAnimation);
     if (changeColor != null) setChangeColor(changeColor);
-    if (wordGroup != null) setWordGroup(wordGroup);
+    if (wordPack != null) setWordPack(wordPack);
     if (undeeColours != null) setUndeeColours(undeeColours);
   }
 }

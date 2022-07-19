@@ -334,10 +334,11 @@ class _WelcomePageState extends State<WelcomePage> {
                           child: Text(
                             "_______",
                             style: TextStyle(
+                                fontWeight: FontWeight.bold,
                                 letterSpacing: 12,
                                 fontSize: orientation == Orientation.portrait
                                     ? SizeConfig.blockSizeHorizontal * 10
-                                    : SizeConfig.blockSizeHorizontal * 8),
+                                    : SizeConfig.blockSizeHorizontal * 5),
                           ),
                         ),
                         Text(
@@ -364,12 +365,12 @@ class _WelcomePageState extends State<WelcomePage> {
                               ? EdgeInsets.only(
                                   top: SizeConfig.blockSizeHorizontal * 20)
                               : EdgeInsets.only(
-                                  top: SizeConfig.blockSizeVertical * 10),
+                                  top: SizeConfig.blockSizeVertical * 5),
                           child: Image.asset(
                             'assets/images/fullBasket.png',
                             width: orientation == Orientation.portrait
                                 ? SizeConfig.safeBlockVertical * 33
-                                : SizeConfig.safeBlockHorizontal * 30,
+                                : SizeConfig.safeBlockHorizontal * 25,
                           ),
                         ),
                       ],

@@ -20,18 +20,18 @@ class ChangeWordPack extends StatefulWidget {
 }
 
 class _ChangeWordPackState extends State<ChangeWordPack> {
-  List<String> myWordPacks = ["Random 1"];
+  List<String> myWordPacks = ["WorkPack 1"];
 
   List<String> wordPacks = [
-    "Random 2",
-    "Random 3",
-    "Random 4",
-    "Random 5",
-    "Random 6",
-    "Random 7",
-    "Random 8",
-    "Random 9",
-    "Random 10",
+    "WorkPack 2",
+    "WorkPack 3",
+    "WorkPack 4",
+    "WorkPack 5",
+    "WorkPack 6",
+    "WorkPack 7",
+    "WorkPack 8",
+    "WorkPack 9",
+    "WorkPack 10",
   ];
 
   late int coins;
@@ -40,30 +40,65 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
     setState(() {
       switch (index) {
         case 0:
-          widget.prefs.setString('wordGroup', "Random 2");
-          if (!myWordPacks.contains("Random 2")) {
-            myWordPacks.add("Random 2");
+          widget.prefs.setString('wordPack', "WordPack 2");
+          if (!myWordPacks.contains("WordPack 2")) {
+            myWordPacks.add("WordPack 2");
             widget.prefs.setStringList('myWordPacks', myWordPacks);
           }
           break;
         case 1:
-          widget.prefs.setString('wordGroup', "Random 3");
-          if (!myWordPacks.contains("Random 3")) {
-            myWordPacks.add("Random 3");
+          widget.prefs.setString('wordPack', "WordPack 3");
+          if (!myWordPacks.contains("WordPack 3")) {
+            myWordPacks.add("WordPack 3");
             widget.prefs.setStringList('myWordPacks', myWordPacks);
           }
           break;
         case 2:
-          widget.prefs.setString('wordGroup', "Random 4");
-          if (!myWordPacks.contains("Random 4")) {
-            myWordPacks.add("Random 4");
+          widget.prefs.setString('wordPack', "WordPack 4");
+          if (!myWordPacks.contains("WordPack 4")) {
+            myWordPacks.add("WordPack 4");
             widget.prefs.setStringList('myWordPacks', myWordPacks);
           }
           break;
         case 3:
-          widget.prefs.setString('wordGroup', "Random 5");
-          if (!myWordPacks.contains("Random 5")) {
-            myWordPacks.add("Random 5");
+          widget.prefs.setString('wordPack', "WordPack 5");
+          if (!myWordPacks.contains("WordPack 5")) {
+            myWordPacks.add("WordPack 5");
+            widget.prefs.setStringList('myWordPacks', myWordPacks);
+          }
+          break;
+        case 4:
+          widget.prefs.setString('wordPack', "WordPack 6");
+          if (!myWordPacks.contains("WordPack 6")) {
+            myWordPacks.add("WordPack 6");
+            widget.prefs.setStringList('myWordPacks', myWordPacks);
+          }
+          break;
+        case 5:
+          widget.prefs.setString('wordPack', "WordPack 7");
+          if (!myWordPacks.contains("WordPack 7")) {
+            myWordPacks.add("WordPack 7");
+            widget.prefs.setStringList('myWordPacks', myWordPacks);
+          }
+          break;
+        case 6:
+          widget.prefs.setString('wordPack', "WordPack 8");
+          if (!myWordPacks.contains("WordPack 8")) {
+            myWordPacks.add("WordPack 8");
+            widget.prefs.setStringList('myWordPacks', myWordPacks);
+          }
+          break;
+        case 7:
+          widget.prefs.setString('wordPack', "WordPack 9");
+          if (!myWordPacks.contains("WordPack 9")) {
+            myWordPacks.add("WordPack 9");
+            widget.prefs.setStringList('myWordPacks', myWordPacks);
+          }
+          break;
+        case 8:
+          widget.prefs.setString('wordPack', "WordPack 10");
+          if (!myWordPacks.contains("WordPack 10")) {
+            myWordPacks.add("WordPack 10");
             widget.prefs.setStringList('myWordPacks', myWordPacks);
           }
           break;
@@ -72,16 +107,12 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
     });
   }
 
-  int selected = 0;
-  double itemWidth = 60;
-  int itemCount = 1;
-  final FixedExtentScrollController _scrollController =
-      FixedExtentScrollController(initialItem: 4);
-
   @override
   void initState() {
     super.initState();
     coins = widget.prefs.getInt('coins') ?? 0;
+    myWordPacks = widget.prefs.getStringList('myWordPacks') ?? ["WordPack 1"];
+    debugPrint(myWordPacks.toString());
   }
 
   @override
@@ -122,7 +153,7 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
                     ]),
               ),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                // mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Padding(
@@ -152,7 +183,7 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
                           return Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(6),
-                              border: widget.prefs.getString('wordGroup') ==
+                              border: widget.prefs.getString('wordPack') ==
                                       myWordPacks[index]
                                   ? Border.all(
                                       color: AppColors.darkBlue, width: 2)
@@ -160,7 +191,7 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
                                       color: Colors.transparent, width: 2),
                             ),
                             height: SizeConfig.blockSizeVertical * 20,
-                            width: SizeConfig.blockSizeHorizontal * 15,
+                            width: SizeConfig.blockSizeHorizontal * 18,
                             child: Center(
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -168,11 +199,11 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
                                   onTap: () {
                                     setState(() {
                                       widget.prefs.setString(
-                                          'wordGroup', myWordPacks[index]);
+                                          'wordPack', myWordPacks[index]);
                                       debugPrint(
                                           "myWords: ${myWordPacks[index]}");
                                       debugPrint(
-                                          widget.prefs.getString('wordGroup'));
+                                          widget.prefs.getString('wordPack'));
                                     });
                                   },
                                   child: Text(
@@ -181,7 +212,7 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
                                       fontSize: orientation ==
                                               Orientation.portrait
                                           ? SizeConfig.blockSizeVertical * 2
-                                          : SizeConfig.blockSizeVertical * 4,
+                                          : SizeConfig.blockSizeVertical * 3,
                                     ),
                                   ),
                                 ),
@@ -193,7 +224,7 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
                     child: Text(
-                      "Each word pack contains 50 words.",
+                      "Each word pack contains 50 random words.",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           color: AppColors.darkBlue,
@@ -205,7 +236,7 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8.0),
                     child: Text(
-                      "Buy for 500 coins.",
+                      "Purchase for 500 coins.",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           color: AppColors.darkBlue,
@@ -214,399 +245,185 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
                               : SizeConfig.blockSizeVertical * 4),
                     ),
                   ),
-                  Flexible(
-                    child: RotatedBox(
-                        quarterTurns: -1,
-                        child: ListWheelScrollView.useDelegate(
-                          controller: _scrollController,
-                          diameterRatio: 4,
-                          itemExtent: 200,
-                          clipBehavior: Clip.antiAlias,
-                          squeeze: 0.85,
-                          physics: const FixedExtentScrollPhysics(),
-                          childDelegate: ListWheelChildBuilderDelegate(
-                              childCount: wordPacks.length,
-                              builder: (BuildContext context, int index) {
-                                // if (index < 0 || index > wordPacks.length + 1) {
-                                //   return null;
-                                // }
-
-                                return RotatedBox(
-                                    quarterTurns: 1,
-                                    child: GestureDetector(
-                                        onTap: () {
-                                          debugPrint(index.toString());
-                                          showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return AlertDialog(
-                                                  content: coins > 100
-                                                      ? Text(
-                                                          "Buy ${wordPacks[index]} for 500 coins?",
-                                                          style: TextStyle(
-                                                            fontSize: notifier
-                                                                    .isPhone
-                                                                ? SizeConfig
-                                                                        .blockSizeHorizontal *
-                                                                    6
-                                                                : orientation ==
-                                                                        Orientation
-                                                                            .portrait
-                                                                    ? SizeConfig
-                                                                            .blockSizeHorizontal *
-                                                                        4
-                                                                    : SizeConfig
-                                                                            .blockSizeVertical *
-                                                                        4,
-                                                          ),
-                                                        )
-                                                      : Text(
-                                                          "You don't have enough coins! Keep playing to win more.",
-                                                          style: TextStyle(
-                                                            fontSize: notifier
-                                                                    .isPhone
-                                                                ? SizeConfig
-                                                                        .blockSizeHorizontal *
-                                                                    6
-                                                                : orientation ==
-                                                                        Orientation
-                                                                            .portrait
-                                                                    ? SizeConfig
-                                                                            .blockSizeHorizontal *
-                                                                        4
-                                                                    : SizeConfig
-                                                                            .blockSizeVertical *
-                                                                        4,
-                                                          ),
-                                                        ),
-                                                  actions: [
-                                                    ElevatedButton(
-                                                        onPressed: coins >= 500
-                                                            ? () {
-                                                                coins =
-                                                                    coins - 500;
-                                                                widget.prefs
-                                                                    .setInt(
-                                                                        'coins',
-                                                                        coins);
-                                                                selectWordPack(
-                                                                    index);
-                                                                Navigator.push(
-                                                                  context,
-                                                                  PageRouteBuilder(
-                                                                    pageBuilder: (c,
-                                                                            a1,
-                                                                            a2) =>
-                                                                        ChangeWordPack(
-                                                                      prefs: widget
-                                                                          .prefs,
-                                                                    ),
-                                                                    transitionsBuilder: (c,
-                                                                            anim,
-                                                                            a2,
-                                                                            child) =>
-                                                                        FadeTransition(
-                                                                            opacity:
-                                                                                anim,
-                                                                            child:
-                                                                                child),
-                                                                    transitionDuration:
-                                                                        const Duration(
-                                                                            milliseconds:
-                                                                                500),
-                                                                  ),
-                                                                );
-                                                              }
-                                                            : () {
-                                                                // Go Back
-                                                                Navigator.pop(
-                                                                    context);
-                                                              },
-                                                        child: coins >= 500
-                                                            ? Text(
-                                                                "Yes",
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontSize: notifier
-                                                                          .isPhone
-                                                                      ? SizeConfig
-                                                                              .blockSizeHorizontal *
-                                                                          4
-                                                                      : orientation ==
-                                                                              Orientation
-                                                                                  .portrait
-                                                                          ? SizeConfig.blockSizeHorizontal *
-                                                                              3
-                                                                          : SizeConfig.blockSizeVertical *
-                                                                              3,
-                                                                ),
-                                                              )
-                                                            : Text(
-                                                                "OK",
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontSize: notifier
-                                                                          .isPhone
-                                                                      ? SizeConfig
-                                                                              .blockSizeHorizontal *
-                                                                          4
-                                                                      : orientation ==
-                                                                              Orientation
-                                                                                  .portrait
-                                                                          ? SizeConfig.blockSizeHorizontal *
-                                                                              3
-                                                                          : SizeConfig.blockSizeVertical *
-                                                                              3,
-                                                                ),
-                                                              )),
-                                                    OutlinedButton(
-                                                        onPressed: () {
-                                                          // Go Back
-                                                          Navigator.pop(
-                                                              context);
-                                                        },
-                                                        child: Text(
-                                                          "Cancel",
-                                                          style: TextStyle(
-                                                            fontSize: notifier
-                                                                    .isPhone
-                                                                ? SizeConfig
-                                                                        .blockSizeHorizontal *
-                                                                    4
-                                                                : orientation ==
-                                                                        Orientation
-                                                                            .portrait
-                                                                    ? SizeConfig
-                                                                            .blockSizeHorizontal *
-                                                                        3
-                                                                    : SizeConfig
-                                                                            .blockSizeVertical *
-                                                                        3,
-                                                          ),
-                                                        ))
-                                                  ],
-                                                );
-                                              });
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            gradient: const LinearGradient(
-                                                begin: Alignment.topCenter,
-                                                end: Alignment.bottomCenter,
-                                                colors: [
-                                                  AppColors.green,
-                                                  AppColors.lightGray
-                                                ]),
-                                            borderRadius:
-                                                BorderRadius.circular(6),
-                                            border: Border.all(
-                                                color: AppColors.darkBlue,
-                                                width: 2),
-                                            //
-                                          ),
-                                          child: Center(
-                                            child: Text(
-                                              wordPacks[index],
+                  Container(
+                    color: Colors.transparent,
+                    height: SizeConfig.blockSizeVertical * 15,
+                    width: SizeConfig.blockSizeHorizontal * 25,
+                    child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: wordPacks.length,
+                        itemBuilder: ((context, index) {
+                          return Material(
+                              child: InkWell(
+                            onTap: (() {
+                              debugPrint("inkwell: $index");
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      content: coins > 500
+                                          ? Text(
+                                              "Buy ${wordPacks[index]} for 500 coins?",
                                               style: TextStyle(
-                                                fontSize: SizeConfig
-                                                        .blockSizeVertical *
-                                                    3,
+                                                fontSize: notifier.isPhone
+                                                    ? SizeConfig
+                                                            .blockSizeHorizontal *
+                                                        6
+                                                    : orientation ==
+                                                            Orientation.portrait
+                                                        ? SizeConfig
+                                                                .blockSizeHorizontal *
+                                                            4
+                                                        : SizeConfig
+                                                                .blockSizeVertical *
+                                                            4,
+                                              ),
+                                            )
+                                          : Text(
+                                              "You don't have enough coins! Keep playing to win more.",
+                                              style: TextStyle(
+                                                fontSize: notifier.isPhone
+                                                    ? SizeConfig
+                                                            .blockSizeHorizontal *
+                                                        6
+                                                    : orientation ==
+                                                            Orientation.portrait
+                                                        ? SizeConfig
+                                                                .blockSizeHorizontal *
+                                                            4
+                                                        : SizeConfig
+                                                                .blockSizeVertical *
+                                                            4,
                                               ),
                                             ),
-                                          ),
-                                        )));
-                              }),
-                        )),
-                  ),
+                                      actions: [
+                                        ElevatedButton(
+                                            onPressed: coins >= 500
+                                                ? () {
+                                                    setState(() {
+                                                      coins = coins - 500;
+                                                      widget.prefs.setInt(
+                                                          'coins', coins);
 
-                  // Flexible(
-                  //   child: Container(
-                  //     padding: const EdgeInsets.all(10.0),
-                  //     child: GridView.builder(
-                  //       itemCount: wordPacks.length,
-                  //       itemBuilder: (context, index) {
-                  //         return GestureDetector(
-                  //             onTap: () {
-                  //               debugPrint(index.toString());
-                  //               showDialog(
-                  //                   context: context,
-                  //                   builder: (context) {
-                  //                     return AlertDialog(
-                  //                       content: coins > 100
-                  //                           ? Text(
-                  //                               "Buy ${wordPacks[index]} for 500 coins?",
-                  //                               style: TextStyle(
-                  //                                 fontSize: notifier.isPhone
-                  //                                     ? SizeConfig
-                  //                                             .blockSizeHorizontal *
-                  //                                         6
-                  //                                     : orientation ==
-                  //                                             Orientation
-                  //                                                 .portrait
-                  //                                         ? SizeConfig
-                  //                                                 .blockSizeHorizontal *
-                  //                                             4
-                  //                                         : SizeConfig
-                  //                                                 .blockSizeVertical *
-                  //                                             4,
-                  //                               ),
-                  //                             )
-                  //                           : Text(
-                  //                               "You don't have enough coins! Keep playing to win more.",
-                  //                               style: TextStyle(
-                  //                                 fontSize: notifier.isPhone
-                  //                                     ? SizeConfig
-                  //                                             .blockSizeHorizontal *
-                  //                                         6
-                  //                                     : orientation ==
-                  //                                             Orientation
-                  //                                                 .portrait
-                  //                                         ? SizeConfig
-                  //                                                 .blockSizeHorizontal *
-                  //                                             4
-                  //                                         : SizeConfig
-                  //                                                 .blockSizeVertical *
-                  //                                             4,
-                  //                               ),
-                  //                             ),
-                  //                       actions: [
-                  //                         ElevatedButton(
-                  //                             onPressed: coins >= 500
-                  //                                 ? () {
-                  //                                     coins = coins - 500;
-                  //                                     widget.prefs.setInt(
-                  //                                         'coins', coins);
-                  //                                     selectWordPack(index);
-                  //                                     Navigator.push(
-                  //                                       context,
-                  //                                       PageRouteBuilder(
-                  //                                         pageBuilder: (c, a1,
-                  //                                                 a2) =>
-                  //                                             ChangeWordPack(
-                  //                                           prefs: widget.prefs,
-                  //                                         ),
-                  //                                         transitionsBuilder: (c,
-                  //                                                 anim,
-                  //                                                 a2,
-                  //                                                 child) =>
-                  //                                             FadeTransition(
-                  //                                                 opacity: anim,
-                  //                                                 child: child),
-                  //                                         transitionDuration:
-                  //                                             const Duration(
-                  //                                                 milliseconds:
-                  //                                                     500),
-                  //                                       ),
-                  //                                     );
-                  //                                   }
-                  //                                 : () {
-                  //                                     // Go Back
-                  //                                     Navigator.pop(context);
-                  //                                   },
-                  //                             child: coins >= 500
-                  //                                 ? Text(
-                  //                                     "Yes",
-                  //                                     style: TextStyle(
-                  //                                       fontSize: notifier
-                  //                                               .isPhone
-                  //                                           ? SizeConfig
-                  //                                                   .blockSizeHorizontal *
-                  //                                               4
-                  //                                           : orientation ==
-                  //                                                   Orientation
-                  //                                                       .portrait
-                  //                                               ? SizeConfig
-                  //                                                       .blockSizeHorizontal *
-                  //                                                   3
-                  //                                               : SizeConfig
-                  //                                                       .blockSizeVertical *
-                  //                                                   3,
-                  //                                     ),
-                  //                                   )
-                  //                                 : Text(
-                  //                                     "OK",
-                  //                                     style: TextStyle(
-                  //                                       fontSize: notifier
-                  //                                               .isPhone
-                  //                                           ? SizeConfig
-                  //                                                   .blockSizeHorizontal *
-                  //                                               4
-                  //                                           : orientation ==
-                  //                                                   Orientation
-                  //                                                       .portrait
-                  //                                               ? SizeConfig
-                  //                                                       .blockSizeHorizontal *
-                  //                                                   3
-                  //                                               : SizeConfig
-                  //                                                       .blockSizeVertical *
-                  //                                                   3,
-                  //                                     ),
-                  //                                   )),
-                  //                         OutlinedButton(
-                  //                             onPressed: () {
-                  //                               // Go Back
-                  //                               Navigator.pop(context);
-                  //                             },
-                  //                             child: Text(
-                  //                               "Cancel",
-                  //                               style: TextStyle(
-                  //                                 fontSize: notifier.isPhone
-                  //                                     ? SizeConfig
-                  //                                             .blockSizeHorizontal *
-                  //                                         4
-                  //                                     : orientation ==
-                  //                                             Orientation
-                  //                                                 .portrait
-                  //                                         ? SizeConfig
-                  //                                                 .blockSizeHorizontal *
-                  //                                             3
-                  //                                         : SizeConfig
-                  //                                                 .blockSizeVertical *
-                  //                                             3,
-                  //                               ),
-                  //                             ))
-                  //                       ],
-                  //                     );
-                  //                   });
-                  //             },
-                  //             child: Container(
-                  //               //
-                  //               decoration: BoxDecoration(
-                  //                 gradient: const LinearGradient(
-                  //                     begin: Alignment.topCenter,
-                  //                     end: Alignment.bottomCenter,
-                  //                     colors: [
-                  //                       AppColors.green,
-                  //                       AppColors.lightGray
-                  //                     ]),
-                  //                 borderRadius: BorderRadius.circular(6),
-                  //                 border: Border.all(
-                  //                     color: AppColors.darkBlue, width: 2),
-                  //                 //
-                  //               ),
-                  //               child: Center(
-                  //                 child: Padding(
-                  //                   padding: const EdgeInsets.all(8.0),
-                  //                   child: Text(
-                  //                     wordPacks[index],
-                  //                     style: TextStyle(
-                  //                       fontSize:
-                  //                           SizeConfig.blockSizeVertical * 3,
-                  //                     ),
-                  //                   ),
-                  //                 ),
-                  //               ),
-                  //             ));
-                  //       },
-                  //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  //           mainAxisSpacing: 10, //horizontal space
-                  //           crossAxisSpacing: 10, //vertical space
-                  //           crossAxisCount: 5,
-                  //           childAspectRatio:
-                  //               orientation == Orientation.portrait ? 1.5 : 4),
-                  //     ),
-                  //   ),
-                  // ),
+                                                      selectWordPack(index);
+                                                    });
+                                                    Navigator.push(
+                                                      context,
+                                                      PageRouteBuilder(
+                                                        pageBuilder:
+                                                            (c, a1, a2) =>
+                                                                ChangeWordPack(
+                                                          prefs: widget.prefs,
+                                                        ),
+                                                        transitionsBuilder: (c,
+                                                                anim,
+                                                                a2,
+                                                                child) =>
+                                                            FadeTransition(
+                                                                opacity: anim,
+                                                                child: child),
+                                                        transitionDuration:
+                                                            const Duration(
+                                                                milliseconds:
+                                                                    50),
+                                                      ),
+                                                    );
+                                                  }
+                                                : () {
+                                                    // Go Back
+                                                    Navigator.pop(context);
+                                                  },
+                                            child: coins >= 500
+                                                ? Text(
+                                                    "Yes",
+                                                    style: TextStyle(
+                                                      fontSize: notifier.isPhone
+                                                          ? SizeConfig
+                                                                  .blockSizeHorizontal *
+                                                              4
+                                                          : orientation ==
+                                                                  Orientation
+                                                                      .portrait
+                                                              ? SizeConfig
+                                                                      .blockSizeHorizontal *
+                                                                  3
+                                                              : SizeConfig
+                                                                      .blockSizeVertical *
+                                                                  3,
+                                                    ),
+                                                  )
+                                                : Text(
+                                                    "OK",
+                                                    style: TextStyle(
+                                                      fontSize: notifier.isPhone
+                                                          ? SizeConfig
+                                                                  .blockSizeHorizontal *
+                                                              4
+                                                          : orientation ==
+                                                                  Orientation
+                                                                      .portrait
+                                                              ? SizeConfig
+                                                                      .blockSizeHorizontal *
+                                                                  3
+                                                              : SizeConfig
+                                                                      .blockSizeVertical *
+                                                                  3,
+                                                    ),
+                                                  )),
+                                        OutlinedButton(
+                                            onPressed: () {
+                                              // Go Back
+                                              Navigator.pop(context);
+                                            },
+                                            child: Text(
+                                              "Cancel",
+                                              style: TextStyle(
+                                                fontSize: notifier.isPhone
+                                                    ? SizeConfig
+                                                            .blockSizeHorizontal *
+                                                        4
+                                                    : orientation ==
+                                                            Orientation.portrait
+                                                        ? SizeConfig
+                                                                .blockSizeHorizontal *
+                                                            3
+                                                        : SizeConfig
+                                                                .blockSizeVertical *
+                                                            3,
+                                              ),
+                                            ))
+                                      ],
+                                    );
+                                  });
+                            }),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Ink(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: AppColors.darkBlue, width: 1),
+                                      gradient: const LinearGradient(
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.bottomCenter,
+                                          colors: [
+                                            AppColors.green,
+                                            AppColors.lightGray
+                                          ]),
+                                      borderRadius: BorderRadius.circular(6)),
+                                  height: SizeConfig.blockSizeVertical * 8,
+                                  width: SizeConfig.blockSizeHorizontal * 20,
+                                  child: Center(
+                                      child: Text(
+                                    wordPacks[index],
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize:
+                                            SizeConfig.blockSizeVertical * 3),
+                                  ))),
+                            ),
+                          ));
+                        })),
+                  ),
                   Container(
                       margin: EdgeInsets.only(
                           top: SizeConfig.blockSizeVertical * 5),

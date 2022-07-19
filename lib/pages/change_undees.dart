@@ -480,7 +480,7 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                                         ? SizeConfig.blockSizeHorizontal * 2
                                         : orientation == Orientation.portrait
                                             ? SizeConfig.blockSizeHorizontal * 2
-                                            : SizeConfig.blockSizeVertical * 2,
+                                            : SizeConfig.blockSizeVertical * 1,
                                   ),
                                 ),
                                 onPressed: () {
@@ -506,7 +506,7 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                                     "Back to Options",
                                     style: TextStyle(
                                         fontSize:
-                                            SizeConfig.blockSizeVertical * 3),
+                                            SizeConfig.blockSizeVertical * 2.5),
                                   ),
                                 ),
                               ),
@@ -520,7 +520,7 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                                         ? SizeConfig.blockSizeHorizontal * 2
                                         : orientation == Orientation.portrait
                                             ? SizeConfig.blockSizeHorizontal * 2
-                                            : SizeConfig.blockSizeVertical * 2,
+                                            : SizeConfig.blockSizeVertical * 1,
                                   ),
                                 ),
                                 onPressed: () {
@@ -550,7 +550,7 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                                     "Play",
                                     style: TextStyle(
                                         fontSize:
-                                            SizeConfig.blockSizeVertical * 3),
+                                            SizeConfig.blockSizeVertical * 2.5),
                                   ),
                                 ),
                               ),

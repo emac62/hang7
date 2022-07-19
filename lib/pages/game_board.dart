@@ -78,27 +78,74 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
   }
 
   getWord() {
-    String group = widget.prefs.getString('wordGroup') ?? "Random 1";
+    String group = widget.prefs.getString('wordPack') ?? "WordPack 1";
+    String listKey = "";
     List<String> words = [];
+    List<String> usedWordIndexes = [];
     switch (group) {
-      case "Random 1":
-        words = wordGroup1;
+      case "WordPack 1":
+        words = wordPack1;
+        usedWordIndexes = widget.prefs.getStringList('usedWords1') ?? [];
+        listKey = "usedWords1";
         break;
-      case "Random 2":
-        words = wordGroup2;
+      case "WordPack 2":
+        words = wordPack2;
+        usedWordIndexes = widget.prefs.getStringList('usedWords2') ?? [];
+        listKey = "usedWords2";
         break;
-      case "Random 3":
-        words = wordGroup3;
+      case "WordPack 3":
+        words = wordPack3;
+        usedWordIndexes = widget.prefs.getStringList('usedWords3') ?? [];
+        listKey = "usedWords3";
         break;
-      case "Random 4":
-        words = wordGroup4;
+      case "WordPack 4":
+        words = wordPack4;
+        usedWordIndexes = widget.prefs.getStringList('usedWords4') ?? [];
+        listKey = "usedWords4";
         break;
-      case "Random 5":
-        words = wordGroup5;
+      case "WordPack 5":
+        words = wordPack5;
+        usedWordIndexes = widget.prefs.getStringList('usedWords5') ?? [];
+        listKey = "usedWords5";
+        break;
+      case "WordPack 6":
+        words = wordPack6;
+        usedWordIndexes = widget.prefs.getStringList('usedWords6') ?? [];
+        listKey = "usedWords6";
+        break;
+      case "WordPack 7":
+        words = wordPack7;
+        usedWordIndexes = widget.prefs.getStringList('usedWords7') ?? [];
+        listKey = "usedWords7";
+        break;
+      case "WordPack 8":
+        words = wordPack8;
+        usedWordIndexes = widget.prefs.getStringList('usedWords8') ?? [];
+        listKey = "usedWords8";
+        break;
+      case "WordPack 9":
+        words = wordPack9;
+        usedWordIndexes = widget.prefs.getStringList('usedWords9') ?? [];
+        listKey = "usedWords9";
+        break;
+      case "WordPack 10":
+        words = wordPack10;
+        usedWordIndexes = widget.prefs.getStringList('usedWords10') ?? [];
+        listKey = "usedWords10";
         break;
       default:
     }
-    final r = Random().nextInt(words.length);
+    int r = Random().nextInt(words.length);
+    debugPrint("first Random: $r");
+    String rAsString = r.toString();
+    while (usedWordIndexes.contains(rAsString)) {
+      r = Random().nextInt(words.length);
+      rAsString = r.toString();
+    }
+    debugPrint(rAsString);
+    debugPrint(usedWordIndexes.toString());
+    usedWordIndexes.add(rAsString);
+    widget.prefs.setStringList(listKey, usedWordIndexes);
     currentWord = words[r].toUpperCase();
   }
 

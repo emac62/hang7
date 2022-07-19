@@ -1,4 +1,4 @@
-final wordGroup1 = [
+final wordPack1 = [
   "ACCOUNT",
   "PERFORM",
   "DEFICIT",
@@ -49,6 +49,9 @@ final wordGroup1 = [
   "FASHION",
   "SERIOUS",
   "PUBLISH",
+];
+
+final wordPack2 = [
   "POVERTY",
   "CONTAIN",
   "LIMITED",
@@ -101,7 +104,7 @@ final wordGroup1 = [
   "PACKAGE"
 ];
 
-final wordGroup2 = [
+final wordPack3 = [
   "PENDING",
   "PRESENT",
   "PASSIVE",
@@ -152,6 +155,9 @@ final wordGroup2 = [
   "RESERVE",
   "LEADING",
   "PAINTED",
+];
+
+final wordPack4 = [
   "FILLING",
   "COLLEGE",
   "PREPARE",
@@ -204,7 +210,7 @@ final wordGroup2 = [
   "WHEREBY"
 ];
 
-final wordGroup3 = [
+final wordPack5 = [
   "EXPLAIN",
   "SEVERAL",
   "OUTDOOR",
@@ -255,6 +261,9 @@ final wordGroup3 = [
   "HELPFUL",
   "CHECKED",
   "CONSIST",
+];
+
+final wordPack6 = [
   "HELPING",
   "ARRANGE",
   "COUNCIL",
@@ -307,7 +316,7 @@ final wordGroup3 = [
   "PROCESS"
 ];
 
-final wordGroup4 = [
+final wordPack7 = [
   "VERSION",
   "MESSAGE",
   "ILLNESS",
@@ -358,6 +367,9 @@ final wordGroup4 = [
   "ADVANCE",
   "ASSURED",
   "BEATING",
+];
+
+final wordPack8 = [
   "DISTANT",
   "VETERAN",
   "REMOVAL",
@@ -410,7 +422,7 @@ final wordGroup4 = [
   "GENERAL"
 ];
 
-final wordGroup5 = [
+final wordPack9 = [
   "FEELING",
   "PROBLEM",
   "PERHAPS",
@@ -461,6 +473,8 @@ final wordGroup5 = [
   "PRODUCE",
   "ADVISED",
   "BENEATH",
+];
+final wordPack10 = [
   "READILY",
   "CONTENT",
   "LOGICAL",

@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/material.dart';
 import 'package:hang7/animations/route.dart';
 import 'package:hang7/constants/key_state.dart';
@@ -66,20 +68,23 @@ class _OptionsState extends State<Options> {
           appBar: AppBar(
               automaticallyImplyLeading: false,
               backgroundColor: AppColors.lightGray,
-              toolbarHeight: SizeConfig.blockSizeVertical * 10,
+              toolbarHeight: orientation == Orientation.portrait
+                  ? SizeConfig.blockSizeVertical * 10
+                  : SizeConfig.blockSizeVertical * 8,
               title: Text(
                 "OPTIONS",
                 style: TextStyle(
                     color: AppColors.darkBlue,
                     fontSize: orientation == Orientation.portrait
-                        ? SizeConfig.blockSizeHorizontal * 7
-                        : SizeConfig.blockSizeVertical * 6),
+                        ? SizeConfig.blockSizeVertical * 7
+                        : SizeConfig.blockSizeVertical * 5),
               )),
           body: Consumer<Controller>(
             builder: (_, notifier, __) {
               return Container(
                 height: SizeConfig.screenHeight,
                 width: SizeConfig.screenWidth,
+                margin: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 2),
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
                       begin: Alignment.center,
@@ -87,59 +92,110 @@ class _OptionsState extends State<Options> {
                       colors: [AppColors.lightGray, AppColors.backgroundColor]),
                 ),
                 child: Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: SizeConfig.blockSizeHorizontal * 10),
+                  padding: orientation == Orientation.portrait
+                      ? EdgeInsets.symmetric(
+                          horizontal: SizeConfig.blockSizeHorizontal * 10)
+                      : EdgeInsets.symmetric(
+                          horizontal: SizeConfig.blockSizeHorizontal * 20),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Padding(
-                        padding:
-                            EdgeInsets.all(SizeConfig.blockSizeHorizontal * 1),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Play animations?',
-                              style: TextStyle(
-                                fontSize: notifier.isPhone
-                                    ? SizeConfig.blockSizeHorizontal * 5
-                                    : orientation == Orientation.portrait
-                                        ? SizeConfig.blockSizeHorizontal * 5
-                                        : SizeConfig.blockSizeVertical * 5,
-                              ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Play animations?',
+                            style: TextStyle(
+                              fontSize: notifier.isPhone
+                                  ? SizeConfig.blockSizeHorizontal * 5
+                                  : orientation == Orientation.portrait
+                                      ? SizeConfig.blockSizeHorizontal * 5
+                                      : SizeConfig.blockSizeVertical * 3,
                             ),
-                            SizedBox(
-                              height: SizeConfig.blockSizeVertical * 8,
-                              child: FittedBox(
-                                fit: BoxFit.fitHeight,
-                                child: Switch(
-                                    activeColor: AppColors.green,
-                                    inactiveThumbColor:
-                                        AppColors.backgroundColor,
-                                    value: settingsProvider.withAnimation,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        settingsProvider
-                                            .setWithAnimation(value);
-                                        if (value) {
-                                          debugPrint("value $value");
-                                        } else {}
-                                      });
-                                    }),
-                              ),
+                          ),
+                          SizedBox(
+                            height: orientation == Orientation.portrait
+                                ? SizeConfig.blockSizeVertical * 8
+                                : SizeConfig.blockSizeVertical * 5,
+                            child: FittedBox(
+                              fit: BoxFit.fitHeight,
+                              child: Switch(
+                                  activeColor: AppColors.green,
+                                  inactiveThumbColor: AppColors.backgroundColor,
+                                  value: settingsProvider.withAnimation,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      settingsProvider.setWithAnimation(value);
+                                      if (value) {
+                                        debugPrint("value $value");
+                                      } else {}
+                                    });
+                                  }),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-
                       Padding(
                         padding: EdgeInsets.symmetric(
                           vertical: SizeConfig.blockSizeVertical * 2,
                         ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("Reset Stats?",
+                                style: TextStyle(
+                                  fontSize: notifier.isPhone
+                                      ? SizeConfig.blockSizeHorizontal * 5
+                                      : orientation == Orientation.portrait
+                                          ? SizeConfig.blockSizeHorizontal * 5
+                                          : SizeConfig.blockSizeVertical * 3,
+                                )),
+                            ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    primary: AppColors.green,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(6)),
+                                    elevation: 10,
+                                    padding: const EdgeInsets.all(8.0)),
+                                onPressed: () {
+                                  clearSP();
+                                  showDialog(
+                                      context: context,
+                                      builder: (_) => GameStatsAlert(
+                                            coins: coins ?? 0,
+                                            orientation: Orientation.portrait,
+                                          ));
+                                },
+                                child: Text("Reset",
+                                    style: TextStyle(
+                                      fontSize: notifier.isPhone
+                                          ? SizeConfig.blockSizeHorizontal * 3
+                                          : orientation == Orientation.portrait
+                                              ? SizeConfig.blockSizeHorizontal *
+                                                  3
+                                              : SizeConfig.blockSizeVertical *
+                                                  2,
+                                    )))
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: SizeConfig.blockSizeVertical * 1),
+                        child: Text(
+                          "Use Your Coins!",
+                          style: TextStyle(
+                              fontSize: SizeConfig.blockSizeVertical * 4),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: SizeConfig.blockSizeVertical * 1,
+                        ),
                         child: GestureDetector(
                             child: Padding(
-                              padding: EdgeInsets.all(
-                                  SizeConfig.blockSizeHorizontal * 1),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: SizeConfig.blockSizeHorizontal * 1),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -154,20 +210,37 @@ class _OptionsState extends State<Options> {
                                                         .blockSizeHorizontal *
                                                     5
                                                 : SizeConfig.blockSizeVertical *
-                                                    5,
+                                                    3,
                                       )),
                                   SizedBox(
-                                      height: SizeConfig.blockSizeVertical * 6,
+                                      height: SizeConfig.blockSizeVertical * 5,
                                       child: undeesImage),
-                                  Icon(
-                                    Icons.arrow_right_outlined,
-                                    color: AppColors.green,
-                                    size: notifier.isPhone
-                                        ? SizeConfig.blockSizeHorizontal * 8
-                                        : orientation == Orientation.portrait
-                                            ? SizeConfig.blockSizeHorizontal * 5
-                                            : SizeConfig.blockSizeVertical * 5,
-                                  ),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(6),
+                                        color: AppColors.green),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10.0, vertical: 8),
+                                      child: Text(
+                                        "Change",
+                                        style: TextStyle(
+                                          color: AppColors.lightGray,
+                                          fontSize: notifier.isPhone
+                                              ? SizeConfig.blockSizeHorizontal *
+                                                  5
+                                              : orientation ==
+                                                      Orientation.portrait
+                                                  ? SizeConfig
+                                                          .blockSizeHorizontal *
+                                                      5
+                                                  : SizeConfig
+                                                          .blockSizeVertical *
+                                                      2,
+                                        ),
+                                      ),
+                                    ),
+                                  )
                                 ],
                               ),
                             ),
@@ -193,13 +266,13 @@ class _OptionsState extends State<Options> {
                         ),
                         child: GestureDetector(
                             child: Padding(
-                              padding: EdgeInsets.all(
-                                  SizeConfig.blockSizeHorizontal * 1),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: SizeConfig.blockSizeHorizontal * 1),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text("Current Word Pack:",
+                                  Text("Current WordPack:",
                                       style: TextStyle(
                                         fontSize: notifier.isPhone
                                             ? SizeConfig.blockSizeHorizontal * 5
@@ -209,31 +282,48 @@ class _OptionsState extends State<Options> {
                                                         .blockSizeHorizontal *
                                                     5
                                                 : SizeConfig.blockSizeVertical *
-                                                    5,
+                                                    3,
                                       )),
                                   Text(
-                                      widget.prefs.getString('wordGroup') ??
-                                          "Word Pack 1",
+                                      widget.prefs.getString('wordPack') ??
+                                          "WordPack 1",
                                       style: TextStyle(
                                         fontSize: notifier.isPhone
-                                            ? SizeConfig.blockSizeHorizontal * 5
+                                            ? SizeConfig.blockSizeHorizontal * 4
                                             : orientation ==
                                                     Orientation.portrait
                                                 ? SizeConfig
                                                         .blockSizeHorizontal *
-                                                    5
+                                                    4
                                                 : SizeConfig.blockSizeVertical *
-                                                    5,
+                                                    2.5,
                                       )),
-                                  Icon(
-                                    Icons.arrow_right_outlined,
-                                    color: AppColors.green,
-                                    size: notifier.isPhone
-                                        ? SizeConfig.blockSizeHorizontal * 8
-                                        : orientation == Orientation.portrait
-                                            ? SizeConfig.blockSizeHorizontal * 5
-                                            : SizeConfig.blockSizeVertical * 5,
-                                  ),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(6),
+                                        color: AppColors.green),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10.0, vertical: 8),
+                                      child: Text(
+                                        "Change",
+                                        style: TextStyle(
+                                          color: AppColors.lightGray,
+                                          fontSize: notifier.isPhone
+                                              ? SizeConfig.blockSizeHorizontal *
+                                                  5
+                                              : orientation ==
+                                                      Orientation.portrait
+                                                  ? SizeConfig
+                                                          .blockSizeHorizontal *
+                                                      5
+                                                  : SizeConfig
+                                                          .blockSizeVertical *
+                                                      2,
+                                        ),
+                                      ),
+                                    ),
+                                  )
                                 ],
                               ),
                             ),
@@ -253,59 +343,73 @@ class _OptionsState extends State<Options> {
                                       )));
                             }),
                       ),
-                      //
                       Padding(
                         padding: EdgeInsets.symmetric(
                           vertical: SizeConfig.blockSizeVertical * 2,
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("Reset Stats",
-                                style: TextStyle(
-                                  fontSize: notifier.isPhone
-                                      ? SizeConfig.blockSizeHorizontal * 5
-                                      : orientation == Orientation.portrait
-                                          ? SizeConfig.blockSizeHorizontal * 5
-                                          : SizeConfig.blockSizeVertical * 5,
-                                )),
-                            ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  primary: AppColors.green,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10)),
-                                  elevation: 10,
-                                  padding: EdgeInsets.all(
-                                    notifier.isPhone
-                                        ? SizeConfig.blockSizeHorizontal * 2
-                                        : orientation == Orientation.portrait
-                                            ? SizeConfig.blockSizeHorizontal * 2
-                                            : SizeConfig.blockSizeVertical * 2,
-                                  ),
-                                ),
-                                onPressed: () {
-                                  clearSP();
-                                  showDialog(
-                                      context: context,
-                                      builder: (_) => GameStatsAlert(
-                                            coins: coins ?? 0,
-                                            orientation: Orientation.portrait,
-                                          ));
-                                },
-                                child: Text("Reset Stats",
-                                    style: TextStyle(
-                                      fontSize: notifier.isPhone
-                                          ? SizeConfig.blockSizeHorizontal * 5
-                                          : orientation == Orientation.portrait
-                                              ? SizeConfig.blockSizeHorizontal *
-                                                  5
-                                              : SizeConfig.blockSizeVertical *
-                                                  5,
-                                    )))
-                          ],
-                        ),
+                        child: GestureDetector(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: SizeConfig.blockSizeHorizontal * 1),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Platform.isIOS
+                                      ? Text(
+                                          "Purchase more coins in the App Store:",
+                                          style: TextStyle(
+                                            fontSize: notifier.isPhone
+                                                ? SizeConfig
+                                                        .blockSizeHorizontal *
+                                                    4
+                                                : orientation ==
+                                                        Orientation.portrait
+                                                    ? SizeConfig
+                                                            .blockSizeHorizontal *
+                                                        4
+                                                    : SizeConfig
+                                                            .blockSizeVertical *
+                                                        3,
+                                          ))
+                                      : Text(
+                                          "Purchase more coins on Google Play:",
+                                          style: TextStyle(
+                                            fontSize: notifier.isPhone
+                                                ? SizeConfig
+                                                        .blockSizeHorizontal *
+                                                    4
+                                                : orientation ==
+                                                        Orientation.portrait
+                                                    ? SizeConfig
+                                                            .blockSizeHorizontal *
+                                                        4
+                                                    : SizeConfig
+                                                            .blockSizeVertical *
+                                                        3,
+                                          )),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(6),
+                                        color: AppColors.green),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10.0, vertical: 8),
+                                      child: Text(
+                                        "Buy",
+                                        style: TextStyle(
+                                            color: AppColors.lightGray,
+                                            fontSize:
+                                                SizeConfig.blockSizeVertical *
+                                                    2.5),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            onTap: () {}),
                       ),
-
                       Expanded(
                         child: Center(
                           child: Row(
@@ -405,11 +509,11 @@ class _OptionsState extends State<Options> {
                           onTap: _launchUrl,
                           child: Container(
                               decoration: BoxDecoration(
-                                color: const Color(0xff182835),
+                                color: const Color(0xff182834),
                                 image: const DecorationImage(
                                     image:
                                         AssetImage('assets/images/quotes.png'),
-                                    fit: BoxFit.fitWidth),
+                                    fit: BoxFit.fitHeight),
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               height: SizeConfig.blockSizeVertical * 7,
@@ -417,7 +521,7 @@ class _OptionsState extends State<Options> {
                                   ? SizeConfig.blockSizeHorizontal * 95
                                   : orientation == Orientation.portrait
                                       ? SizeConfig.blockSizeHorizontal * 80
-                                      : SizeConfig.blockSizeHorizontal * 60,
+                                      : SizeConfig.blockSizeHorizontal * 50,
                               child: Center(
                                 child: Text(
                                   "Try our online game Daily Quote",
