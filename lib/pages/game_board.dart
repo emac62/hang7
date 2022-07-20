@@ -2,14 +2,12 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:hang7/animations/undee_animation.dart';
 import 'package:hang7/constants/help.dart';
 import 'package:hang7/constants/key_state.dart';
 import 'package:hang7/constants/progress_messages.dart';
 import 'package:hang7/constants/seven_letters.dart';
 import 'package:hang7/data/key_map.dart';
-import 'package:hang7/pages/end_of_game.dart';
 import 'package:hang7/pages/options.dart';
 import 'package:hang7/providers/controller.dart';
 import 'package:hang7/providers/settings_provider.dart';
@@ -230,49 +228,8 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                 Future.delayed(const Duration(milliseconds: 2000), () {
                   notifier.revealWord();
                 });
+              }
 
-                SchedulerBinding.instance.addPostFrameCallback((_) {
-                  Future.delayed(const Duration(milliseconds: 7000), () {
-                    settingsProvider.withAnimation
-                        ? Navigator.push(
-                            context,
-                            RotationRoute(
-                                page: EndOfGame(
-                              coinsEarned: 0,
-                              prefs: widget.prefs,
-                            )))
-                        : Navigator.push(
-                            context,
-                            FadeRoute(
-                                page: EndOfGame(
-                              coinsEarned: 0,
-                              prefs: widget.prefs,
-                            )));
-                  });
-                });
-              }
-              if (notifier.gameWon) {
-                debugPrint("gameBoard: Game Won");
-                SchedulerBinding.instance.addPostFrameCallback((_) {
-                  Future.delayed(const Duration(milliseconds: 4000), () {
-                    settingsProvider.withAnimation
-                        ? Navigator.push(
-                            context,
-                            RotationRoute(
-                                page: EndOfGame(
-                              prefs: widget.prefs,
-                              coinsEarned: (10 + notifier.remainingGuesses),
-                            )))
-                        : Navigator.push(
-                            context,
-                            FadeRoute(
-                                page: EndOfGame(
-                              prefs: widget.prefs,
-                              coinsEarned: (10 + notifier.remainingGuesses),
-                            )));
-                  });
-                });
-              }
               if (notifier.isPhone) {
                 isPhone = true;
                 isTablet = false;
@@ -300,12 +257,12 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                       child: Stack(
                         children: [
                           Positioned(
-                            top: 8,
+                            top: 6,
                             right: 8,
                             child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                     shape: const CircleBorder(),
-                                    padding: const EdgeInsets.all(10),
+                                    padding: const EdgeInsets.all(8),
                                     primary: AppColors.backgroundColor),
                                 child: const Icon(
                                   Icons.menu,
@@ -333,7 +290,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                             ),
                           ),
                           Positioned(
-                            top: 8,
+                            top: 6,
                             right: isPhone
                                 ? SizeConfig.blockSizeHorizontal * 20
                                 : SizeConfig.blockSizeHorizontal * 15,
@@ -485,7 +442,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                                       ),
                                           ),
                                 Positioned(
-                                  top: 0,
+                                  top: 6,
                                   right: 0,
                                   child: Container(
                                     color: Colors.transparent,
@@ -748,7 +705,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                               Border.all(color: Colors.transparent, width: 2)),
                       width: SizeConfig.blockSizeHorizontal * 100,
                       height: notifier.isPhone
-                          ? SizeConfig.blockSizeVertical * 18
+                          ? SizeConfig.blockSizeVertical * 16
                           : orientation == Orientation.portrait
                               ? SizeConfig.blockSizeVertical * 20
                               : SizeConfig.blockSizeVertical * 18,
@@ -767,23 +724,26 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                               : SizeConfig.blockSizeVertical * 1,
                     ),
                     KeyboardRow(
+                      prefs: widget.prefs,
                       min: 1,
                       max: 10,
                       orientation: orientation,
                     ),
                     KeyboardRow(
+                      prefs: widget.prefs,
                       min: 11,
                       max: 19,
                       orientation: orientation,
                     ),
                     KeyboardRow(
+                      prefs: widget.prefs,
                       min: 20,
                       max: 26,
                       orientation: orientation,
                     ),
                     SizedBox(
                       height: isPhone
-                          ? SizeConfig.blockSizeVertical * 2
+                          ? SizeConfig.blockSizeVertical * 1
                           : orientation == Orientation.portrait
                               ? SizeConfig.blockSizeVertical * 2
                               : SizeConfig.blockSizeVertical * 1,

@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hang7/constants/key_state.dart';
 import 'package:hang7/data/key_map.dart';
+import 'package:hang7/pages/end_of_game.dart';
 import 'package:hang7/providers/controller.dart';
+import 'package:hang7/providers/settings_provider.dart';
 import 'package:hang7/widgets/size_config.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../animations/route.dart';
 import 'app_colors.dart';
 
 class KeyboardRow extends StatelessWidget {
@@ -12,15 +16,18 @@ class KeyboardRow extends StatelessWidget {
       {Key? key,
       required this.min,
       required this.max,
-      required this.orientation})
+      required this.orientation,
+      required this.prefs})
       : super(key: key);
 
   final int min;
   final int max;
   final Orientation orientation;
+  final SharedPreferences prefs;
 
   @override
   Widget build(BuildContext context) {
+    var settingsProvider = Provider.of<SettingsProvider>(context);
     late bool isPhone;
     return Consumer<Controller>(
       builder: (_, notifier, __) {
@@ -62,6 +69,50 @@ class KeyboardRow extends StatelessWidget {
                                     : Provider.of<Controller>(context,
                                             listen: false)
                                         .onUserInput(letter: e.key);
+                                if (notifier.gameCompleted &&
+                                    !notifier.gameWon) {
+                                  Future.delayed(
+                                      const Duration(milliseconds: 7000), () {
+                                    settingsProvider.withAnimation
+                                        ? Navigator.push(
+                                            context,
+                                            RotationRoute(
+                                                page: EndOfGame(
+                                              coinsEarned: 0,
+                                              prefs: prefs,
+                                            )))
+                                        : Navigator.push(
+                                            context,
+                                            FadeRoute(
+                                                page: EndOfGame(
+                                              coinsEarned: 0,
+                                              prefs: prefs,
+                                            )));
+                                  });
+                                }
+                                if (notifier.gameWon) {
+                                  debugPrint("keyInput: Game Won");
+                                  Future.delayed(
+                                      const Duration(milliseconds: 4000), () {
+                                    settingsProvider.withAnimation
+                                        ? Navigator.push(
+                                            context,
+                                            RotationRoute(
+                                                page: EndOfGame(
+                                              prefs: prefs,
+                                              coinsEarned: (10 +
+                                                  notifier.remainingGuesses),
+                                            )))
+                                        : Navigator.push(
+                                            context,
+                                            FadeRoute(
+                                                page: EndOfGame(
+                                              prefs: prefs,
+                                              coinsEarned: (10 +
+                                                  notifier.remainingGuesses),
+                                            )));
+                                  });
+                                }
                               },
                               child: Center(
                                 child: Padding(

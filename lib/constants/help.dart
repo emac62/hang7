@@ -8,6 +8,7 @@ showHelpDialog(context) {
       builder: (BuildContext context) => OrientationBuilder(
             builder: (context, orientation) {
               return AlertDialog(
+                scrollable: true,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15)),
                 backgroundColor: AppColors.lightGray,
@@ -17,7 +18,7 @@ showHelpDialog(context) {
                       fontFamily: "Boogaloo",
                       color: AppColors.darkBlue,
                       letterSpacing: 1.25,
-                      fontSize: SizeConfig.blockSizeVertical * 5),
+                      fontSize: SizeConfig.blockSizeVertical * 4),
                 ),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -29,7 +30,7 @@ showHelpDialog(context) {
                           letterSpacing: 1.25,
                           color: AppColors.darkBlue,
                           fontSize: orientation == Orientation.portrait
-                              ? SizeConfig.blockSizeHorizontal * 4.5
+                              ? SizeConfig.blockSizeHorizontal * 4
                               : SizeConfig.blockSizeHorizontal * 3),
                     ),
                     Padding(
@@ -40,7 +41,7 @@ showHelpDialog(context) {
                             letterSpacing: 1.25,
                             color: AppColors.darkBlue,
                             fontSize: orientation == Orientation.portrait
-                                ? SizeConfig.blockSizeHorizontal * 4.5
+                                ? SizeConfig.blockSizeHorizontal * 4
                                 : SizeConfig.blockSizeHorizontal * 3),
                       ),
                     ),
@@ -50,7 +51,7 @@ showHelpDialog(context) {
                           letterSpacing: 1.25,
                           color: AppColors.darkBlue,
                           fontSize: orientation == Orientation.portrait
-                              ? SizeConfig.blockSizeHorizontal * 4.5
+                              ? SizeConfig.blockSizeHorizontal * 4
                               : SizeConfig.blockSizeHorizontal * 3),
                     ),
                     Text(
@@ -59,7 +60,7 @@ showHelpDialog(context) {
                           letterSpacing: 1.25,
                           color: AppColors.darkBlue,
                           fontSize: orientation == Orientation.portrait
-                              ? SizeConfig.blockSizeHorizontal * 4.5
+                              ? SizeConfig.blockSizeHorizontal * 4
                               : SizeConfig.blockSizeHorizontal * 3),
                     )
                   ],

@@ -82,7 +82,7 @@ class _LetterTileState extends State<LetterTile>
                           fontFamily: "Boogaloo",
                           color: _fontColor,
                           fontSize: isPhone
-                              ? SizeConfig.blockSizeVertical * 7.5
+                              ? SizeConfig.blockSizeVertical * 7
                               : widget.orientation == Orientation.portrait
                                   ? SizeConfig.blockSizeVertical * 10
                                   : SizeConfig.blockSizeVertical * 8),
@@ -97,7 +97,7 @@ class _LetterTileState extends State<LetterTile>
                   fontFamily: "Boogaloo",
                   color: _fontColor,
                   fontSize: isPhone
-                      ? SizeConfig.blockSizeVertical * 7.5
+                      ? SizeConfig.blockSizeVertical * 7
                       : widget.orientation == Orientation.portrait
                           ? SizeConfig.blockSizeVertical * 10
                           : SizeConfig.blockSizeVertical * 8),

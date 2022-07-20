@@ -200,7 +200,7 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                       Container(
                         margin: const EdgeInsets.symmetric(vertical: 10.0),
                         height: orientation == Orientation.portrait
-                            ? SizeConfig.blockSizeVertical * 10
+                            ? SizeConfig.blockSizeVertical * 8
                             : SizeConfig.blockSizeVertical * 8,
                         width: double.infinity,
                         alignment: Alignment.center,
@@ -252,7 +252,7 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                         ),
                       ),
                       Text(
-                        "100 coins each",
+                        "Purchase for 100 coins each",
                         style: TextStyle(
                           fontSize: notifier.isPhone
                               ? SizeConfig.blockSizeHorizontal * 4
@@ -439,12 +439,12 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                                             ? 3
                                             : 6,
                                     childAspectRatio:
-                                        notifier.isPhone ? 1.75 : 2),
+                                        notifier.isPhone ? 1.95 : 2),
                           ),
                         ),
                       ),
                       Flexible(
-                        flex: 2,
+                        flex: 1,
                         child: Center(
                           child: Container(
                               height: SizeConfig.blockSizeVertical * 8,

@@ -202,41 +202,38 @@ class _EndOfGameState extends State<EndOfGame> {
                                           : SizeConfig.blockSizeVertical * 4,
                                     ),
                                   )),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      primary: AppColors.green,
-                                    ),
-                                    onPressed: () {
-                                      keysMap.updateAll((key, value) =>
-                                          value = KeyState.unselected);
+                              ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    primary: AppColors.green,
+                                  ),
+                                  onPressed: () {
+                                    keysMap.updateAll((key, value) =>
+                                        value = KeyState.unselected);
 
-                                      notifier.resetGame();
-                                      withAnimation
-                                          ? Navigator.pushReplacement(
-                                              context,
-                                              SlideRoute(
-                                                  page: GameBoard(
-                                                prefs: widget.prefs,
-                                              )))
-                                          : Navigator.pushReplacement(
-                                              context,
-                                              FadeRoute(
-                                                  page: GameBoard(
-                                                prefs: widget.prefs,
-                                              )));
-                                    },
-                                    child: Text(
-                                      'New Game',
-                                      style: TextStyle(
-                                        fontSize: orientation ==
-                                                Orientation.portrait
-                                            ? SizeConfig.blockSizeHorizontal * 5
-                                            : SizeConfig.blockSizeVertical * 4,
-                                      ),
-                                    )),
-                              ),
+                                    notifier.resetGame();
+                                    withAnimation
+                                        ? Navigator.pushReplacement(
+                                            context,
+                                            SlideRoute(
+                                                page: GameBoard(
+                                              prefs: widget.prefs,
+                                            )))
+                                        : Navigator.pushReplacement(
+                                            context,
+                                            FadeRoute(
+                                                page: GameBoard(
+                                              prefs: widget.prefs,
+                                            )));
+                                  },
+                                  child: Text(
+                                    'New Game',
+                                    style: TextStyle(
+                                      fontSize: orientation ==
+                                              Orientation.portrait
+                                          ? SizeConfig.blockSizeHorizontal * 5
+                                          : SizeConfig.blockSizeVertical * 4,
+                                    ),
+                                  )),
                             ],
                           ),
                         ))

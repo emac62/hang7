@@ -51,7 +51,7 @@ class _UndeeAnimationState extends State<UndeeAnimation> {
                 width: widget.selected ? widget.imgSize : 0,
                 top: widget.selected
                     ? notifier.isPhone
-                        ? SizeConfig.blockSizeVertical * 9.5
+                        ? SizeConfig.blockSizeVertical * 8.5
                         : widget.orientation == Orientation.portrait
                             ? SizeConfig.blockSizeVertical * 6
                             : SizeConfig.blockSizeVertical * 9
@@ -68,7 +68,7 @@ class _UndeeAnimationState extends State<UndeeAnimation> {
                 width: widget.selected ? widget.imgSize : 0,
                 top: widget.selected
                     ? notifier.isPhone
-                        ? SizeConfig.blockSizeVertical * 9.5
+                        ? SizeConfig.blockSizeVertical * 8.5
                         : widget.orientation == Orientation.portrait
                             ? SizeConfig.blockSizeVertical * 6
                             : SizeConfig.blockSizeVertical * 9

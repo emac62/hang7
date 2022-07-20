@@ -62,22 +62,27 @@ class _OptionsState extends State<Options> {
   @override
   Widget build(BuildContext context) {
     var settingsProvider = Provider.of<SettingsProvider>(context);
+    var controller = Provider.of<Controller>(context);
     return OrientationBuilder(
       builder: (context, orientation) {
         return Scaffold(
           appBar: AppBar(
               automaticallyImplyLeading: false,
               backgroundColor: AppColors.lightGray,
-              toolbarHeight: orientation == Orientation.portrait
-                  ? SizeConfig.blockSizeVertical * 10
-                  : SizeConfig.blockSizeVertical * 8,
+              toolbarHeight: controller.isPhone
+                  ? SizeConfig.blockSizeVertical * 6
+                  : orientation == Orientation.portrait
+                      ? SizeConfig.blockSizeVertical * 10
+                      : SizeConfig.blockSizeVertical * 8,
               title: Text(
                 "OPTIONS",
                 style: TextStyle(
                     color: AppColors.darkBlue,
-                    fontSize: orientation == Orientation.portrait
-                        ? SizeConfig.blockSizeVertical * 7
-                        : SizeConfig.blockSizeVertical * 5),
+                    fontSize: controller.isPhone
+                        ? SizeConfig.blockSizeVertical * 4
+                        : orientation == Orientation.portrait
+                            ? SizeConfig.blockSizeVertical * 7
+                            : SizeConfig.blockSizeVertical * 5),
               )),
           body: Consumer<Controller>(
             builder: (_, notifier, __) {
@@ -92,11 +97,14 @@ class _OptionsState extends State<Options> {
                       colors: [AppColors.lightGray, AppColors.backgroundColor]),
                 ),
                 child: Padding(
-                  padding: orientation == Orientation.portrait
+                  padding: notifier.isPhone
                       ? EdgeInsets.symmetric(
-                          horizontal: SizeConfig.blockSizeHorizontal * 10)
-                      : EdgeInsets.symmetric(
-                          horizontal: SizeConfig.blockSizeHorizontal * 20),
+                          horizontal: SizeConfig.blockSizeVertical * 2)
+                      : orientation == Orientation.portrait
+                          ? EdgeInsets.symmetric(
+                              horizontal: SizeConfig.blockSizeHorizontal * 10)
+                          : EdgeInsets.symmetric(
+                              horizontal: SizeConfig.blockSizeHorizontal * 20),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -181,7 +189,7 @@ class _OptionsState extends State<Options> {
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            vertical: SizeConfig.blockSizeVertical * 1),
+                            vertical: SizeConfig.blockSizeVertical * 0.5),
                         child: Text(
                           "Use Your Coins!",
                           style: TextStyle(
@@ -513,7 +521,7 @@ class _OptionsState extends State<Options> {
                                 image: const DecorationImage(
                                     image:
                                         AssetImage('assets/images/quotes.png'),
-                                    fit: BoxFit.fitHeight),
+                                    fit: BoxFit.contain),
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               height: SizeConfig.blockSizeVertical * 7,

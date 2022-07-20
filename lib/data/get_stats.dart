@@ -25,7 +25,10 @@ calculateStats({required bool gameWon, required int remainingGuesses}) async {
 
   gamesPlayed += 1;
 
-  if (gamesPlayed == 1 || gamesPlayed == 10 || gamesPlayed == 25) {
+  if (gamesPlayed == 25 ||
+      gamesPlayed == 50 ||
+      gamesPlayed == 75 ||
+      gamesPlayed == 100) {
     coins = coins + 10;
   }
 

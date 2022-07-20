@@ -32,6 +32,9 @@ class _WelcomePageState extends State<WelcomePage> {
     setState(() {
       coins = (widget.prefs.getInt('coins') ?? 0);
       withAnimation = widget.prefs.getBool('withAnimation') ?? true;
+      final wordpack = widget.prefs.getString('wordPack') ??
+          widget.prefs.setString('wordPack', "WordPack 1");
+      debugPrint(wordpack.toString());
     });
   }
 

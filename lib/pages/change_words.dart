@@ -35,6 +35,8 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
   ];
 
   late int coins;
+  final myWordScrollController = ScrollController();
+  final wordScrollController = ScrollController();
 
   selectWordPack(int index) {
     setState(() {
@@ -43,6 +45,7 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
           widget.prefs.setString('wordPack', "WordPack 2");
           if (!myWordPacks.contains("WordPack 2")) {
             myWordPacks.add("WordPack 2");
+
             widget.prefs.setStringList('myWordPacks', myWordPacks);
           }
           break;
@@ -145,7 +148,7 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
             return Container(
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
-                    begin: Alignment.center,
+                    begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
                       AppColors.lightGray,
@@ -175,51 +178,61 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
                         ? SizeConfig.blockSizeVertical * 6
                         : SizeConfig.blockSizeVertical * 8,
                     alignment: Alignment.center,
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        itemCount: myWordPacks.length,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(6),
-                              border: widget.prefs.getString('wordPack') ==
-                                      myWordPacks[index]
-                                  ? Border.all(
-                                      color: AppColors.darkBlue, width: 2)
-                                  : Border.all(
-                                      color: Colors.transparent, width: 2),
-                            ),
-                            height: SizeConfig.blockSizeVertical * 20,
-                            width: SizeConfig.blockSizeHorizontal * 18,
-                            child: Center(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      widget.prefs.setString(
-                                          'wordPack', myWordPacks[index]);
-                                      debugPrint(
-                                          "myWords: ${myWordPacks[index]}");
-                                      debugPrint(
-                                          widget.prefs.getString('wordPack'));
-                                    });
-                                  },
-                                  child: Text(
-                                    myWordPacks[index],
-                                    style: TextStyle(
-                                      fontSize: orientation ==
-                                              Orientation.portrait
-                                          ? SizeConfig.blockSizeVertical * 2
-                                          : SizeConfig.blockSizeVertical * 3,
+                    child: Scrollbar(
+                      controller: myWordScrollController,
+                      thumbVisibility: true,
+                      thickness: 3,
+                      child: ListView.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          controller: myWordScrollController,
+                          itemCount: myWordPacks.length,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(6),
+                                border: widget.prefs.getString('wordPack') ==
+                                        myWordPacks[index]
+                                    ? Border.all(
+                                        color: AppColors.darkBlue, width: 2)
+                                    : Border.all(
+                                        color: Colors.transparent, width: 2),
+                              ),
+                              height: orientation == Orientation.portrait
+                                  ? SizeConfig.blockSizeVertical * 25
+                                  : SizeConfig.blockSizeVertical * 20,
+                              width: orientation == Orientation.portrait
+                                  ? SizeConfig.blockSizeVertical * 15
+                                  : SizeConfig.blockSizeHorizontal * 18,
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        widget.prefs.setString(
+                                            'wordPack', myWordPacks[index]);
+                                        debugPrint(
+                                            "myWords: ${myWordPacks[index]}");
+                                        debugPrint(
+                                            widget.prefs.getString('wordPack'));
+                                      });
+                                    },
+                                    child: Text(
+                                      myWordPacks[index],
+                                      style: TextStyle(
+                                        fontSize: orientation ==
+                                                Orientation.portrait
+                                            ? SizeConfig.blockSizeVertical * 2
+                                            : SizeConfig.blockSizeVertical * 3,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          );
-                        }),
+                            );
+                          }),
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
@@ -236,7 +249,7 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8.0),
                     child: Text(
-                      "Purchase for 500 coins.",
+                      "Purchase for 5 coins.",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           color: AppColors.darkBlue,
@@ -245,115 +258,152 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
                               : SizeConfig.blockSizeVertical * 4),
                     ),
                   ),
-                  Container(
-                    color: Colors.transparent,
+                  SizedBox(
                     height: SizeConfig.blockSizeVertical * 15,
                     width: SizeConfig.blockSizeHorizontal * 25,
-                    child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: wordPacks.length,
-                        itemBuilder: ((context, index) {
-                          return Material(
-                              child: InkWell(
-                            onTap: (() {
-                              debugPrint("inkwell: $index");
-                              showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      content: coins > 500
-                                          ? Text(
-                                              "Buy ${wordPacks[index]} for 500 coins?",
-                                              style: TextStyle(
-                                                fontSize: notifier.isPhone
-                                                    ? SizeConfig
-                                                            .blockSizeHorizontal *
-                                                        6
-                                                    : orientation ==
-                                                            Orientation.portrait
-                                                        ? SizeConfig
-                                                                .blockSizeHorizontal *
-                                                            4
-                                                        : SizeConfig
-                                                                .blockSizeVertical *
-                                                            4,
-                                              ),
-                                            )
-                                          : Text(
-                                              "You don't have enough coins! Keep playing to win more.",
-                                              style: TextStyle(
-                                                fontSize: notifier.isPhone
-                                                    ? SizeConfig
-                                                            .blockSizeHorizontal *
-                                                        6
-                                                    : orientation ==
-                                                            Orientation.portrait
-                                                        ? SizeConfig
-                                                                .blockSizeHorizontal *
-                                                            4
-                                                        : SizeConfig
-                                                                .blockSizeVertical *
-                                                            4,
-                                              ),
-                                            ),
-                                      actions: [
-                                        ElevatedButton(
-                                            onPressed: coins >= 500
-                                                ? () {
-                                                    setState(() {
-                                                      coins = coins - 500;
-                                                      widget.prefs.setInt(
-                                                          'coins', coins);
-
-                                                      selectWordPack(index);
-                                                    });
-                                                    Navigator.push(
-                                                      context,
-                                                      PageRouteBuilder(
-                                                        pageBuilder:
-                                                            (c, a1, a2) =>
-                                                                ChangeWordPack(
-                                                          prefs: widget.prefs,
-                                                        ),
-                                                        transitionsBuilder: (c,
-                                                                anim,
-                                                                a2,
-                                                                child) =>
-                                                            FadeTransition(
-                                                                opacity: anim,
-                                                                child: child),
-                                                        transitionDuration:
-                                                            const Duration(
-                                                                milliseconds:
-                                                                    50),
-                                                      ),
-                                                    );
-                                                  }
-                                                : () {
-                                                    // Go Back
-                                                    Navigator.pop(context);
-                                                  },
-                                            child: coins >= 500
+                    child: Scrollbar(
+                      controller: wordScrollController,
+                      thumbVisibility: true,
+                      thickness: 3,
+                      child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          controller: wordScrollController,
+                          itemCount: wordPacks.length,
+                          itemBuilder: ((context, index) {
+                            return Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  onTap: (() {
+                                    debugPrint("inkwell: $index");
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            content: coins > 5
                                                 ? Text(
-                                                    "Yes",
+                                                    "Buy ${wordPacks[index]} for 5 coins?",
                                                     style: TextStyle(
                                                       fontSize: notifier.isPhone
                                                           ? SizeConfig
                                                                   .blockSizeHorizontal *
-                                                              4
+                                                              6
                                                           : orientation ==
                                                                   Orientation
                                                                       .portrait
                                                               ? SizeConfig
                                                                       .blockSizeHorizontal *
-                                                                  3
+                                                                  4
                                                               : SizeConfig
                                                                       .blockSizeVertical *
-                                                                  3,
+                                                                  4,
                                                     ),
                                                   )
                                                 : Text(
-                                                    "OK",
+                                                    "You don't have enough coins! Keep playing to win more.",
+                                                    style: TextStyle(
+                                                      fontSize: notifier.isPhone
+                                                          ? SizeConfig
+                                                                  .blockSizeHorizontal *
+                                                              6
+                                                          : orientation ==
+                                                                  Orientation
+                                                                      .portrait
+                                                              ? SizeConfig
+                                                                      .blockSizeHorizontal *
+                                                                  4
+                                                              : SizeConfig
+                                                                      .blockSizeVertical *
+                                                                  4,
+                                                    ),
+                                                  ),
+                                            actions: [
+                                              ElevatedButton(
+                                                  onPressed: coins >= 5
+                                                      ? () {
+                                                          setState(() {
+                                                            coins = coins - 5;
+                                                            widget.prefs.setInt(
+                                                                'coins', coins);
+
+                                                            selectWordPack(
+                                                                index);
+                                                          });
+                                                          Navigator.push(
+                                                            context,
+                                                            PageRouteBuilder(
+                                                              pageBuilder: (c,
+                                                                      a1, a2) =>
+                                                                  ChangeWordPack(
+                                                                prefs: widget
+                                                                    .prefs,
+                                                              ),
+                                                              transitionsBuilder: (c,
+                                                                      anim,
+                                                                      a2,
+                                                                      child) =>
+                                                                  FadeTransition(
+                                                                      opacity:
+                                                                          anim,
+                                                                      child:
+                                                                          child),
+                                                              transitionDuration:
+                                                                  const Duration(
+                                                                      milliseconds:
+                                                                          50),
+                                                            ),
+                                                          );
+                                                        }
+                                                      : () {
+                                                          // Go Back
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                  child: coins >= 5
+                                                      ? Text(
+                                                          "Yes",
+                                                          style: TextStyle(
+                                                            fontSize: notifier
+                                                                    .isPhone
+                                                                ? SizeConfig
+                                                                        .blockSizeHorizontal *
+                                                                    4
+                                                                : orientation ==
+                                                                        Orientation
+                                                                            .portrait
+                                                                    ? SizeConfig
+                                                                            .blockSizeHorizontal *
+                                                                        3
+                                                                    : SizeConfig
+                                                                            .blockSizeVertical *
+                                                                        3,
+                                                          ),
+                                                        )
+                                                      : Text(
+                                                          "OK",
+                                                          style: TextStyle(
+                                                            fontSize: notifier
+                                                                    .isPhone
+                                                                ? SizeConfig
+                                                                        .blockSizeHorizontal *
+                                                                    4
+                                                                : orientation ==
+                                                                        Orientation
+                                                                            .portrait
+                                                                    ? SizeConfig
+                                                                            .blockSizeHorizontal *
+                                                                        3
+                                                                    : SizeConfig
+                                                                            .blockSizeVertical *
+                                                                        3,
+                                                          ),
+                                                        )),
+                                              OutlinedButton(
+                                                  onPressed: () {
+                                                    // Go Back
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: Text(
+                                                    "Cancel",
                                                     style: TextStyle(
                                                       fontSize: notifier.isPhone
                                                           ? SizeConfig
@@ -369,60 +419,49 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
                                                                       .blockSizeVertical *
                                                                   3,
                                                     ),
-                                                  )),
-                                        OutlinedButton(
-                                            onPressed: () {
-                                              // Go Back
-                                              Navigator.pop(context);
-                                            },
+                                                  ))
+                                            ],
+                                          );
+                                        });
+                                  }),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Ink(
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: AppColors.darkBlue,
+                                                width: 1),
+                                            gradient: const LinearGradient(
+                                                begin: Alignment.topCenter,
+                                                end: Alignment.bottomCenter,
+                                                colors: [
+                                                  AppColors.green,
+                                                  AppColors.lightGray
+                                                ]),
+                                            borderRadius:
+                                                BorderRadius.circular(6)),
+                                        height:
+                                            SizeConfig.blockSizeVertical * 8,
+                                        width:
+                                            SizeConfig.blockSizeHorizontal * 20,
+                                        child: Center(
                                             child: Text(
-                                              "Cancel",
-                                              style: TextStyle(
-                                                fontSize: notifier.isPhone
-                                                    ? SizeConfig
-                                                            .blockSizeHorizontal *
-                                                        4
-                                                    : orientation ==
-                                                            Orientation.portrait
-                                                        ? SizeConfig
-                                                                .blockSizeHorizontal *
-                                                            3
-                                                        : SizeConfig
-                                                                .blockSizeVertical *
-                                                            3,
-                                              ),
-                                            ))
-                                      ],
-                                    );
-                                  });
-                            }),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Ink(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: AppColors.darkBlue, width: 1),
-                                      gradient: const LinearGradient(
-                                          begin: Alignment.topCenter,
-                                          end: Alignment.bottomCenter,
-                                          colors: [
-                                            AppColors.green,
-                                            AppColors.lightGray
-                                          ]),
-                                      borderRadius: BorderRadius.circular(6)),
-                                  height: SizeConfig.blockSizeVertical * 8,
-                                  width: SizeConfig.blockSizeHorizontal * 20,
-                                  child: Center(
-                                      child: Text(
-                                    wordPacks[index],
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize:
-                                            SizeConfig.blockSizeVertical * 3),
-                                  ))),
-                            ),
-                          ));
-                        })),
+                                          wordPacks[index],
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontSize: orientation ==
+                                                      Orientation.portrait
+                                                  ? SizeConfig
+                                                          .blockSizeVertical *
+                                                      2.5
+                                                  : SizeConfig
+                                                          .blockSizeVertical *
+                                                      3),
+                                        ))),
+                                  ),
+                                ));
+                          })),
+                    ),
                   ),
                   Container(
                       margin: EdgeInsets.only(
