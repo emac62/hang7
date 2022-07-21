@@ -59,15 +59,11 @@ class StatsRow extends StatelessWidget {
               Expanded(
                 child: bonus
                     ? Text(
-                        "10 Bonus Coins for $gamesPlayed games played.",
+                        "10 Bonus Coins for $gamesPlayed games played",
                         style: TextStyle(
-                            fontSize: SizeConfig.blockSizeVertical * 3),
+                            fontSize: SizeConfig.blockSizeVertical * 2),
                       )
-                    : Text(
-                        "",
-                        style: TextStyle(
-                            fontSize: SizeConfig.blockSizeVertical * 3),
-                      ),
+                    : const Text(""),
               )
             ],
           ),

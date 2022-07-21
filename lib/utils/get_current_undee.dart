@@ -5,6 +5,8 @@ String setUndees(SharedPreferences prefs) {
   switch (prefs.getString('changeColor')) {
     case "Pink":
       return "assets/images/pinkUndees.png";
+    case "GreenPlaid":
+      return "assets/images/greenPlaid.png";
 
     case "White":
       return "assets/images/whiteUndees.png";
@@ -27,12 +29,12 @@ String setUndees(SharedPreferences prefs) {
 }
 
 getMyUndeesImages(SharedPreferences prefs) {
-  List<Widget> myUndees = [];
+  List<Widget> myUndees = [Image.asset("assets/images/pinkUndees.png")];
   List<String> myStrUndees = prefs.getStringList('undeeColours') ?? ["Pink"];
   for (var i = 0; i < myStrUndees.length; i++) {
     switch (myStrUndees[i]) {
-      case "Pink":
-        myUndees.add(Image.asset("assets/images/pinkUndees.png"));
+      case "GreenPlaid":
+        myUndees.add(Image.asset("assets/images/greenPlaid.png"));
         break;
       case "White":
         myUndees.add(Image.asset("assets/images/whiteUndees.png"));

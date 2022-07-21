@@ -9,6 +9,7 @@ import 'package:hang7/constants/progress_messages.dart';
 import 'package:hang7/constants/seven_letters.dart';
 import 'package:hang7/data/key_map.dart';
 import 'package:hang7/pages/options.dart';
+import 'package:hang7/pages/welcome_page.dart';
 import 'package:hang7/providers/controller.dart';
 import 'package:hang7/providers/settings_provider.dart';
 import 'package:hang7/widgets/keyboard_row.dart';
@@ -77,6 +78,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
 
   getWord() {
     String group = widget.prefs.getString('wordPack') ?? "WordPack 1";
+    debugPrint("getWord group: $group");
     String listKey = "";
     List<String> words = [];
     List<String> usedWordIndexes = [];
@@ -304,7 +306,21 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                       menuButton(
                                           icon: Icons.refresh,
                                           onPressed: () {
+                                            notifier.resetGame();
                                             resetControllers();
+                                            settingsProvider.withAnimation
+                                                ? Navigator.push(
+                                                    context,
+                                                    RotationRoute(
+                                                        page: WelcomePage(
+                                                      prefs: widget.prefs,
+                                                    )))
+                                                : Navigator.push(
+                                                    context,
+                                                    FadeRoute(
+                                                        page: WelcomePage(
+                                                      prefs: widget.prefs,
+                                                    )));
                                           },
                                           orientation: orientation),
                                       menuButton(
@@ -459,24 +475,29 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                               letterSpacing: 1.5,
                                               fontSize: isPhone
                                                   ? SizeConfig
-                                                          .blockSizeHorizontal *
-                                                      4
+                                                          .blockSizeVertical *
+                                                      2
                                                   : orientation ==
                                                           Orientation.portrait
                                                       ? SizeConfig
-                                                              .blockSizeHorizontal *
-                                                          3
+                                                              .blockSizeVertical *
+                                                          2
                                                       : SizeConfig
-                                                              .blockSizeHorizontal *
+                                                              .blockSizeVertical *
                                                           2,
                                             ),
                                           ),
                                         ),
                                         Padding(
                                           padding: EdgeInsets.only(
-                                              right: SizeConfig
-                                                      .blockSizeHorizontal *
-                                                  10),
+                                              right: orientation ==
+                                                      Orientation.portrait
+                                                  ? SizeConfig
+                                                          .blockSizeHorizontal *
+                                                      10
+                                                  : SizeConfig
+                                                          .blockSizeHorizontal *
+                                                      6),
                                           child: Text(
                                             notifier.remainingGuesses
                                                 .toString(),
@@ -484,15 +505,15 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                               fontWeight: FontWeight.bold,
                                               fontSize: isPhone
                                                   ? SizeConfig
-                                                          .blockSizeHorizontal *
-                                                      4
+                                                          .blockSizeVertical *
+                                                      3
                                                   : orientation ==
                                                           Orientation.portrait
                                                       ? SizeConfig
-                                                              .blockSizeHorizontal *
-                                                          4
+                                                              .blockSizeVertical *
+                                                          2.5
                                                       : SizeConfig
-                                                              .blockSizeHorizontal *
+                                                              .blockSizeVertical *
                                                           2,
                                             ),
                                           ),
