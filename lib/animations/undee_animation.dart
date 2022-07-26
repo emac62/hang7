@@ -51,16 +51,26 @@ class _UndeeAnimationState extends State<UndeeAnimation> {
                 width: widget.selected ? widget.imgSize : 0,
                 top: widget.selected
                     ? notifier.isPhone
-                        ? SizeConfig.blockSizeVertical * 8.5
+                        ? SizeConfig.blockSizeVertical * 8.5 //phone on line
                         : widget.orientation == Orientation.portrait
-                            ? SizeConfig.blockSizeVertical * 6
-                            : SizeConfig.blockSizeVertical * 9
-                    : SizeConfig.blockSizeVertical * 20,
+                            ? SizeConfig.blockSizeVertical *
+                                6 //tablet portrait on line
+                            : SizeConfig.blockSizeVertical *
+                                9 // tablet landscape on line
+                    : widget.orientation == Orientation.portrait
+                        ? SizeConfig.blockSizeVertical * 25
+                        : SizeConfig.blockSizeVertical *
+                            30, //starting position from top
                 left: widget.selected
                     ? widget.fromLeft
-                    : notifier.isTablet
-                        ? SizeConfig.blockSizeHorizontal * 75
-                        : SizeConfig.blockSizeHorizontal * 85,
+                    : notifier.isPhone
+                        ? SizeConfig.blockSizeHorizontal *
+                            80 //phone from starting from left
+                        : widget.orientation == Orientation.portrait
+                            ? SizeConfig.blockSizeHorizontal *
+                                60 // tablet portrait from left
+                            : SizeConfig.blockSizeHorizontal *
+                                50, // tablet landscape starting from left
                 duration: Duration(milliseconds: widget.duration),
                 curve: Curves.bounceOut,
                 child: undeeImage)

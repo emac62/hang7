@@ -5,6 +5,7 @@ import 'package:hang7/animations/route.dart';
 import 'package:hang7/constants/key_state.dart';
 import 'package:hang7/data/key_map.dart';
 import 'package:hang7/pages/game_board.dart';
+import 'package:hang7/pages/options.dart';
 import 'package:hang7/providers/controller.dart';
 import 'package:hang7/providers/settings_provider.dart';
 import 'package:hang7/pages/welcome_page.dart';
@@ -39,6 +40,97 @@ class _EndOfGameState extends State<EndOfGame> {
       coins = (prefs.getInt('coins') ?? 0);
       withAnimation = (prefs.getBool('withAnimation') ?? true);
     });
+  }
+
+  showOutOfWords(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('No Words!'),
+            content: const Text(
+                'You have used all the words in this word pack. Go to Options to change your pack or buy more coins if needed.'),
+            actions: <Widget>[
+              ElevatedButton(
+                child: const Text('Get More Words!'),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      FadeRoute(
+                          page: Options(
+                        prefs: widget.prefs,
+                      )));
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  int currentWPRemainingWords = 50;
+  getCurrentRemainingWords() {
+    String wp = widget.prefs.getString('wordPack') ?? "WordPack 1";
+    switch (wp) {
+      case "WordPack 1":
+        List<String> l = widget.prefs.getStringList('usedWords1') ?? [];
+        currentWPRemainingWords = l.length;
+        break;
+      case "WordPack 2":
+        List<String> l = widget.prefs.getStringList('usedWords2') ?? [];
+        currentWPRemainingWords = l.length;
+        break;
+      case "WordPack 3":
+        List<String> l = widget.prefs.getStringList('usedWords3') ?? [];
+        currentWPRemainingWords = l.length;
+        break;
+      case "WordPack 4":
+        List<String> l = widget.prefs.getStringList('usedWords4') ?? [];
+        currentWPRemainingWords = l.length;
+        break;
+      case "WordPack 5":
+        List<String> l = widget.prefs.getStringList('usedWords5') ?? [];
+        currentWPRemainingWords = l.length;
+        break;
+      case "WordPack 6":
+        List<String> l = widget.prefs.getStringList('usedWords6') ?? [];
+        currentWPRemainingWords = l.length;
+        break;
+      case "WordPack 7":
+        List<String> l = widget.prefs.getStringList('usedWords7') ?? [];
+        currentWPRemainingWords = l.length;
+        break;
+      case "WordPack 8":
+        List<String> l = widget.prefs.getStringList('usedWords8') ?? [];
+        currentWPRemainingWords = l.length;
+        break;
+      case "WordPack 9":
+        List<String> l = widget.prefs.getStringList('usedWords9') ?? [];
+        currentWPRemainingWords = l.length;
+        break;
+      case "WordPack 10":
+        List<String> l = widget.prefs.getStringList('usedWords10') ?? [];
+        currentWPRemainingWords = l.length;
+        break;
+    }
+  }
+
+  newGame() {
+    keysMap.updateAll((key, value) => value = KeyState.unselected);
+
+    Provider.of<Controller>(context, listen: false).resetGame();
+    withAnimation
+        ? Navigator.pushReplacement(
+            context,
+            SlideRoute(
+                page: GameBoard(
+              prefs: widget.prefs,
+            )))
+        : Navigator.pushReplacement(
+            context,
+            FadeRoute(
+                page: GameBoard(
+              prefs: widget.prefs,
+            )));
   }
 
   @override
@@ -207,23 +299,10 @@ class _EndOfGameState extends State<EndOfGame> {
                                     primary: AppColors.green,
                                   ),
                                   onPressed: () {
-                                    keysMap.updateAll((key, value) =>
-                                        value = KeyState.unselected);
-
-                                    notifier.resetGame();
-                                    withAnimation
-                                        ? Navigator.pushReplacement(
-                                            context,
-                                            SlideRoute(
-                                                page: GameBoard(
-                                              prefs: widget.prefs,
-                                            )))
-                                        : Navigator.pushReplacement(
-                                            context,
-                                            FadeRoute(
-                                                page: GameBoard(
-                                              prefs: widget.prefs,
-                                            )));
+                                    getCurrentRemainingWords();
+                                    currentWPRemainingWords >= 50
+                                        ? showOutOfWords(context)
+                                        : newGame();
                                   },
                                   child: Text(
                                     'New Game',

@@ -6,6 +6,7 @@ import 'package:hang7/pages/game_board.dart';
 import 'package:hang7/pages/options.dart';
 import 'package:hang7/providers/controller.dart';
 import 'package:hang7/providers/settings_provider.dart';
+import 'package:hang7/utils/get_remaining_words.dart';
 import 'package:hang7/widgets/app_colors.dart';
 import 'package:hang7/widgets/size_config.dart';
 import 'package:provider/provider.dart';
@@ -49,14 +50,18 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
     });
   }
 
+  List<String> remainingWords = [];
+
   @override
   void initState() {
     super.initState();
+
     coins = widget.prefs.getInt('coins') ?? 0;
     myWordPacks = widget.prefs.getStringList('myWordPacks') ?? ["WordPack 1"];
     debugPrint(myWordPacks.toString());
     availablePacks =
         wordPacks.where((element) => !myWordPacks.contains(element)).toList();
+    remainingWords = getMyWordPackRemainingWords(widget.prefs);
   }
 
   @override
@@ -112,18 +117,40 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
                                 ? SizeConfig.blockSizeVertical * 4
                                 : orientation == Orientation.portrait
                                     ? SizeConfig.blockSizeVertical * 5
-                                    : SizeConfig.blockSizeVertical * 5,
+                                    : SizeConfig.blockSizeVertical * 4,
                           )),
                     ),
                     Text(
-                      "Default (WordPack 1) and all purchased, current WordPack is outlined.",
+                      "Default (WordPack 1) and all purchased packs.",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: notifier.isPhone
                             ? SizeConfig.blockSizeVertical * 2
                             : orientation == Orientation.portrait
                                 ? SizeConfig.blockSizeVertical * 3
-                                : SizeConfig.blockSizeVertical * 3,
+                                : SizeConfig.blockSizeVertical * 2,
+                      ),
+                    ),
+                    Text(
+                      "Current WordPack is outlined.",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: notifier.isPhone
+                            ? SizeConfig.blockSizeVertical * 2
+                            : orientation == Orientation.portrait
+                                ? SizeConfig.blockSizeVertical * 3
+                                : SizeConfig.blockSizeVertical * 2,
+                      ),
+                    ),
+                    Text(
+                      "Once all the words are used, repurchase for 100 coins.",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: notifier.isPhone
+                            ? SizeConfig.blockSizeVertical * 2
+                            : orientation == Orientation.portrait
+                                ? SizeConfig.blockSizeVertical * 3
+                                : SizeConfig.blockSizeVertical * 2,
                       ),
                     ),
                     Container(
@@ -132,7 +159,7 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
                               Border.all(color: Colors.transparent, width: 2)),
                       height: orientation == Orientation.portrait
                           ? SizeConfig.blockSizeVertical * 12
-                          : SizeConfig.blockSizeVertical * 8,
+                          : SizeConfig.blockSizeVertical * 12,
                       alignment: Alignment.center,
                       child: Scrollbar(
                         controller: myWordScrollController,
@@ -169,23 +196,145 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
                                     child: GestureDetector(
                                       onTap: () {
                                         setState(() {
-                                          widget.prefs.setString(
-                                              'wordPack', myWordPacks[index]);
-                                          debugPrint(
-                                              "myWords: ${myWordPacks[index]}");
-                                          debugPrint(widget.prefs
-                                              .getString('wordPack'));
+                                          int r =
+                                              int.parse(remainingWords[index]);
+                                          if (r == 0) {
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return AlertDialog(
+                                                    content: coins > 100
+                                                        ? Text(
+                                                            "You have used all the words in this pack. Reset for 100 coins?",
+                                                            style: TextStyle(
+                                                              fontSize: orientation ==
+                                                                      Orientation
+                                                                          .portrait
+                                                                  ? SizeConfig
+                                                                          .blockSizeVertical *
+                                                                      2
+                                                                  : SizeConfig
+                                                                          .blockSizeVertical *
+                                                                      3,
+                                                            ),
+                                                          )
+                                                        : Text(
+                                                            "You need 100 coins to reset this pack.",
+                                                            style: TextStyle(
+                                                              fontSize: orientation ==
+                                                                      Orientation
+                                                                          .portrait
+                                                                  ? SizeConfig
+                                                                          .blockSizeVertical *
+                                                                      2
+                                                                  : SizeConfig
+                                                                          .blockSizeVertical *
+                                                                      3,
+                                                            ),
+                                                          ),
+                                                    actions: [
+                                                      ElevatedButton(
+                                                          onPressed: () {
+                                                            setState(() {
+                                                              if (coins > 100) {
+                                                                coins =
+                                                                    coins - 100;
+                                                                widget.prefs
+                                                                    .setInt(
+                                                                        'coins',
+                                                                        coins);
+                                                                resetMyWordPackRemainingWords(
+                                                                    widget
+                                                                        .prefs,
+                                                                    myWordPacks[
+                                                                        index]);
+                                                                widget.prefs.setString(
+                                                                    'wordPack',
+                                                                    myWordPacks[
+                                                                        index]);
+                                                                remainingWords =
+                                                                    getMyWordPackRemainingWords(
+                                                                        widget
+                                                                            .prefs);
+                                                              }
+                                                            });
+
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
+                                                          child: Text(
+                                                            "OK",
+                                                            style: TextStyle(
+                                                              fontSize: orientation ==
+                                                                      Orientation
+                                                                          .portrait
+                                                                  ? SizeConfig
+                                                                          .blockSizeVertical *
+                                                                      2
+                                                                  : SizeConfig
+                                                                          .blockSizeVertical *
+                                                                      3,
+                                                            ),
+                                                          )),
+                                                      ElevatedButton(
+                                                          onPressed: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
+                                                          child: Text(
+                                                            "Cancel",
+                                                            style: TextStyle(
+                                                              fontSize: orientation ==
+                                                                      Orientation
+                                                                          .portrait
+                                                                  ? SizeConfig
+                                                                          .blockSizeVertical *
+                                                                      2
+                                                                  : SizeConfig
+                                                                          .blockSizeVertical *
+                                                                      3,
+                                                            ),
+                                                          ))
+                                                    ],
+                                                  );
+                                                });
+                                          } else {
+                                            widget.prefs.setString(
+                                                'wordPack', myWordPacks[index]);
+                                          }
                                         });
                                       },
-                                      child: Text(
-                                        myWordPacks[index],
-                                        style: TextStyle(
-                                          fontSize: orientation ==
-                                                  Orientation.portrait
-                                              ? SizeConfig.blockSizeVertical * 2
-                                              : SizeConfig.blockSizeVertical *
-                                                  3,
-                                        ),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            myWordPacks[index],
+                                            style: TextStyle(
+                                              fontSize: orientation ==
+                                                      Orientation.portrait
+                                                  ? SizeConfig
+                                                          .blockSizeVertical *
+                                                      2
+                                                  : SizeConfig
+                                                          .blockSizeVertical *
+                                                      3,
+                                            ),
+                                          ),
+                                          Text(
+                                            "${remainingWords[index]} words left",
+                                            style: TextStyle(
+                                              fontSize: orientation ==
+                                                      Orientation.portrait
+                                                  ? SizeConfig
+                                                          .blockSizeVertical *
+                                                      2
+                                                  : SizeConfig
+                                                          .blockSizeVertical *
+                                                      1.5,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ),
@@ -207,10 +356,22 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
                                     : SizeConfig.blockSizeVertical * 5,
                           )),
                     ),
+                    Text(
+                      "Each word pack contains 50 random words.",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: AppColors.darkBlue,
+                        fontSize: notifier.isPhone
+                            ? SizeConfig.blockSizeVertical * 2
+                            : orientation == Orientation.portrait
+                                ? SizeConfig.blockSizeVertical * 3
+                                : SizeConfig.blockSizeVertical * 3,
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 8.0),
                       child: Text(
-                        "Each word pack contains 50 random words. Purchase for 500 coins.",
+                        "Purchase for 500 coins.",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: AppColors.darkBlue,

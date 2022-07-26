@@ -14,6 +14,7 @@ import 'package:hang7/providers/controller.dart';
 import 'package:hang7/providers/settings_provider.dart';
 import 'package:hang7/widgets/keyboard_row.dart';
 import 'package:hang7/widgets/game_stats_alert.dart';
+import 'package:hang7/widgets/undees_basket.dart';
 import 'package:hang7/widgets/word_grid.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -58,23 +59,23 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
   late Image undeeImage;
   int coins = 0;
 
-  resetControllers() {
-    showMenu = false;
-    showUndee1 = false;
-    showUndee2 = false;
-    showUndee3 = false;
-    showUndee4 = false;
-    showUndee5 = false;
-    showUndee6 = false;
-    showUndee7 = false;
+  // resetControllers() {
+  //   showMenu = false;
+  //   showUndee1 = false;
+  //   showUndee2 = false;
+  //   showUndee3 = false;
+  //   showUndee4 = false;
+  //   showUndee5 = false;
+  //   showUndee6 = false;
+  //   showUndee7 = false;
 
-    progressMessage = "Start by picking a letter.";
-    progressValue = 0;
+  //   progressMessage = "Start by picking a letter.";
+  //   progressValue = 0;
 
-    keysMap.updateAll((key, value) => value = KeyState.unselected);
-    debugPrint("before resetgame in resetcontrollers");
-    Provider.of<Controller>(context, listen: false).resetGame();
-  }
+  //   keysMap.updateAll((key, value) => value = KeyState.unselected);
+  //   debugPrint("before resetgame in resetcontrollers");
+  //   Provider.of<Controller>(context, listen: false).resetGame();
+  // }
 
   getWord() {
     String group = widget.prefs.getString('wordPack') ?? "WordPack 1";
@@ -138,15 +139,18 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
     int r = Random().nextInt(words.length);
     debugPrint("first Random: $r");
     String rAsString = r.toString();
+
+    debugPrint("else called");
     while (usedWordIndexes.contains(rAsString)) {
       r = Random().nextInt(words.length);
       rAsString = r.toString();
     }
-    debugPrint(rAsString);
+    debugPrint("random String: $rAsString");
     debugPrint(usedWordIndexes.toString());
     usedWordIndexes.add(rAsString);
     widget.prefs.setStringList(listKey, usedWordIndexes);
     currentWord = words[r].toUpperCase();
+    debugPrint("getWord: $currentWord");
   }
 
   @override
@@ -306,8 +310,10 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                       menuButton(
                                           icon: Icons.refresh,
                                           onPressed: () {
+                                            keysMap.updateAll((key, value) =>
+                                                value = KeyState.unselected);
                                             notifier.resetGame();
-                                            resetControllers();
+
                                             settingsProvider.withAnimation
                                                 ? Navigator.push(
                                                     context,
@@ -394,15 +400,10 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                                     30,
                                         width: SizeConfig.safeBlockHorizontal *
                                             100,
-                                        child: notifier.remainingGuesses != 0
-                                            ? Image.asset(
-                                                'assets/images/clothesLine.png',
-                                                fit: BoxFit.fitWidth,
-                                              )
-                                            : Image.asset(
-                                                'assets/images/clothesLine2.png',
-                                                fit: BoxFit.fitWidth,
-                                              ),
+                                        child: Image.asset(
+                                          'assets/images/clothesLine.png',
+                                          fit: BoxFit.fitWidth,
+                                        ),
                                       )
                                     : orientation == Orientation.portrait
                                         ? SizedBox(
@@ -420,16 +421,10 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                                     : SizeConfig
                                                             .blockSizeVertical *
                                                         25,
-                                            child:
-                                                notifier.remainingGuesses != 0
-                                                    ? Image.asset(
-                                                        'assets/images/tabletLine.png',
-                                                        fit: BoxFit.fitWidth,
-                                                      )
-                                                    : Image.asset(
-                                                        'assets/images/tabletLine2.png',
-                                                        fit: BoxFit.fitWidth,
-                                                      ),
+                                            child: Image.asset(
+                                              'assets/images/tabletLine.png',
+                                              fit: BoxFit.fitWidth,
+                                            ),
                                           )
                                         : SizedBox(
                                             width:
@@ -446,17 +441,19 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                                     : SizeConfig
                                                             .blockSizeVertical *
                                                         30,
-                                            child:
-                                                notifier.remainingGuesses != 0
-                                                    ? Image.asset(
-                                                        'assets/images/tabletLine.png',
-                                                        fit: BoxFit.fitWidth,
-                                                      )
-                                                    : Image.asset(
-                                                        'assets/images/tabletLine2.png',
-                                                        fit: BoxFit.fitWidth,
-                                                      ),
+                                            child: Image.asset(
+                                              'assets/images/tabletLine.png',
+                                              fit: BoxFit.fitWidth,
+                                            ),
                                           ),
+                                Positioned(
+                                    right: SizeConfig.blockSizeHorizontal * 10,
+                                    bottom: notifier.isPhone
+                                        ? SizeConfig.blockSizeVertical * 4
+                                        : SizeConfig.blockSizeVertical * 2,
+                                    child: UndeesBasket(
+                                      prefs: widget.prefs,
+                                    )),
                                 Positioned(
                                   top: 6,
                                   right: 0,
@@ -527,7 +524,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                   duration: 2000,
                                   selected: showUndee1,
                                   fromLeft: isPhone
-                                      ? SizeConfig.blockSizeHorizontal * 6
+                                      ? SizeConfig.blockSizeHorizontal * 8
                                       : orientation == Orientation.portrait
                                           ? 50
                                           : 70,
@@ -720,20 +717,22 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                     SizedBox(
                       height: SizeConfig.blockSizeVertical * 1,
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                          border:
-                              Border.all(color: Colors.transparent, width: 2)),
-                      width: SizeConfig.blockSizeHorizontal * 100,
-                      height: notifier.isPhone
-                          ? SizeConfig.blockSizeVertical * 16
-                          : orientation == Orientation.portrait
-                              ? SizeConfig.blockSizeVertical * 20
-                              : SizeConfig.blockSizeVertical * 18,
-                      child: Align(
-                        alignment: Alignment.bottomCenter,
-                        child: WordGrid(
-                          orientation: orientation,
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                color: Colors.transparent, width: 2)),
+                        width: SizeConfig.blockSizeHorizontal * 100,
+                        height: notifier.isPhone
+                            ? SizeConfig.blockSizeVertical * 16
+                            : orientation == Orientation.portrait
+                                ? SizeConfig.blockSizeVertical * 20
+                                : SizeConfig.blockSizeVertical * 18,
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: WordGrid(
+                            orientation: orientation,
+                          ),
                         ),
                       ),
                     ),

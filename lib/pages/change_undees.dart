@@ -170,7 +170,7 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                       children: [
                         Padding(
                           padding: EdgeInsets.all(
-                              SizeConfig.blockSizeHorizontal * 2),
+                              SizeConfig.blockSizeHorizontal * 1),
                           child: Text(
                             "My Undees",
                             style: TextStyle(
@@ -178,12 +178,12 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                                   ? SizeConfig.blockSizeVertical * 4
                                   : orientation == Orientation.portrait
                                       ? SizeConfig.blockSizeVertical * 5
-                                      : SizeConfig.blockSizeVertical * 5,
+                                      : SizeConfig.blockSizeVertical * 4,
                             ),
                           ),
                         ),
                         Text(
-                          "Default (Pink) and all purchased, current undees are outlined.",
+                          "Default (Pink) and all purchased.",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: notifier.isPhone
@@ -193,13 +193,24 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                                     : SizeConfig.blockSizeVertical * 3,
                           ),
                         ),
+                        Text(
+                          "Current UnDees are outlined.",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: notifier.isPhone
+                                ? SizeConfig.blockSizeVertical * 2
+                                : orientation == Orientation.portrait
+                                    ? SizeConfig.blockSizeVertical * 3
+                                    : SizeConfig.blockSizeVertical * 2,
+                          ),
+                        ),
                         Container(
                           decoration: BoxDecoration(
                               border: Border.all(
                                   color: Colors.transparent, width: 2)),
                           height: orientation == Orientation.portrait
                               ? SizeConfig.blockSizeVertical * 12
-                              : SizeConfig.blockSizeVertical * 8,
+                              : SizeConfig.blockSizeVertical * 12,
                           alignment: Alignment.center,
                           child: Scrollbar(
                             controller: myUndeesScrollController,
@@ -232,6 +243,10 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                                                 widget.prefs.setString(
                                                     'changeColor',
                                                     undColour[index]);
+                                                undeesStr = widget.prefs
+                                                        .getString(
+                                                            'changeColor') ??
+                                                    "Pink";
                                               });
                                             },
                                             child: myUndees[index]),
@@ -250,7 +265,7 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                                   ? SizeConfig.blockSizeVertical * 4
                                   : orientation == Orientation.portrait
                                       ? SizeConfig.blockSizeVertical * 5
-                                      : SizeConfig.blockSizeVertical * 5,
+                                      : SizeConfig.blockSizeVertical * 4,
                             ),
                           ),
                         ),
