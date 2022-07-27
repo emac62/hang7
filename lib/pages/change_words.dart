@@ -158,7 +158,7 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
                           border:
                               Border.all(color: Colors.transparent, width: 2)),
                       height: orientation == Orientation.portrait
-                          ? SizeConfig.blockSizeVertical * 12
+                          ? SizeConfig.blockSizeVertical * 13
                           : SizeConfig.blockSizeVertical * 12,
                       alignment: Alignment.center,
                       child: Scrollbar(

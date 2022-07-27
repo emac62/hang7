@@ -219,6 +219,10 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     var settingsProvider = Provider.of<SettingsProvider>(context);
+    debugPrint("Screen height: ${SizeConfig.screenHeight}");
+
+    debugPrint("Screen safeBlockVertical: ${SizeConfig.safeBlockVertical}");
+    debugPrint("Screen blockVertial: ${SizeConfig.blockSizeVertical}");
     return OrientationBuilder(
       builder: ((context, orientation) {
         return Scaffold(
@@ -239,9 +243,11 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
               if (notifier.isPhone) {
                 isPhone = true;
                 isTablet = false;
+                debugPrint("isPhone: $isPhone");
               } else {
                 isPhone = false;
                 isTablet = true;
+                debugPrint("isTablet: $isTablet");
               }
 
               return Container(
@@ -254,16 +260,19 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                 width: SizeConfig.safeBlockHorizontal * 100,
                 child: SafeArea(
                   child: Column(children: [
-                    SizedBox(
+                    Container(
+                      decoration: BoxDecoration(
+                          border:
+                              Border.all(color: Colors.transparent, width: 2)),
                       height: isPhone
-                          ? SizeConfig.blockSizeVertical * 10
+                          ? 60
                           : orientation == Orientation.portrait
                               ? SizeConfig.blockSizeVertical * 12
                               : SizeConfig.blockSizeVertical * 8,
                       child: Stack(
                         children: [
                           Positioned(
-                            top: 6,
+                            top: 3,
                             right: 8,
                             child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
@@ -381,337 +390,295 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                     Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Colors.transparent, width: 2)),
-                              child: Stack(children: <Widget>[
-                                isPhone
-                                    ? SizedBox(
+                          Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: Colors.transparent, width: 2)),
+                            child: Stack(children: <Widget>[
+                              isPhone
+                                  ? SizedBox(
+                                      width: double.infinity,
+                                      child: Image.asset(
+                                        'assets/images/clothesLine.png',
+                                        fit: BoxFit.fitWidth,
+                                      ),
+                                    )
+                                  : orientation == Orientation.portrait
+                                      ? SizedBox(
+                                          width:
+                                              SizeConfig.safeBlockHorizontal *
+                                                  75,
+                                          child: Image.asset(
+                                            'assets/images/tabletLine.png',
+                                            fit: BoxFit.fitWidth,
+                                          ),
+                                        )
+                                      : SizedBox(
+                                          width:
+                                              SizeConfig.safeBlockHorizontal *
+                                                  60,
+                                          child: Image.asset(
+                                            'assets/images/tabletLine.png',
+                                            fit: BoxFit.fitWidth,
+                                          ),
+                                        ),
+                              Positioned(
+                                  right: SizeConfig.blockSizeHorizontal * 10,
+                                  bottom: notifier.isPhone
+                                      ? SizeConfig.blockSizeVertical * 4
+                                      : SizeConfig.blockSizeVertical * 2,
+                                  child: UndeesBasket(
+                                    prefs: widget.prefs,
+                                  )),
+                              Positioned(
+                                top: 0,
+                                right: 0,
+                                child: Container(
+                                  color: Colors.transparent,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 8),
+                                        child: Text(
+                                          'Remaining UnDees',
+                                          style: TextStyle(
+                                            letterSpacing: 1.5,
+                                            fontSize: isPhone
+                                                ? SizeConfig.blockSizeVertical *
+                                                    2
+                                                : orientation ==
+                                                        Orientation.portrait
+                                                    ? SizeConfig
+                                                            .blockSizeVertical *
+                                                        2
+                                                    : SizeConfig
+                                                            .blockSizeVertical *
+                                                        2,
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            right: orientation ==
+                                                    Orientation.portrait
+                                                ? SizeConfig
+                                                        .blockSizeHorizontal *
+                                                    10
+                                                : SizeConfig
+                                                        .blockSizeHorizontal *
+                                                    6),
+                                        child: Text(
+                                          notifier.remainingGuesses.toString(),
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: isPhone
+                                                ? SizeConfig.blockSizeVertical *
+                                                    3
+                                                : orientation ==
+                                                        Orientation.portrait
+                                                    ? SizeConfig
+                                                            .blockSizeVertical *
+                                                        2.5
+                                                    : SizeConfig
+                                                            .blockSizeVertical *
+                                                        2,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              UndeeAnimation(
+                                prefs: widget.prefs,
+                                duration: 2000,
+                                selected: showUndee1,
+                                fromLeft: isPhone
+                                    ? SizeConfig.blockSizeHorizontal * 8
+                                    : orientation == Orientation.portrait
+                                        ? 50
+                                        : 70,
+                                imgSize: orientation == Orientation.portrait
+                                    ? SizeConfig.blockSizeVertical * 8
+                                    : SizeConfig.blockSizeVertical * 10,
+                                orientation: orientation,
+                              ),
+                              UndeeAnimation(
+                                prefs: widget.prefs,
+                                duration: 1750,
+                                selected: showUndee2,
+                                fromLeft: isPhone
+                                    ? SizeConfig.blockSizeHorizontal * 16
+                                    : orientation == Orientation.portrait
+                                        ? 125
+                                        : 140,
+                                imgSize: orientation == Orientation.portrait
+                                    ? SizeConfig.blockSizeVertical * 8
+                                    : SizeConfig.blockSizeVertical * 10,
+                                orientation: orientation,
+                              ),
+                              UndeeAnimation(
+                                prefs: widget.prefs,
+                                duration: 1500,
+                                selected: showUndee3,
+                                fromLeft: isPhone
+                                    ? SizeConfig.blockSizeHorizontal * 26
+                                    : orientation == Orientation.portrait
+                                        ? 200
+                                        : 210,
+                                imgSize: orientation == Orientation.portrait
+                                    ? SizeConfig.blockSizeVertical * 8
+                                    : SizeConfig.blockSizeVertical * 10,
+                                orientation: orientation,
+                              ),
+                              UndeeAnimation(
+                                prefs: widget.prefs,
+                                duration: 1250,
+                                selected: showUndee4,
+                                fromLeft: isPhone
+                                    ? SizeConfig.blockSizeHorizontal * 36
+                                    : orientation == Orientation.portrait
+                                        ? 275
+                                        : 280,
+                                imgSize: orientation == Orientation.portrait
+                                    ? SizeConfig.blockSizeVertical * 8
+                                    : SizeConfig.blockSizeVertical * 10,
+                                orientation: orientation,
+                              ),
+                              UndeeAnimation(
+                                prefs: widget.prefs,
+                                duration: 1000,
+                                selected: showUndee5,
+                                fromLeft: isPhone
+                                    ? SizeConfig.blockSizeHorizontal * 46
+                                    : orientation == Orientation.portrait
+                                        ? 350
+                                        : 350,
+                                imgSize: orientation == Orientation.portrait
+                                    ? SizeConfig.blockSizeVertical * 8
+                                    : SizeConfig.blockSizeVertical * 10,
+                                orientation: orientation,
+                              ),
+                              UndeeAnimation(
+                                prefs: widget.prefs,
+                                duration: 750,
+                                selected: showUndee6,
+                                fromLeft: isPhone
+                                    ? SizeConfig.blockSizeHorizontal * 56
+                                    : orientation == Orientation.portrait
+                                        ? 425
+                                        : 420,
+                                imgSize: orientation == Orientation.portrait
+                                    ? SizeConfig.blockSizeVertical * 8
+                                    : SizeConfig.blockSizeVertical * 10,
+                                orientation: orientation,
+                              ),
+                              UndeeAnimation(
+                                prefs: widget.prefs,
+                                duration: 500,
+                                selected: showUndee7,
+                                fromLeft: isPhone
+                                    ? SizeConfig.blockSizeHorizontal * 66
+                                    : orientation == Orientation.portrait
+                                        ? 500
+                                        : 490,
+                                imgSize: orientation == Orientation.portrait
+                                    ? SizeConfig.blockSizeVertical * 8
+                                    : SizeConfig.blockSizeVertical * 10,
+                                orientation: orientation,
+                              ),
+                              Positioned(
+                                  top: 0,
+                                  left: isPhone
+                                      ? SizeConfig.blockSizeHorizontal * 5
+                                      : orientation == Orientation.portrait
+                                          ? SizeConfig.blockSizeHorizontal * 2
+                                          : SizeConfig.blockSizeHorizontal * 1,
+                                  child: AnimatedOpacity(
+                                      opacity: (notifier.gameCompleted &&
+                                              !notifier.gameWon)
+                                          ? 1
+                                          : 0,
+                                      duration:
+                                          const Duration(milliseconds: 2500),
+                                      child: Container(
+                                        width: isPhone
+                                            ? SizeConfig.blockSizeHorizontal *
+                                                90
+                                            : orientation ==
+                                                    Orientation.portrait
+                                                ? SizeConfig
+                                                        .blockSizeHorizontal *
+                                                    71
+                                                : SizeConfig
+                                                        .blockSizeHorizontal *
+                                                    58,
                                         height: isPhone
-                                            ? SizeConfig.blockSizeVertical * 30
+                                            ? SizeConfig.screenWidth * 0.54
                                             : orientation ==
                                                     Orientation.portrait
                                                 ? SizeConfig.blockSizeVertical *
-                                                    30
+                                                    20
                                                 : SizeConfig.blockSizeVertical *
                                                     30,
-                                        width: SizeConfig.safeBlockHorizontal *
-                                            100,
-                                        child: Image.asset(
-                                          'assets/images/clothesLine.png',
-                                          fit: BoxFit.fitWidth,
-                                        ),
-                                      )
-                                    : orientation == Orientation.portrait
-                                        ? SizedBox(
-                                            width:
-                                                SizeConfig.safeBlockHorizontal *
-                                                    75,
-                                            height: isPhone
-                                                ? SizeConfig.blockSizeVertical *
-                                                    30.5
-                                                : orientation ==
-                                                        Orientation.portrait
-                                                    ? SizeConfig
-                                                            .blockSizeVertical *
-                                                        20
-                                                    : SizeConfig
-                                                            .blockSizeVertical *
-                                                        25,
-                                            child: Image.asset(
-                                              'assets/images/tabletLine.png',
-                                              fit: BoxFit.fitWidth,
-                                            ),
-                                          )
-                                        : SizedBox(
-                                            width:
-                                                SizeConfig.safeBlockHorizontal *
-                                                    60,
-                                            height: isPhone
-                                                ? SizeConfig.blockSizeVertical *
-                                                    30.5
-                                                : orientation ==
-                                                        Orientation.portrait
-                                                    ? SizeConfig
-                                                            .blockSizeVertical *
-                                                        30.5
-                                                    : SizeConfig
-                                                            .blockSizeVertical *
-                                                        30,
-                                            child: Image.asset(
-                                              'assets/images/tabletLine.png',
-                                              fit: BoxFit.fitWidth,
-                                            ),
-                                          ),
-                                Positioned(
-                                    right: SizeConfig.blockSizeHorizontal * 10,
-                                    bottom: notifier.isPhone
-                                        ? SizeConfig.blockSizeVertical * 4
-                                        : SizeConfig.blockSizeVertical * 2,
-                                    child: UndeesBasket(
-                                      prefs: widget.prefs,
-                                    )),
-                                Positioned(
-                                  top: 6,
-                                  right: 0,
-                                  child: Container(
-                                    color: Colors.transparent,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(right: 8),
-                                          child: Text(
-                                            'Remaining UnDees',
-                                            style: TextStyle(
-                                              letterSpacing: 1.5,
-                                              fontSize: isPhone
-                                                  ? SizeConfig
-                                                          .blockSizeVertical *
-                                                      2
-                                                  : orientation ==
-                                                          Orientation.portrait
+                                        decoration: BoxDecoration(
+                                            color: AppColors.backgroundColor
+                                                .withOpacity(0.5),
+                                            borderRadius:
+                                                BorderRadius.circular(6),
+                                            border: Border.all(
+                                                color: AppColors.darkBlue,
+                                                width: 2)),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(5),
+                                          child: Align(
+                                            alignment: Alignment.center,
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  "You got a",
+                                                  style: TextStyle(
+                                                      fontFamily: "Boogaloo",
+                                                      fontSize: isPhone
+                                                          ? SizeConfig
+                                                                  .blockSizeHorizontal *
+                                                              5
+                                                          : SizeConfig
+                                                                  .blockSizeHorizontal *
+                                                              4),
+                                                ),
+                                                SizedBox(
+                                                  height: isPhone
                                                       ? SizeConfig
                                                               .blockSizeVertical *
-                                                          2
-                                                      : SizeConfig
-                                                              .blockSizeVertical *
-                                                          2,
+                                                          20
+                                                      : orientation ==
+                                                              Orientation
+                                                                  .portrait
+                                                          ? SizeConfig
+                                                                  .blockSizeVertical *
+                                                              15
+                                                          : SizeConfig
+                                                                  .blockSizeVertical *
+                                                              20,
+                                                  child: Image.asset(
+                                                    'assets/images/wedgie.png',
+                                                    fit: BoxFit.fitHeight,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ),
                                         ),
-                                        Padding(
-                                          padding: EdgeInsets.only(
-                                              right: orientation ==
-                                                      Orientation.portrait
-                                                  ? SizeConfig
-                                                          .blockSizeHorizontal *
-                                                      10
-                                                  : SizeConfig
-                                                          .blockSizeHorizontal *
-                                                      6),
-                                          child: Text(
-                                            notifier.remainingGuesses
-                                                .toString(),
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: isPhone
-                                                  ? SizeConfig
-                                                          .blockSizeVertical *
-                                                      3
-                                                  : orientation ==
-                                                          Orientation.portrait
-                                                      ? SizeConfig
-                                                              .blockSizeVertical *
-                                                          2.5
-                                                      : SizeConfig
-                                                              .blockSizeVertical *
-                                                          2,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                UndeeAnimation(
-                                  prefs: widget.prefs,
-                                  duration: 2000,
-                                  selected: showUndee1,
-                                  fromLeft: isPhone
-                                      ? SizeConfig.blockSizeHorizontal * 8
-                                      : orientation == Orientation.portrait
-                                          ? 50
-                                          : 70,
-                                  imgSize: orientation == Orientation.portrait
-                                      ? SizeConfig.blockSizeVertical * 8
-                                      : SizeConfig.blockSizeVertical * 10,
-                                  orientation: orientation,
-                                ),
-                                UndeeAnimation(
-                                  prefs: widget.prefs,
-                                  duration: 1750,
-                                  selected: showUndee2,
-                                  fromLeft: isPhone
-                                      ? SizeConfig.blockSizeHorizontal * 16
-                                      : orientation == Orientation.portrait
-                                          ? 125
-                                          : 140,
-                                  imgSize: orientation == Orientation.portrait
-                                      ? SizeConfig.blockSizeVertical * 8
-                                      : SizeConfig.blockSizeVertical * 10,
-                                  orientation: orientation,
-                                ),
-                                UndeeAnimation(
-                                  prefs: widget.prefs,
-                                  duration: 1500,
-                                  selected: showUndee3,
-                                  fromLeft: isPhone
-                                      ? SizeConfig.blockSizeHorizontal * 26
-                                      : orientation == Orientation.portrait
-                                          ? 200
-                                          : 210,
-                                  imgSize: orientation == Orientation.portrait
-                                      ? SizeConfig.blockSizeVertical * 8
-                                      : SizeConfig.blockSizeVertical * 10,
-                                  orientation: orientation,
-                                ),
-                                UndeeAnimation(
-                                  prefs: widget.prefs,
-                                  duration: 1250,
-                                  selected: showUndee4,
-                                  fromLeft: isPhone
-                                      ? SizeConfig.blockSizeHorizontal * 36
-                                      : orientation == Orientation.portrait
-                                          ? 275
-                                          : 280,
-                                  imgSize: orientation == Orientation.portrait
-                                      ? SizeConfig.blockSizeVertical * 8
-                                      : SizeConfig.blockSizeVertical * 10,
-                                  orientation: orientation,
-                                ),
-                                UndeeAnimation(
-                                  prefs: widget.prefs,
-                                  duration: 1000,
-                                  selected: showUndee5,
-                                  fromLeft: isPhone
-                                      ? SizeConfig.blockSizeHorizontal * 46
-                                      : orientation == Orientation.portrait
-                                          ? 350
-                                          : 350,
-                                  imgSize: orientation == Orientation.portrait
-                                      ? SizeConfig.blockSizeVertical * 8
-                                      : SizeConfig.blockSizeVertical * 10,
-                                  orientation: orientation,
-                                ),
-                                UndeeAnimation(
-                                  prefs: widget.prefs,
-                                  duration: 750,
-                                  selected: showUndee6,
-                                  fromLeft: isPhone
-                                      ? SizeConfig.blockSizeHorizontal * 56
-                                      : orientation == Orientation.portrait
-                                          ? 425
-                                          : 420,
-                                  imgSize: orientation == Orientation.portrait
-                                      ? SizeConfig.blockSizeVertical * 8
-                                      : SizeConfig.blockSizeVertical * 10,
-                                  orientation: orientation,
-                                ),
-                                UndeeAnimation(
-                                  prefs: widget.prefs,
-                                  duration: 500,
-                                  selected: showUndee7,
-                                  fromLeft: isPhone
-                                      ? SizeConfig.blockSizeHorizontal * 66
-                                      : orientation == Orientation.portrait
-                                          ? 500
-                                          : 490,
-                                  imgSize: orientation == Orientation.portrait
-                                      ? SizeConfig.blockSizeVertical * 8
-                                      : SizeConfig.blockSizeVertical * 10,
-                                  orientation: orientation,
-                                ),
-                                Positioned(
-                                    top: 0,
-                                    left: isPhone
-                                        ? SizeConfig.blockSizeHorizontal * 5
-                                        : orientation == Orientation.portrait
-                                            ? SizeConfig.blockSizeHorizontal * 2
-                                            : SizeConfig.blockSizeHorizontal *
-                                                1,
-                                    child: AnimatedOpacity(
-                                        opacity: (notifier.gameCompleted &&
-                                                !notifier.gameWon)
-                                            ? 1
-                                            : 0,
-                                        duration:
-                                            const Duration(milliseconds: 2500),
-                                        child: Container(
-                                          width: isPhone
-                                              ? SizeConfig.blockSizeHorizontal *
-                                                  90
-                                              : orientation ==
-                                                      Orientation.portrait
-                                                  ? SizeConfig
-                                                          .blockSizeHorizontal *
-                                                      71
-                                                  : SizeConfig
-                                                          .blockSizeHorizontal *
-                                                      58,
-                                          height: isPhone
-                                              ? SizeConfig.blockSizeVertical *
-                                                  30
-                                              : orientation ==
-                                                      Orientation.portrait
-                                                  ? SizeConfig
-                                                          .blockSizeVertical *
-                                                      20
-                                                  : SizeConfig
-                                                          .blockSizeVertical *
-                                                      30,
-                                          decoration: BoxDecoration(
-                                              color: AppColors.backgroundColor
-                                                  .withOpacity(0.5),
-                                              borderRadius:
-                                                  BorderRadius.circular(6),
-                                              border: Border.all(
-                                                  color: AppColors.darkBlue,
-                                                  width: 2)),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(5),
-                                            child: Align(
-                                              alignment: Alignment.center,
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    "You got a",
-                                                    style: TextStyle(
-                                                        fontFamily: "Boogaloo",
-                                                        fontSize: isPhone
-                                                            ? SizeConfig
-                                                                    .blockSizeHorizontal *
-                                                                5
-                                                            : SizeConfig
-                                                                    .blockSizeHorizontal *
-                                                                4),
-                                                  ),
-                                                  SizedBox(
-                                                    height: isPhone
-                                                        ? SizeConfig
-                                                                .blockSizeVertical *
-                                                            20
-                                                        : orientation ==
-                                                                Orientation
-                                                                    .portrait
-                                                            ? SizeConfig
-                                                                    .blockSizeVertical *
-                                                                15
-                                                            : SizeConfig
-                                                                    .blockSizeVertical *
-                                                                20,
-                                                    child: Image.asset(
-                                                      'assets/images/wedgie.png',
-                                                      fit: BoxFit.fitHeight,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ))),
-                              ]),
-                            ),
+                                      ))),
+                            ]),
                           ),
                         ]),
                     SizedBox(
@@ -729,7 +696,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                 ? SizeConfig.blockSizeVertical * 20
                                 : SizeConfig.blockSizeVertical * 18,
                         child: Align(
-                          alignment: Alignment.bottomCenter,
+                          alignment: Alignment.center,
                           child: WordGrid(
                             orientation: orientation,
                           ),
@@ -768,37 +735,39 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                               ? SizeConfig.blockSizeVertical * 2
                               : SizeConfig.blockSizeVertical * 1,
                     ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: orientation == Orientation.portrait
-                              ? SizeConfig.blockSizeHorizontal * 10
-                              : SizeConfig.blockSizeHorizontal * 20,
-                          vertical: SizeConfig.blockSizeVertical * 1),
-                      child: Stack(alignment: Alignment.center, children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: SizedBox(
-                            height: SizeConfig.blockSizeVertical * 5,
-                            child: LinearProgressIndicator(
-                              value: progressValue,
-                              backgroundColor: const Color(0xFF46AD37),
-                              color: AppColors.darkBlue,
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: orientation == Orientation.portrait
+                                ? SizeConfig.blockSizeHorizontal * 10
+                                : SizeConfig.blockSizeHorizontal * 20,
+                            vertical: SizeConfig.blockSizeVertical * 1),
+                        child: Stack(alignment: Alignment.center, children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: SizedBox(
+                              height: SizeConfig.blockSizeVertical * 5,
+                              child: LinearProgressIndicator(
+                                value: progressValue,
+                                backgroundColor: const Color(0xFF46AD37),
+                                color: AppColors.darkBlue,
+                              ),
                             ),
                           ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              left: SizeConfig.blockSizeHorizontal * 2),
-                          child: Text(
-                            progressMessage,
-                            style: TextStyle(
-                                color: AppColors.lightGray,
-                                fontSize: orientation == Orientation.portrait
-                                    ? SizeConfig.blockSizeHorizontal * 5
-                                    : SizeConfig.blockSizeHorizontal * 3),
-                          ),
-                        )
-                      ]),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: SizeConfig.blockSizeHorizontal * 2),
+                            child: Text(
+                              progressMessage,
+                              style: TextStyle(
+                                  color: AppColors.lightGray,
+                                  fontSize: orientation == Orientation.portrait
+                                      ? SizeConfig.blockSizeHorizontal * 5
+                                      : SizeConfig.blockSizeHorizontal * 3),
+                            ),
+                          )
+                        ]),
+                      ),
                     ),
                   ]),
                 ),

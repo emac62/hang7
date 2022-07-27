@@ -28,9 +28,7 @@ class UndeeAnimation extends StatefulWidget {
 }
 
 class _UndeeAnimationState extends State<UndeeAnimation> {
-  double fromTopPhoneStart = 0;
-  double fromTopPhoneEnd = 0;
-  double fromTopTablet = 0;
+  double onLine = 0;
   late Image undeeImage;
   bool withAnimation = true;
 
@@ -51,12 +49,12 @@ class _UndeeAnimationState extends State<UndeeAnimation> {
                 width: widget.selected ? widget.imgSize : 0,
                 top: widget.selected
                     ? notifier.isPhone
-                        ? SizeConfig.blockSizeVertical * 8.5 //phone on line
+                        ? SizeConfig.screenWidth * 0.155 //phone on line
                         : widget.orientation == Orientation.portrait
                             ? SizeConfig.blockSizeVertical *
                                 6 //tablet portrait on line
                             : SizeConfig.blockSizeVertical *
-                                9 // tablet landscape on line
+                                8 // tablet landscape on line
                     : widget.orientation == Orientation.portrait
                         ? SizeConfig.blockSizeVertical * 25
                         : SizeConfig.blockSizeVertical *
@@ -78,7 +76,7 @@ class _UndeeAnimationState extends State<UndeeAnimation> {
                 width: widget.selected ? widget.imgSize : 0,
                 top: widget.selected
                     ? notifier.isPhone
-                        ? SizeConfig.blockSizeVertical * 8.5
+                        ? SizeConfig.blockSizeVertical * 7.5
                         : widget.orientation == Orientation.portrait
                             ? SizeConfig.blockSizeVertical * 6
                             : SizeConfig.blockSizeVertical * 9

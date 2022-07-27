@@ -24,23 +24,15 @@ class _WordGridState extends State<WordGrid> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
 
-    return GridView.builder(
+    return ListView.builder(
       physics: const NeverScrollableScrollPhysics(),
       padding: EdgeInsets.symmetric(
-          horizontal: widget.orientation == Orientation.portrait
-              ? SizeConfig.blockSizeHorizontal * 7
-              : SizeConfig.blockSizeHorizontal * 20,
+          // horizontal: widget.orientation == Orientation.portrait
+          //     ? SizeConfig.blockSizeHorizontal * 7
+          //     : SizeConfig.blockSizeHorizontal * 20,
           vertical: SizeConfig.blockSizeVertical * 1),
       shrinkWrap: true,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 7,
-          childAspectRatio: widget.orientation == Orientation.portrait
-              ? SizeConfig.screenHeight < 750
-                  ? 0.5
-                  : 0.5
-              : SizeConfig.screenHeight > 750
-                  ? 0.75
-                  : 0.5),
+      scrollDirection: Axis.horizontal,
       itemCount: 7,
       itemBuilder: (context, index) {
         var settingsProvider = Provider.of<SettingsProvider>(context);
