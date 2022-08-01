@@ -35,12 +35,15 @@ class Controller extends ChangeNotifier {
     if (devicePixelRatio < 2 && (width > 1200 || height > 1200)) {
       isTablet = true;
       isPhone = false;
+      debugPrint("Device isTablet: $isTablet");
     } else if (devicePixelRatio == 2 && (width >= 1920 || height >= 1920)) {
       isTablet = true;
       isPhone = false;
+      debugPrint("Device isTablet2: $isTablet");
     } else {
       isTablet = false;
       isPhone = true;
+      debugPrint("Device isPhone: $isPhone");
     }
     notifyListeners();
   }

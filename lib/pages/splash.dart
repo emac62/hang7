@@ -65,7 +65,15 @@ class _SplashScreenState extends State<SplashScreen> {
                         color: AppColors.darkBlue),
                   ),
                 ),
-                Image.asset('assets/images/wedgie.png'),
+                SizedBox(
+                  height: SizeConfig.blockSizeVertical * 50,
+                  child: Image.asset(
+                    'assets/images/wedgie.png',
+                    fit: orientation == Orientation.portrait
+                        ? BoxFit.fitWidth
+                        : BoxFit.fitHeight,
+                  ),
+                ),
               ],
             ),
           ),

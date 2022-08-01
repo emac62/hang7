@@ -52,9 +52,9 @@ class _UndeeAnimationState extends State<UndeeAnimation> {
                         ? SizeConfig.screenWidth * 0.155 //phone on line
                         : widget.orientation == Orientation.portrait
                             ? SizeConfig.blockSizeVertical *
-                                6 //tablet portrait on line
+                                8 //tablet portrait on line
                             : SizeConfig.blockSizeVertical *
-                                8 // tablet landscape on line
+                                11 // tablet landscape on line
                     : widget.orientation == Orientation.portrait
                         ? SizeConfig.blockSizeVertical * 25
                         : SizeConfig.blockSizeVertical *

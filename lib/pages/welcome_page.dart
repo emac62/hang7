@@ -122,13 +122,6 @@ class _WelcomePageState extends State<WelcomePage> {
               ));
         },
       ),
-      bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-            color: AppColors.violet,
-            border:
-                Border(top: BorderSide(color: AppColors.darkBlue, width: 2))),
-        height: 60,
-      ),
     );
   }
 

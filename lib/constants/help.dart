@@ -23,6 +23,7 @@ showHelpDialog(context) {
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       "Guess the 7 letter word without hanging all your UnDees! There are 7 UnDees in the basket. ",
@@ -30,8 +31,8 @@ showHelpDialog(context) {
                           letterSpacing: 1.25,
                           color: AppColors.darkBlue,
                           fontSize: orientation == Orientation.portrait
-                              ? SizeConfig.blockSizeHorizontal * 4
-                              : SizeConfig.blockSizeHorizontal * 3),
+                              ? SizeConfig.blockSizeVertical * 2
+                              : SizeConfig.blockSizeVertical * 3),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -41,8 +42,8 @@ showHelpDialog(context) {
                             letterSpacing: 1.25,
                             color: AppColors.darkBlue,
                             fontSize: orientation == Orientation.portrait
-                                ? SizeConfig.blockSizeHorizontal * 4
-                                : SizeConfig.blockSizeHorizontal * 3),
+                                ? SizeConfig.blockSizeVertical * 2
+                                : SizeConfig.blockSizeVertical * 3),
                       ),
                     ),
                     Text(
@@ -51,17 +52,20 @@ showHelpDialog(context) {
                           letterSpacing: 1.25,
                           color: AppColors.darkBlue,
                           fontSize: orientation == Orientation.portrait
-                              ? SizeConfig.blockSizeHorizontal * 4
-                              : SizeConfig.blockSizeHorizontal * 3),
+                              ? SizeConfig.blockSizeVertical * 2
+                              : SizeConfig.blockSizeVertical * 3),
                     ),
-                    Text(
-                      "In the future, coins will be able to purchase various styles of undees and different word packs.",
-                      style: TextStyle(
-                          letterSpacing: 1.25,
-                          color: AppColors.darkBlue,
-                          fontSize: orientation == Orientation.portrait
-                              ? SizeConfig.blockSizeHorizontal * 4
-                              : SizeConfig.blockSizeHorizontal * 3),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Text(
+                        "In the future, coins will be able to purchase various styles of undees and different word packs.",
+                        style: TextStyle(
+                            letterSpacing: 1.25,
+                            color: AppColors.darkBlue,
+                            fontSize: orientation == Orientation.portrait
+                                ? SizeConfig.blockSizeVertical * 2
+                                : SizeConfig.blockSizeVertical * 3),
+                      ),
                     )
                   ],
                 ),

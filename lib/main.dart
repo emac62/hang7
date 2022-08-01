@@ -13,10 +13,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   final double screenWidth =
       MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.width;
 
-  if (screenWidth < 600) {
+  if (screenWidth <= 600) {
     await SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   }

@@ -222,34 +222,40 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                                 scrollDirection: Axis.horizontal,
                                 controller: myUndeesScrollController,
                                 itemBuilder: (context, index) {
-                                  return Container(
-                                    margin: const EdgeInsets.all(8.0),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(6),
-                                      border: undeesStr == undColour[index]
-                                          ? Border.all(
-                                              color: AppColors.darkBlue,
-                                              width: 2)
-                                          : Border.all(
-                                              color: Colors.transparent,
-                                              width: 2),
-                                    ),
-                                    child: Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: GestureDetector(
-                                            onTap: () {
-                                              setState(() {
-                                                widget.prefs.setString(
-                                                    'changeColor',
-                                                    undColour[index]);
-                                                undeesStr = widget.prefs
-                                                        .getString(
-                                                            'changeColor') ??
-                                                    "Pink";
-                                              });
-                                            },
-                                            child: myUndees[index]),
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 2),
+                                    child: Card(
+                                      color: AppColors.backgroundColor,
+                                      elevation: 8,
+                                      margin: const EdgeInsets.all(8.0),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(6),
+                                        side: undeesStr == undColour[index]
+                                            ? const BorderSide(
+                                                color: AppColors.darkBlue,
+                                                width: 4)
+                                            : const BorderSide(
+                                                color: Colors.transparent,
+                                                width: 2),
+                                      ),
+                                      child: Center(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: GestureDetector(
+                                              onTap: () {
+                                                setState(() {
+                                                  widget.prefs.setString(
+                                                      'changeColor',
+                                                      undColour[index]);
+                                                  undeesStr = widget.prefs
+                                                          .getString(
+                                                              'changeColor') ??
+                                                      "Pink";
+                                                });
+                                              },
+                                              child: myUndees[index]),
+                                        ),
                                       ),
                                     ),
                                   );
@@ -292,174 +298,172 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                                 controller: undeesScrollController,
                                 itemCount: availableUndeeImages.length,
                                 itemBuilder: (context, index) {
-                                  return GestureDetector(
-                                      onTap: () {
-                                        debugPrint(index.toString());
-                                        showDialog(
-                                            context: context,
-                                            builder: (context) {
-                                              return AlertDialog(
-                                                title: Text(
-                                                  "Buy these for 100 coins?",
-                                                  style: TextStyle(
-                                                    fontSize: notifier.isPhone
-                                                        ? SizeConfig
-                                                                .blockSizeHorizontal *
-                                                            4
-                                                        : orientation ==
-                                                                Orientation
-                                                                    .portrait
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 2),
+                                    child: Card(
+                                      color: AppColors.backgroundColor,
+                                      elevation: 8,
+                                      child: GestureDetector(
+                                          onTap: () {
+                                            debugPrint(index.toString());
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return AlertDialog(
+                                                    title: Text(
+                                                      "Buy these for 100 coins?",
+                                                      style: TextStyle(
+                                                        fontSize: notifier
+                                                                .isPhone
                                                             ? SizeConfig
                                                                     .blockSizeHorizontal *
-                                                                3
-                                                            : SizeConfig
-                                                                    .blockSizeVertical *
-                                                                3,
-                                                  ),
-                                                ),
-                                                content: coins > 100
-                                                    ? availableUndeeImages[
-                                                        index]
-                                                    : Text(
-                                                        "You don't have enough coins! Keep playing to win more.",
-                                                        style: TextStyle(
-                                                          fontSize: notifier
-                                                                  .isPhone
-                                                              ? SizeConfig
-                                                                      .blockSizeHorizontal *
-                                                                  4
-                                                              : orientation ==
-                                                                      Orientation
-                                                                          .portrait
-                                                                  ? SizeConfig
-                                                                          .blockSizeHorizontal *
-                                                                      3
-                                                                  : SizeConfig
-                                                                          .blockSizeVertical *
-                                                                      3,
-                                                        ),
+                                                                4
+                                                            : orientation ==
+                                                                    Orientation
+                                                                        .portrait
+                                                                ? SizeConfig
+                                                                        .blockSizeHorizontal *
+                                                                    3
+                                                                : SizeConfig
+                                                                        .blockSizeVertical *
+                                                                    3,
                                                       ),
-                                                actions: [
-                                                  ElevatedButton(
-                                                      onPressed: coins >= 100
-                                                          ? () {
-                                                              coins =
-                                                                  coins - 100;
-                                                              widget.prefs
-                                                                  .setInt(
-                                                                      'coins',
-                                                                      coins);
-                                                              selectUndees(
-                                                                  index);
-                                                              Navigator.push(
-                                                                context,
-                                                                PageRouteBuilder(
-                                                                  pageBuilder: (c,
-                                                                          a1,
-                                                                          a2) =>
-                                                                      ChangeUndees(
-                                                                    prefs: widget
-                                                                        .prefs,
-                                                                  ),
-                                                                  transitionsBuilder: (c,
-                                                                          anim,
-                                                                          a2,
-                                                                          child) =>
-                                                                      FadeTransition(
-                                                                          opacity:
-                                                                              anim,
-                                                                          child:
-                                                                              child),
-                                                                  transitionDuration:
-                                                                      const Duration(
-                                                                          milliseconds:
-                                                                              500),
-                                                                ),
-                                                              );
-                                                            }
-                                                          : () {
-                                                              // Go Back
-                                                              Navigator.pop(
-                                                                  context);
-                                                            },
-                                                      child: coins >= 100
-                                                          ? Text(
-                                                              "Yes",
-                                                              style: TextStyle(
-                                                                fontSize: notifier
-                                                                        .isPhone
-                                                                    ? SizeConfig
-                                                                            .blockSizeHorizontal *
-                                                                        4
-                                                                    : orientation ==
-                                                                            Orientation
-                                                                                .portrait
-                                                                        ? SizeConfig.blockSizeHorizontal *
-                                                                            3
-                                                                        : SizeConfig.blockSizeVertical *
-                                                                            3,
-                                                              ),
-                                                            )
-                                                          : Text(
-                                                              "OK",
-                                                              style: TextStyle(
-                                                                fontSize: notifier
-                                                                        .isPhone
-                                                                    ? SizeConfig
-                                                                            .blockSizeHorizontal *
-                                                                        4
-                                                                    : orientation ==
-                                                                            Orientation
-                                                                                .portrait
-                                                                        ? SizeConfig.blockSizeHorizontal *
-                                                                            3
-                                                                        : SizeConfig.blockSizeVertical *
-                                                                            3,
-                                                              ),
-                                                            )),
-                                                  OutlinedButton(
-                                                      onPressed: () {
-                                                        // Go Back
-                                                        Navigator.pop(context);
-                                                      },
-                                                      child: Text(
-                                                        "Cancel",
-                                                        style: TextStyle(
-                                                          fontSize: notifier
-                                                                  .isPhone
-                                                              ? SizeConfig
-                                                                      .blockSizeHorizontal *
-                                                                  4
-                                                              : orientation ==
-                                                                      Orientation
-                                                                          .portrait
+                                                    ),
+                                                    content: coins > 100
+                                                        ? availableUndeeImages[
+                                                            index]
+                                                        : Text(
+                                                            "You don't have enough coins! Keep playing to win more.",
+                                                            style: TextStyle(
+                                                              fontSize: notifier
+                                                                      .isPhone
                                                                   ? SizeConfig
                                                                           .blockSizeHorizontal *
-                                                                      3
-                                                                  : SizeConfig
-                                                                          .blockSizeVertical *
-                                                                      3,
-                                                        ),
-                                                      ))
-                                                ],
-                                              );
-                                            });
-                                      },
-                                      child: Container(
-                                        //
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(6),
-                                          border: Border.all(
-                                              color: AppColors.darkBlue,
-                                              width: 2),
-                                          //
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: availableUndeeImages[index],
-                                        ),
-                                      ));
+                                                                      4
+                                                                  : orientation ==
+                                                                          Orientation
+                                                                              .portrait
+                                                                      ? SizeConfig
+                                                                              .blockSizeHorizontal *
+                                                                          3
+                                                                      : SizeConfig
+                                                                              .blockSizeVertical *
+                                                                          3,
+                                                            ),
+                                                          ),
+                                                    actions: [
+                                                      ElevatedButton(
+                                                          onPressed:
+                                                              coins >= 100
+                                                                  ? () {
+                                                                      coins =
+                                                                          coins -
+                                                                              100;
+                                                                      widget.prefs.setInt(
+                                                                          'coins',
+                                                                          coins);
+                                                                      selectUndees(
+                                                                          index);
+                                                                      Navigator
+                                                                          .push(
+                                                                        context,
+                                                                        PageRouteBuilder(
+                                                                          pageBuilder: (c, a1, a2) =>
+                                                                              ChangeUndees(
+                                                                            prefs:
+                                                                                widget.prefs,
+                                                                          ),
+                                                                          transitionsBuilder: (c, anim, a2, child) => FadeTransition(
+                                                                              opacity: anim,
+                                                                              child: child),
+                                                                          transitionDuration:
+                                                                              const Duration(milliseconds: 500),
+                                                                        ),
+                                                                      );
+                                                                    }
+                                                                  : () {
+                                                                      // Go Back
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                    },
+                                                          child: coins >= 100
+                                                              ? Text(
+                                                                  "Yes",
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontSize: notifier
+                                                                            .isPhone
+                                                                        ? SizeConfig.blockSizeHorizontal *
+                                                                            4
+                                                                        : orientation ==
+                                                                                Orientation.portrait
+                                                                            ? SizeConfig.blockSizeHorizontal * 3
+                                                                            : SizeConfig.blockSizeVertical * 3,
+                                                                  ),
+                                                                )
+                                                              : Text(
+                                                                  "OK",
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontSize: notifier
+                                                                            .isPhone
+                                                                        ? SizeConfig.blockSizeHorizontal *
+                                                                            4
+                                                                        : orientation ==
+                                                                                Orientation.portrait
+                                                                            ? SizeConfig.blockSizeHorizontal * 3
+                                                                            : SizeConfig.blockSizeVertical * 3,
+                                                                  ),
+                                                                )),
+                                                      OutlinedButton(
+                                                          onPressed: () {
+                                                            // Go Back
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
+                                                          child: Text(
+                                                            "Cancel",
+                                                            style: TextStyle(
+                                                              fontSize: notifier
+                                                                      .isPhone
+                                                                  ? SizeConfig
+                                                                          .blockSizeHorizontal *
+                                                                      4
+                                                                  : orientation ==
+                                                                          Orientation
+                                                                              .portrait
+                                                                      ? SizeConfig
+                                                                              .blockSizeHorizontal *
+                                                                          3
+                                                                      : SizeConfig
+                                                                              .blockSizeVertical *
+                                                                          3,
+                                                            ),
+                                                          ))
+                                                    ],
+                                                  );
+                                                });
+                                          },
+                                          child: Container(
+                                            //
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(6),
+                                              border: Border.all(
+                                                  color: AppColors.darkBlue,
+                                                  width: 1),
+                                              //
+                                            ),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child:
+                                                  availableUndeeImages[index],
+                                            ),
+                                          )),
+                                    ),
+                                  );
                                 },
                               ),
                             ),

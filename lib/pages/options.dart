@@ -89,7 +89,7 @@ class _OptionsState extends State<Options> {
               return Container(
                 height: SizeConfig.screenHeight,
                 width: SizeConfig.screenWidth,
-                margin: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 2),
+                padding: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 2),
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
                       begin: Alignment.center,

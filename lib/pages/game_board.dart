@@ -58,6 +58,8 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
   String? undeeColor;
   late Image undeeImage;
   int coins = 0;
+  late double undeeSize;
+  late double hWRatio;
 
   // resetControllers() {
   //   showMenu = false;
@@ -219,10 +221,11 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     var settingsProvider = Provider.of<SettingsProvider>(context);
-    debugPrint("Screen height: ${SizeConfig.screenHeight}");
-
+    debugPrint("Screen width: ${SizeConfig.screenWidth}");
+    debugPrint("Screen safeBlockHorizontal: ${SizeConfig.safeBlockHorizontal}");
+    debugPrint("Screen width: ${SizeConfig.screenWidth}");
     debugPrint("Screen safeBlockVertical: ${SizeConfig.safeBlockVertical}");
-    debugPrint("Screen blockVertial: ${SizeConfig.blockSizeVertical}");
+    debugPrint("Screen height: ${SizeConfig.screenHeight}");
     return OrientationBuilder(
       builder: ((context, orientation) {
         return Scaffold(
@@ -250,6 +253,11 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                 debugPrint("isTablet: $isTablet");
               }
 
+              undeeSize = orientation == Orientation.portrait
+                  ? SizeConfig.blockSizeVertical * 9
+                  : SizeConfig.blockSizeHorizontal * 8;
+
+              hWRatio = SizeConfig.screenHeight / SizeConfig.screenWidth;
               return Container(
                 decoration: const BoxDecoration(
                     gradient: LinearGradient(
@@ -405,18 +413,16 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                     )
                                   : orientation == Orientation.portrait
                                       ? SizedBox(
-                                          width:
-                                              SizeConfig.safeBlockHorizontal *
-                                                  75,
+                                          height:
+                                              SizeConfig.blockSizeVertical * 25,
                                           child: Image.asset(
                                             'assets/images/tabletLine.png',
                                             fit: BoxFit.fitWidth,
                                           ),
                                         )
                                       : SizedBox(
-                                          width:
-                                              SizeConfig.safeBlockHorizontal *
-                                                  60,
+                                          height:
+                                              SizeConfig.safeBlockVertical * 35,
                                           child: Image.asset(
                                             'assets/images/tabletLine.png',
                                             fit: BoxFit.fitWidth,
@@ -498,11 +504,12 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                 fromLeft: isPhone
                                     ? SizeConfig.blockSizeHorizontal * 8
                                     : orientation == Orientation.portrait
-                                        ? 50
-                                        : 70,
-                                imgSize: orientation == Orientation.portrait
-                                    ? SizeConfig.blockSizeVertical * 8
-                                    : SizeConfig.blockSizeVertical * 10,
+                                        ? SizeConfig.blockSizeHorizontal * 7
+                                        : (hWRatio > 0.65)
+                                            ? SizeConfig.blockSizeHorizontal * 7
+                                            : SizeConfig.blockSizeHorizontal *
+                                                5,
+                                imgSize: undeeSize,
                                 orientation: orientation,
                               ),
                               UndeeAnimation(
@@ -512,11 +519,13 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                 fromLeft: isPhone
                                     ? SizeConfig.blockSizeHorizontal * 16
                                     : orientation == Orientation.portrait
-                                        ? 125
-                                        : 140,
-                                imgSize: orientation == Orientation.portrait
-                                    ? SizeConfig.blockSizeVertical * 8
-                                    : SizeConfig.blockSizeVertical * 10,
+                                        ? SizeConfig.blockSizeHorizontal * 19
+                                        : (hWRatio > 0.65)
+                                            ? SizeConfig.blockSizeHorizontal *
+                                                16
+                                            : SizeConfig.blockSizeHorizontal *
+                                                12,
+                                imgSize: undeeSize,
                                 orientation: orientation,
                               ),
                               UndeeAnimation(
@@ -526,11 +535,13 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                 fromLeft: isPhone
                                     ? SizeConfig.blockSizeHorizontal * 26
                                     : orientation == Orientation.portrait
-                                        ? 200
-                                        : 210,
-                                imgSize: orientation == Orientation.portrait
-                                    ? SizeConfig.blockSizeVertical * 8
-                                    : SizeConfig.blockSizeVertical * 10,
+                                        ? SizeConfig.blockSizeHorizontal * 31
+                                        : (hWRatio > 0.65)
+                                            ? SizeConfig.blockSizeHorizontal *
+                                                25
+                                            : SizeConfig.blockSizeHorizontal *
+                                                19,
+                                imgSize: undeeSize,
                                 orientation: orientation,
                               ),
                               UndeeAnimation(
@@ -540,11 +551,13 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                 fromLeft: isPhone
                                     ? SizeConfig.blockSizeHorizontal * 36
                                     : orientation == Orientation.portrait
-                                        ? 275
-                                        : 280,
-                                imgSize: orientation == Orientation.portrait
-                                    ? SizeConfig.blockSizeVertical * 8
-                                    : SizeConfig.blockSizeVertical * 10,
+                                        ? SizeConfig.blockSizeHorizontal * 43
+                                        : (hWRatio > 0.65)
+                                            ? SizeConfig.blockSizeHorizontal *
+                                                34
+                                            : SizeConfig.blockSizeHorizontal *
+                                                26,
+                                imgSize: undeeSize,
                                 orientation: orientation,
                               ),
                               UndeeAnimation(
@@ -554,11 +567,13 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                 fromLeft: isPhone
                                     ? SizeConfig.blockSizeHorizontal * 46
                                     : orientation == Orientation.portrait
-                                        ? 350
-                                        : 350,
-                                imgSize: orientation == Orientation.portrait
-                                    ? SizeConfig.blockSizeVertical * 8
-                                    : SizeConfig.blockSizeVertical * 10,
+                                        ? SizeConfig.blockSizeHorizontal * 55
+                                        : (hWRatio > 0.65)
+                                            ? SizeConfig.blockSizeHorizontal *
+                                                43
+                                            : SizeConfig.blockSizeHorizontal *
+                                                33,
+                                imgSize: undeeSize,
                                 orientation: orientation,
                               ),
                               UndeeAnimation(
@@ -568,11 +583,13 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                 fromLeft: isPhone
                                     ? SizeConfig.blockSizeHorizontal * 56
                                     : orientation == Orientation.portrait
-                                        ? 425
-                                        : 420,
-                                imgSize: orientation == Orientation.portrait
-                                    ? SizeConfig.blockSizeVertical * 8
-                                    : SizeConfig.blockSizeVertical * 10,
+                                        ? SizeConfig.blockSizeHorizontal * 67
+                                        : (hWRatio > 0.65)
+                                            ? SizeConfig.blockSizeHorizontal *
+                                                52
+                                            : SizeConfig.blockSizeHorizontal *
+                                                40,
+                                imgSize: undeeSize,
                                 orientation: orientation,
                               ),
                               UndeeAnimation(
@@ -582,11 +599,13 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                 fromLeft: isPhone
                                     ? SizeConfig.blockSizeHorizontal * 66
                                     : orientation == Orientation.portrait
-                                        ? 500
-                                        : 490,
-                                imgSize: orientation == Orientation.portrait
-                                    ? SizeConfig.blockSizeVertical * 8
-                                    : SizeConfig.blockSizeVertical * 10,
+                                        ? SizeConfig.blockSizeHorizontal * 79
+                                        : (hWRatio > 0.65)
+                                            ? SizeConfig.blockSizeHorizontal *
+                                                61
+                                            : SizeConfig.blockSizeHorizontal *
+                                                47,
+                                imgSize: undeeSize,
                                 orientation: orientation,
                               ),
                               Positioned(
@@ -595,7 +614,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                       ? SizeConfig.blockSizeHorizontal * 5
                                       : orientation == Orientation.portrait
                                           ? SizeConfig.blockSizeHorizontal * 2
-                                          : SizeConfig.blockSizeHorizontal * 1,
+                                          : SizeConfig.blockSizeHorizontal * 0,
                                   child: AnimatedOpacity(
                                       opacity: (notifier.gameCompleted &&
                                               !notifier.gameWon)
@@ -604,6 +623,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                       duration:
                                           const Duration(milliseconds: 2500),
                                       child: Container(
+                                        alignment: Alignment.topCenter,
                                         width: isPhone
                                             ? SizeConfig.blockSizeHorizontal *
                                                 90
@@ -611,18 +631,20 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                                     Orientation.portrait
                                                 ? SizeConfig
                                                         .blockSizeHorizontal *
-                                                    71
-                                                : SizeConfig
-                                                        .blockSizeHorizontal *
-                                                    58,
+                                                    97
+                                                : (hWRatio > 0.65)
+                                                    ? SizeConfig.screenWidth *
+                                                        0.76
+                                                    : (SizeConfig.screenWidth *
+                                                        0.6),
                                         height: isPhone
                                             ? SizeConfig.screenWidth * 0.54
                                             : orientation ==
                                                     Orientation.portrait
                                                 ? SizeConfig.blockSizeVertical *
-                                                    20
+                                                    25
                                                 : SizeConfig.blockSizeVertical *
-                                                    30,
+                                                    35,
                                         decoration: BoxDecoration(
                                             color: AppColors.backgroundColor
                                                 .withOpacity(0.5),
@@ -708,7 +730,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                           ? SizeConfig.blockSizeVertical * 1.5
                           : orientation == Orientation.portrait
                               ? SizeConfig.blockSizeVertical * 4
-                              : SizeConfig.blockSizeVertical * 1,
+                              : SizeConfig.blockSizeVertical * 0,
                     ),
                     KeyboardRow(
                       prefs: widget.prefs,
@@ -733,15 +755,17 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                           ? SizeConfig.blockSizeVertical * 1
                           : orientation == Orientation.portrait
                               ? SizeConfig.blockSizeVertical * 2
-                              : SizeConfig.blockSizeVertical * 1,
+                              : SizeConfig.blockSizeVertical * 0,
                     ),
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: orientation == Orientation.portrait
-                                ? SizeConfig.blockSizeHorizontal * 10
-                                : SizeConfig.blockSizeHorizontal * 20,
-                            vertical: SizeConfig.blockSizeVertical * 1),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: orientation == Orientation.portrait
+                              ? SizeConfig.blockSizeHorizontal * 10
+                              : SizeConfig.blockSizeHorizontal * 20,
+                          vertical: SizeConfig.blockSizeVertical * 1),
+                      child: Container(
+                        margin: EdgeInsets.only(
+                            bottom: SizeConfig.blockSizeVertical * 2),
                         child: Stack(alignment: Alignment.center, children: [
                           ClipRRect(
                             borderRadius: BorderRadius.circular(8),
