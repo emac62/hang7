@@ -59,7 +59,7 @@ class _LetterTileState extends State<LetterTile>
         isTablet = true;
       }
 
-      return settingsProvider.withAnimation
+      return settingsProvider.withWordAnimation
           ? AnimatedBuilder(
               animation: _animationController,
               builder: (_, child) {
@@ -97,16 +97,26 @@ class _LetterTileState extends State<LetterTile>
                 );
               },
             )
-          : Text(
-              text,
-              style: TextStyle(
-                  fontFamily: "Boogaloo",
-                  color: _fontColor,
-                  fontSize: isPhone
-                      ? SizeConfig.blockSizeVertical * 7
-                      : widget.orientation == Orientation.portrait
-                          ? SizeConfig.blockSizeVertical * 10
-                          : SizeConfig.blockSizeVertical * 8),
+          : Container(
+              width: notifier.isPhone
+                  ? SizeConfig.blockSizeHorizontal * 12
+                  : widget.orientation == Orientation.portrait
+                      ? SizeConfig.blockSizeHorizontal * 12
+                      : SizeConfig.blockSizeHorizontal * 8,
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.transparent, width: 2)),
+              child: Text(
+                text,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontFamily: "Boogaloo",
+                    color: _fontColor,
+                    fontSize: isPhone
+                        ? SizeConfig.blockSizeVertical * 7
+                        : widget.orientation == Orientation.portrait
+                            ? SizeConfig.blockSizeVertical * 9
+                            : SizeConfig.blockSizeVertical * 8),
+              ),
             );
     });
   }

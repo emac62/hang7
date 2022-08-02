@@ -4,12 +4,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SettingsProvider with ChangeNotifier {
   late bool _withSound;
   late bool _withAnimation;
+  late bool _withWordAnimation;
   late String _changeColor;
   late String _wordPack;
   late List<String> _undeeColours;
 
   SettingsProvider() {
     _withAnimation = true;
+    _withWordAnimation = true;
     _withSound = true;
     _changeColor = "Pink";
     _wordPack = "WordPack 1";
@@ -19,6 +21,7 @@ class SettingsProvider with ChangeNotifier {
   }
 
   bool get withAnimation => _withAnimation;
+  bool get withWordAnimation => _withWordAnimation;
   bool get withSound => _withSound;
   String get changeColor => _changeColor;
   String get wordPack => _wordPack;
@@ -27,6 +30,7 @@ class SettingsProvider with ChangeNotifier {
   savePreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool("withAnimation", _withAnimation);
+    prefs.setBool("withWordAnimation", _withWordAnimation);
     prefs.setBool("withSound", _withSound);
     prefs.setString("changeColor", _changeColor);
     prefs.setString("wordPack", _wordPack);
@@ -35,6 +39,12 @@ class SettingsProvider with ChangeNotifier {
 
   void setWithAnimation(bool withAnimation) {
     _withAnimation = withAnimation;
+    notifyListeners();
+    savePreferences();
+  }
+
+  void setWithWordAnimation(bool withWordAnimation) {
+    _withWordAnimation = withWordAnimation;
     notifyListeners();
     savePreferences();
   }
@@ -64,6 +74,7 @@ class SettingsProvider with ChangeNotifier {
   loadPreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool? withAnimation = prefs.getBool('withAnimation');
+    bool? withWordAnimation = prefs.getBool('withWordAnimation');
     bool? withSound = prefs.getBool('withSound');
     String? changeColor = prefs.getString('changeColor');
     String? wordPack = prefs.getString('wordPack');
@@ -71,6 +82,7 @@ class SettingsProvider with ChangeNotifier {
 
     if (withSound != null) setWithSound(withSound);
     if (withAnimation != null) setWithAnimation(withAnimation);
+    if (withWordAnimation != null) setWithWordAnimation(withWordAnimation);
     if (changeColor != null) setChangeColor(changeColor);
     if (wordPack != null) setWordPack(wordPack);
     if (undeeColours != null) setUndeeColours(undeeColours);

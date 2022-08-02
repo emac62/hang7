@@ -732,9 +732,9 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
           }),
           bottomNavigationBar: Container(
             decoration: const BoxDecoration(
-                color: AppColors.violet,
+                color: Colors.transparent,
                 border: Border(
-                    top: BorderSide(color: AppColors.darkBlue, width: 2))),
+                    top: BorderSide(color: Colors.transparent, width: 2))),
             height: 60,
           ));
     });

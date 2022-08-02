@@ -63,6 +63,22 @@ class GameStatsAlert extends StatelessWidget {
                   child: StatsBarChart(
                     orientation: orientation,
                   )),
+              Container(
+                  margin: EdgeInsets.symmetric(
+                      vertical: SizeConfig.blockSizeVertical * 5),
+                  height: SizeConfig.blockSizeVertical * 8,
+                  decoration: const BoxDecoration(
+                      image: DecorationImage(
+                    image: AssetImage("assets/images/BasketOfCoins.png"),
+                    fit: BoxFit.scaleDown,
+                  )),
+                  child: Center(
+                      child: Text(
+                    coins.toString(),
+                    style: TextStyle(
+                      fontSize: SizeConfig.blockSizeVertical * 6,
+                    ),
+                  ))),
             ],
           ),
         ),

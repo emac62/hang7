@@ -199,7 +199,7 @@ class _EndOfGameState extends State<EndOfGame> {
                                   "assets/images/wedgie.png",
                                   fit: BoxFit.fitHeight,
                                 )
-                              : settings.withAnimation
+                              : settings.withWordAnimation
                                   ? const CoinSpinAnimation()
                                   : Image.asset(
                                       'assets/images/BasketOfCoins.png',
@@ -323,9 +323,9 @@ class _EndOfGameState extends State<EndOfGame> {
               ),
               bottomNavigationBar: Container(
                 decoration: const BoxDecoration(
-                    color: AppColors.violet,
+                    color: Colors.transparent,
                     border: Border(
-                        top: BorderSide(color: AppColors.darkBlue, width: 2))),
+                        top: BorderSide(color: Colors.transparent, width: 2))),
                 height: 60,
               ));
         }),

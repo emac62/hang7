@@ -53,7 +53,7 @@ class _BounceState extends State<Bounce> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     var settingsProvider = Provider.of<SettingsProvider>(context);
-    return settingsProvider.withAnimation
+    return settingsProvider.withWordAnimation
         ? ScaleTransition(
             scale: _animation,
             child: widget.child,

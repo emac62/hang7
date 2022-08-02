@@ -209,12 +209,19 @@ class _WelcomePageState extends State<WelcomePage> {
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         ),
                         onPressed: () {
-                          Navigator.push(
-                              context,
-                              RotationRoute(
-                                  page: GameBoard(
-                                prefs: widget.prefs,
-                              )));
+                          withAnimation
+                              ? Navigator.push(
+                                  context,
+                                  RotationRoute(
+                                      page: GameBoard(
+                                    prefs: widget.prefs,
+                                  )))
+                              : Navigator.push(
+                                  context,
+                                  FadeRoute(
+                                      page: GameBoard(
+                                    prefs: widget.prefs,
+                                  )));
                         },
                         child: Text(
                           "Play",
@@ -254,12 +261,19 @@ class _WelcomePageState extends State<WelcomePage> {
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         ),
                         onPressed: () {
-                          Navigator.push(
-                              context,
-                              RotationRoute(
-                                  page: Options(
-                                prefs: widget.prefs,
-                              )));
+                          withAnimation
+                              ? Navigator.push(
+                                  context,
+                                  RotationRoute(
+                                      page: Options(
+                                    prefs: widget.prefs,
+                                  )))
+                              : Navigator.push(
+                                  context,
+                                  FadeRoute(
+                                      page: Options(
+                                    prefs: widget.prefs,
+                                  )));
                         },
                         child: Text(
                           "Options",

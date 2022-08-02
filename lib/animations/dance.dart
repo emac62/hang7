@@ -63,7 +63,7 @@ class _DanceState extends State<Dance> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     var settingsProvider = Provider.of<SettingsProvider>(context);
-    return settingsProvider.withAnimation
+    return settingsProvider.withWordAnimation
         ? SlideTransition(
             position: _animation,
             child: widget.child,

@@ -55,7 +55,7 @@ class _WordGridState extends State<WordGrid> {
                   border: Border.all(color: Colors.transparent, width: 2)),
               child: Align(
                 alignment: Alignment.bottomCenter,
-                child: settingsProvider.withAnimation
+                child: settingsProvider.withWordAnimation
                     ? Dance(
                         animate: animate,
                         delay: danceDelay,
