@@ -112,8 +112,11 @@ class _WelcomePageState extends State<WelcomePage> {
               ),
               child: LayoutBuilder(
                 builder: (BuildContext context, BoxConstraints constraints) {
-                  if (constraints.maxWidth < 600 ||
-                      constraints.maxHeight < 675) {
+                  debugPrint("BoxCons: ${constraints.maxWidth}");
+                  debugPrint("BoxCons: ${constraints.maxHeight}");
+                  // if (constraints.maxWidth < 600 ||
+                  //     constraints.maxHeight < 675) {
+                  if (constraints.maxWidth < 600) {
                     return portLayout();
                   } else {
                     return landLayout();
@@ -359,7 +362,9 @@ class _WelcomePageState extends State<WelcomePage> {
             padding: EdgeInsets.symmetric(
                 vertical: SizeConfig.blockSizeVertical * 2.5),
             child: SizedBox(
-                height: orientation == Orientation.portrait ? 300 : 250,
+                height: orientation == Orientation.portrait
+                    ? 300
+                    : SizeConfig.blockSizeVertical * 35,
                 child: orientation == Orientation.portrait
                     ? Image.asset(
                         'assets/images/wpGraphic.png',
@@ -381,7 +386,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   child: Padding(
                     padding: orientation == Orientation.portrait
                         ? EdgeInsets.only(
-                            left: SizeConfig.blockSizeHorizontal * 2)
+                            left: SizeConfig.blockSizeHorizontal * 5)
                         : EdgeInsets.only(
                             left: SizeConfig.blockSizeHorizontal * 15),
                     child: Column(
@@ -392,33 +397,35 @@ class _WelcomePageState extends State<WelcomePage> {
                           padding: EdgeInsets.only(
                               bottom: SizeConfig.blockSizeVertical * 5),
                           child: Text(
-                            "_______",
+                            "_ _ _ _ _ _ _",
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                letterSpacing: 12,
+                                letterSpacing: 10,
                                 fontSize: orientation == Orientation.portrait
-                                    ? SizeConfig.blockSizeHorizontal * 10
-                                    : SizeConfig.blockSizeHorizontal * 5),
+                                    ? SizeConfig.blockSizeVertical * 5
+                                    : SizeConfig.blockSizeVertical * 5),
                           ),
                         ),
                         Text(
                           "Figure out the word without",
                           style: TextStyle(
-                              letterSpacing: 5,
+                              letterSpacing:
+                                  orientation == Orientation.portrait ? 3 : 5,
                               fontFamily: "Boogaloo",
                               fontSize: orientation == Orientation.portrait
-                                  ? SizeConfig.blockSizeHorizontal * 4
-                                  : SizeConfig.blockSizeHorizontal * 3),
+                                  ? SizeConfig.blockSizeVertical * 3
+                                  : SizeConfig.blockSizeVertical * 5),
                         ),
                         Text(
                           "hanging your UnDees!",
                           textAlign: TextAlign.left,
                           style: TextStyle(
-                              letterSpacing: 5,
+                              letterSpacing:
+                                  orientation == Orientation.portrait ? 3 : 5,
                               fontFamily: "Boogaloo",
                               fontSize: orientation == Orientation.portrait
-                                  ? SizeConfig.blockSizeHorizontal * 4
-                                  : SizeConfig.blockSizeHorizontal * 3),
+                                  ? SizeConfig.blockSizeVertical * 3
+                                  : SizeConfig.blockSizeVertical * 5),
                         ),
                         Padding(
                           padding: orientation == Orientation.portrait

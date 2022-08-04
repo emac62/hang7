@@ -77,7 +77,7 @@ class _LetterTileState extends State<LetterTile>
                         ? SizeConfig.blockSizeHorizontal * 12
                         : widget.orientation == Orientation.portrait
                             ? SizeConfig.blockSizeHorizontal * 12
-                            : SizeConfig.blockSizeHorizontal * 8,
+                            : SizeConfig.blockSizeHorizontal * 6,
                     decoration: BoxDecoration(
                         border:
                             Border.all(color: Colors.transparent, width: 2)),
@@ -91,7 +91,9 @@ class _LetterTileState extends State<LetterTile>
                               ? SizeConfig.blockSizeVertical * 7
                               : widget.orientation == Orientation.portrait
                                   ? SizeConfig.blockSizeVertical * 9
-                                  : SizeConfig.blockSizeVertical * 8),
+                                  : SizeConfig.screenHeight < 760
+                                      ? SizeConfig.blockSizeVertical * 5
+                                      : SizeConfig.blockSizeVertical * 7),
                     ),
                   ),
                 );
@@ -102,7 +104,7 @@ class _LetterTileState extends State<LetterTile>
                   ? SizeConfig.blockSizeHorizontal * 12
                   : widget.orientation == Orientation.portrait
                       ? SizeConfig.blockSizeHorizontal * 12
-                      : SizeConfig.blockSizeHorizontal * 8,
+                      : SizeConfig.blockSizeHorizontal * 6,
               decoration: BoxDecoration(
                   border: Border.all(color: Colors.transparent, width: 2)),
               child: Text(
@@ -115,7 +117,9 @@ class _LetterTileState extends State<LetterTile>
                         ? SizeConfig.blockSizeVertical * 7
                         : widget.orientation == Orientation.portrait
                             ? SizeConfig.blockSizeVertical * 9
-                            : SizeConfig.blockSizeVertical * 8),
+                            : SizeConfig.screenHeight < 600
+                                ? SizeConfig.blockSizeVertical * 5
+                                : SizeConfig.blockSizeVertical * 7),
               ),
             );
     });

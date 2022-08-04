@@ -50,7 +50,6 @@ class _WordGridState extends State<WordGrid> {
             }
 
             return Container(
-              margin: EdgeInsets.only(bottom: SizeConfig.blockSizeVertical * 1),
               decoration: BoxDecoration(
                   border: Border.all(color: Colors.transparent, width: 2)),
               child: Align(
