@@ -7,23 +7,20 @@ import 'package:hang7/providers/controller.dart';
 import 'package:hang7/providers/settings_provider.dart';
 import 'package:hang7/widgets/size_config.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../animations/route.dart';
 import 'app_colors.dart';
 
 class KeyboardRow extends StatelessWidget {
-  const KeyboardRow(
-      {Key? key,
-      required this.min,
-      required this.max,
-      required this.orientation,
-      required this.prefs})
-      : super(key: key);
+  const KeyboardRow({
+    Key? key,
+    required this.min,
+    required this.max,
+    required this.orientation,
+  }) : super(key: key);
 
   final int min;
   final int max;
   final Orientation orientation;
-  final SharedPreferences prefs;
 
   @override
   Widget build(BuildContext context) {
@@ -77,21 +74,24 @@ class KeyboardRow extends StatelessWidget {
                                         ? Navigator.push(
                                             context,
                                             RotationRoute(
-                                                page: EndOfGame(
+                                                page: const EndOfGame(
                                               coinsEarned: 0,
-                                              prefs: prefs,
                                             )))
                                         : Navigator.push(
                                             context,
                                             FadeRoute(
-                                                page: EndOfGame(
+                                                page: const EndOfGame(
                                               coinsEarned: 0,
-                                              prefs: prefs,
                                             )));
                                   });
                                 }
                                 if (notifier.gameWon) {
                                   debugPrint("keyInput: Game Won");
+                                  int coins = settingsProvider.coins;
+                                  coins =
+                                      coins + 10 + notifier.remainingGuesses;
+                                  settingsProvider.setCoins(coins);
+
                                   Future.delayed(
                                       const Duration(milliseconds: 4000), () {
                                     settingsProvider.withAnimation
@@ -99,7 +99,6 @@ class KeyboardRow extends StatelessWidget {
                                             context,
                                             RotationRoute(
                                                 page: EndOfGame(
-                                              prefs: prefs,
                                               coinsEarned: (10 +
                                                   notifier.remainingGuesses),
                                             )))
@@ -107,7 +106,6 @@ class KeyboardRow extends StatelessWidget {
                                             context,
                                             FadeRoute(
                                                 page: EndOfGame(
-                                              prefs: prefs,
                                               coinsEarned: (10 +
                                                   notifier.remainingGuesses),
                                             )));

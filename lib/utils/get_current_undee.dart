@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hang7/providers/settings_provider.dart';
+import 'package:provider/provider.dart';
 
-String setUndees(SharedPreferences prefs) {
-  switch (prefs.getString('changeColor')) {
+String setUndees(BuildContext context) {
+  var setProv = Provider.of<SettingsProvider>(context, listen: false);
+  switch (setProv.gameUndees) {
     case "Pink":
       return "assets/images/pinkUndees.png";
+
     case "GreenPlaid":
       return "assets/images/greenPlaid.png";
 
@@ -28,9 +31,9 @@ String setUndees(SharedPreferences prefs) {
   }
 }
 
-getMyUndeesImages(SharedPreferences prefs) {
+getMyUndeesImages(List undeeColours) {
   List<Widget> myUndees = [Image.asset("assets/images/pinkUndees.png")];
-  List<String> myStrUndees = prefs.getStringList('undeeColours') ?? ["Pink"];
+  List<String> myStrUndees = undeeColours as List<String>;
   for (var i = 0; i < myStrUndees.length; i++) {
     switch (myStrUndees[i]) {
       case "GreenPlaid":

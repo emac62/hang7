@@ -55,6 +55,7 @@ class UniqueWord with ChangeNotifier {
 
   void setUsedWords1(List usedWords1) {
     _usedWords1 = usedWords1 as List<String>;
+    debugPrint("usedWords1: $usedWords1");
   }
 
   void setUsedWords2(List usedWords2) {
@@ -91,6 +92,41 @@ class UniqueWord with ChangeNotifier {
 
   void setUsedWords10(List usedWords10) {
     _usedWords10 = usedWords10 as List<String>;
+  }
+
+  void setUsedWordsList(String key, List list) {
+    switch (key) {
+      case "usedWords1":
+        setUsedWords1(list);
+        break;
+      case "usedWords2":
+        setUsedWords2(list);
+        break;
+      case "usedWords3":
+        setUsedWords3(list);
+        break;
+      case "usedWords4":
+        setUsedWords4(list);
+        break;
+      case "usedWords5":
+        setUsedWords5(list);
+        break;
+      case "usedWords6":
+        setUsedWords6(list);
+        break;
+      case "usedWords7":
+        setUsedWords7(list);
+        break;
+      case "usedWords8":
+        setUsedWords8(list);
+        break;
+      case "usedWords9":
+        setUsedWords9(list);
+        break;
+      case "usedWords10":
+        setUsedWords10(list);
+        break;
+    }
   }
 
   loadUsedWordsIndexes() async {

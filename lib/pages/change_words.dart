@@ -14,8 +14,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ChangeWordPack extends StatefulWidget {
-  const ChangeWordPack({Key? key, required this.prefs}) : super(key: key);
-  final SharedPreferences prefs;
+  const ChangeWordPack({Key? key}) : super(key: key);
 
   @override
   State<ChangeWordPack> createState() => _ChangeWordPackState();
@@ -25,6 +24,7 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
   List<String> myWordPacks = ["WordPack 1"];
   List<String> availablePacks = [];
   BannerAdContainer bannerAdContainer = const BannerAdContainer();
+  late SharedPreferences prefs;
 
   List<String> wordPacks = [
     "WordPack 2",
@@ -38,37 +38,53 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
     "WordPack 10",
   ];
 
-  late int coins;
+  int coins = 0;
   final myWordScrollController = ScrollController();
   final wordScrollController = ScrollController();
 
   selectWordPack(int index) {
+    var settProv = Provider.of<SettingsProvider>(context, listen: false);
     setState(() {
-      widget.prefs.setString('wordPack', availablePacks[index]);
+      settProv.setWordPack(availablePacks[index]);
       if (!myWordPacks.contains(availablePacks[index])) {
         myWordPacks.add(availablePacks[index]);
-        widget.prefs.setStringList('myWordPacks', myWordPacks);
+        settProv.setMyWordPacks(myWordPacks);
       }
     });
   }
 
   List<String> remainingWords = [];
 
-  @override
-  void initState() {
-    super.initState();
+  getSPInstance() async {
+    prefs = await SharedPreferences.getInstance();
+  }
 
-    coins = widget.prefs.getInt('coins') ?? 0;
-    myWordPacks = widget.prefs.getStringList('myWordPacks') ?? ["WordPack 1"];
+  getData(BuildContext context) {
+    var settingsProvider =
+        Provider.of<SettingsProvider>(context, listen: false);
+    coins = settingsProvider.coins;
+    debugPrint("change_words: coins $coins");
+    myWordPacks = settingsProvider.myWordPacks as List<String>;
     debugPrint(myWordPacks.toString());
     availablePacks =
         wordPacks.where((element) => !myWordPacks.contains(element)).toList();
-    remainingWords = getMyWordPackRemainingWords(widget.prefs);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getSPInstance().then((_) {
+      setState(() {
+        getData(context);
+        remainingWords = getMyWordPackRemainingWords(context);
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     var settingsProvider = Provider.of<SettingsProvider>(context);
+    debugPrint('currentPack: ${settingsProvider.wordPack}');
     return OrientationBuilder(builder: (context, orientation) {
       return Container(
         decoration: const BoxDecoration(
@@ -185,7 +201,7 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
                                         AppColors.green
                                       ]),
                                   borderRadius: BorderRadius.circular(6),
-                                  border: widget.prefs.getString('wordPack') ==
+                                  border: settingsProvider.wordPack ==
                                           myWordPacks[index]
                                       ? Border.all(
                                           color: AppColors.darkBlue, width: 3)
@@ -238,26 +254,21 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
                                                       ElevatedButton(
                                                           onPressed: () {
                                                             setState(() {
-                                                              if (coins > 100) {
+                                                              if (coins >=
+                                                                  100) {
                                                                 coins =
                                                                     coins - 100;
-                                                                widget.prefs
-                                                                    .setInt(
-                                                                        'coins',
+                                                                settingsProvider
+                                                                    .setCoins(
                                                                         coins);
                                                                 resetMyWordPackRemainingWords(
-                                                                    widget
-                                                                        .prefs,
+                                                                    context,
                                                                     myWordPacks[
                                                                         index]);
-                                                                widget.prefs.setString(
-                                                                    'wordPack',
-                                                                    myWordPacks[
-                                                                        index]);
-                                                                remainingWords =
-                                                                    getMyWordPackRemainingWords(
-                                                                        widget
-                                                                            .prefs);
+                                                                settingsProvider
+                                                                    .setWordPack(
+                                                                        myWordPacks[
+                                                                            index]);
                                                               }
                                                             });
 
@@ -301,8 +312,8 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
                                                   );
                                                 });
                                           } else {
-                                            widget.prefs.setString(
-                                                'wordPack', myWordPacks[index]);
+                                            settingsProvider.setWordPack(
+                                                myWordPacks[index]);
                                           }
                                         });
                                       },
@@ -326,19 +337,22 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
                                                         3,
                                               ),
                                             ),
-                                            Text(
-                                              "${remainingWords[index]} words left",
-                                              style: TextStyle(
-                                                fontSize: orientation ==
-                                                        Orientation.portrait
-                                                    ? SizeConfig
-                                                            .blockSizeVertical *
-                                                        1.75
-                                                    : SizeConfig
-                                                            .blockSizeVertical *
-                                                        1.5,
-                                              ),
-                                            ),
+                                            remainingWords.isNotEmpty
+                                                ? Text(
+                                                    "${remainingWords[index]} words left",
+                                                    style: TextStyle(
+                                                      fontSize: orientation ==
+                                                              Orientation
+                                                                  .portrait
+                                                          ? SizeConfig
+                                                                  .blockSizeVertical *
+                                                              1.75
+                                                          : SizeConfig
+                                                                  .blockSizeVertical *
+                                                              1.5,
+                                                    ),
+                                                  )
+                                                : const Text(""),
                                           ],
                                         ),
                                       ),
@@ -459,9 +473,8 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
                                                               setState(() {
                                                                 coins =
                                                                     coins - 500;
-                                                                widget.prefs
-                                                                    .setInt(
-                                                                        'coins',
+                                                                settingsProvider
+                                                                    .setCoins(
                                                                         coins);
 
                                                                 selectWordPack(
@@ -473,10 +486,7 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
                                                                   pageBuilder: (c,
                                                                           a1,
                                                                           a2) =>
-                                                                      ChangeWordPack(
-                                                                    prefs: widget
-                                                                        .prefs,
-                                                                  ),
+                                                                      const ChangeWordPack(),
                                                                   transitionsBuilder: (c,
                                                                           anim,
                                                                           a2,
@@ -642,18 +652,10 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
                             ),
                             onPressed: () {
                               settingsProvider.withAnimation
-                                  ? Navigator.push(
-                                      context,
-                                      SlideLeftRoute(
-                                          page: Options(
-                                        prefs: widget.prefs,
-                                      )))
-                                  : Navigator.push(
-                                      context,
-                                      FadeRoute(
-                                          page: Options(
-                                        prefs: widget.prefs,
-                                      )));
+                                  ? Navigator.push(context,
+                                      SlideLeftRoute(page: const Options()))
+                                  : Navigator.push(context,
+                                      FadeRoute(page: const Options()));
                             },
                             child: Padding(
                               padding: EdgeInsets.symmetric(
@@ -685,18 +687,10 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
 
                               notifier.resetGame();
                               settingsProvider.withAnimation
-                                  ? Navigator.push(
-                                      context,
-                                      RotationRoute(
-                                          page: GameBoard(
-                                        prefs: widget.prefs,
-                                      )))
-                                  : Navigator.push(
-                                      context,
-                                      FadeRoute(
-                                          page: GameBoard(
-                                        prefs: widget.prefs,
-                                      )));
+                                  ? Navigator.push(context,
+                                      RotationRoute(page: const GameBoard()))
+                                  : Navigator.push(context,
+                                      FadeRoute(page: const GameBoard()));
                             },
                             child: Padding(
                               padding: EdgeInsets.symmetric(

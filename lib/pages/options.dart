@@ -2,8 +2,6 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
 import 'package:hang7/animations/route.dart';
-import 'package:hang7/constants/key_state.dart';
-import 'package:hang7/data/key_map.dart';
 import 'package:hang7/pages/change_undees.dart';
 import 'package:hang7/pages/change_words.dart';
 import 'package:hang7/pages/game_board.dart';
@@ -20,33 +18,34 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Options extends StatefulWidget {
-  const Options({Key? key, required this.prefs}) : super(key: key);
-  final SharedPreferences prefs;
+  const Options({Key? key}) : super(key: key);
 
   @override
   State<Options> createState() => _OptionsState();
 }
 
 class _OptionsState extends State<Options> {
-  String wordGroup = "";
-
-  late Image undeesImage;
+  late Image undeesImage = Image.asset('assets/images/pinkUndees.png');
 
   int coins = 0;
   bool withAnimations = true;
   bool withWordAnimation = true;
+
+  late SharedPreferences sharedPrefs;
 
   BannerAdContainer bannerAdContainer = const BannerAdContainer();
 
   @override
   void initState() {
     super.initState();
-    setState(() {
-      coins = (widget.prefs.getInt('coins') ?? 0);
-      undeesImage = Image.asset(setUndees(widget.prefs));
-      wordGroup = (widget.prefs.getString('wordGroup')) ?? "Word Pack 1";
-      withAnimations = (widget.prefs.getBool('withAnimations') ?? true);
-      withWordAnimation = (widget.prefs.getBool('withWordAnimations') ?? true);
+    getSPInstance().then((_) {
+      setState(() {
+        var setProv = Provider.of<SettingsProvider>(context, listen: false);
+        coins = setProv.coins;
+        undeesImage = Image.asset(setUndees(context));
+        withAnimations = setProv.withAnimation;
+        withWordAnimation = setProv.withWordAnimation;
+      });
     });
   }
 
@@ -56,6 +55,10 @@ class _OptionsState extends State<Options> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('gameStats');
     prefs.remove('chart');
+  }
+
+  getSPInstance() async {
+    sharedPrefs = await SharedPreferences.getInstance();
   }
 
   void _launchUrl() async {
@@ -204,33 +207,39 @@ class _OptionsState extends State<Options> {
                                           ? SizeConfig.blockSizeHorizontal * 5
                                           : SizeConfig.blockSizeVertical * 3,
                                 )),
-                            ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  primary: AppColors.green,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(6)),
-                                  elevation: 5,
-                                  // padding: const EdgeInsets.all(4.0)
-                                ),
-                                onPressed: () {
-                                  clearSP();
-                                  showDialog(
-                                      context: context,
-                                      builder: (_) => GameStatsAlert(
-                                            coins: coins,
-                                            orientation: Orientation.portrait,
-                                          ));
-                                },
-                                child: Text("Reset",
+                            GestureDetector(
+                              onTap: (() {
+                                clearSP();
+                                showDialog(
+                                    context: context,
+                                    builder: (_) => GameStatsAlert(
+                                          coins: settingsProvider.coins,
+                                          orientation: Orientation.portrait,
+                                        ));
+                              }),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(6),
+                                    color: AppColors.green),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12.0, vertical: 4),
+                                  child: Text(
+                                    "Reset",
                                     style: TextStyle(
+                                      color: AppColors.lightGray,
                                       fontSize: notifier.isPhone
-                                          ? SizeConfig.blockSizeHorizontal * 4
+                                          ? SizeConfig.blockSizeHorizontal * 5
                                           : orientation == Orientation.portrait
                                               ? SizeConfig.blockSizeHorizontal *
                                                   4
                                               : SizeConfig.blockSizeVertical *
                                                   2,
-                                    )))
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -238,9 +247,9 @@ class _OptionsState extends State<Options> {
                         padding: EdgeInsets.symmetric(
                             vertical: SizeConfig.blockSizeVertical * 0.5),
                         child: Text(
-                          "You have $coins Coins! 100 needed for changes.",
+                          "You have ${settingsProvider.coins} Coins! 100 needed for changes.",
                           style: TextStyle(
-                              fontSize: SizeConfig.blockSizeVertical * 3),
+                              fontSize: SizeConfig.blockSizeVertical * 2.5),
                         ),
                       ),
                       Padding(
@@ -307,15 +316,9 @@ class _OptionsState extends State<Options> {
                                   ? Navigator.push(
                                       context,
                                       SlideRightRoute(
-                                          page: ChangeUndees(
-                                        prefs: widget.prefs,
-                                      )))
-                                  : Navigator.push(
-                                      context,
-                                      FadeRoute(
-                                          page: ChangeUndees(
-                                        prefs: widget.prefs,
-                                      )));
+                                          page: const ChangeUndees()))
+                                  : Navigator.push(context,
+                                      FadeRoute(page: const ChangeUndees()));
                             }),
                       ),
                       Padding(
@@ -343,9 +346,7 @@ class _OptionsState extends State<Options> {
                                                 : SizeConfig.blockSizeVertical *
                                                     3,
                                       )),
-                                  Text(
-                                      widget.prefs.getString('wordPack') ??
-                                          "WordPack 1",
+                                  Text(settingsProvider.wordPack,
                                       style: TextStyle(
                                         fontSize: notifier.isPhone
                                             ? SizeConfig.blockSizeHorizontal * 4
@@ -391,15 +392,9 @@ class _OptionsState extends State<Options> {
                                   ? Navigator.push(
                                       context,
                                       SlideRightRoute(
-                                          page: ChangeWordPack(
-                                        prefs: widget.prefs,
-                                      )))
-                                  : Navigator.push(
-                                      context,
-                                      FadeRoute(
-                                          page: ChangeWordPack(
-                                        prefs: widget.prefs,
-                                      )));
+                                          page: const ChangeWordPack()))
+                                  : Navigator.push(context,
+                                      FadeRoute(page: const ChangeWordPack()));
                             }),
                       ),
                       Padding(
@@ -457,14 +452,23 @@ class _OptionsState extends State<Options> {
                                         color: AppColors.green),
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 10.0, vertical: 8),
+                                          horizontal: 12.0, vertical: 4),
                                       child: Text(
                                         "Buy",
                                         style: TextStyle(
-                                            color: AppColors.lightGray,
-                                            fontSize:
-                                                SizeConfig.blockSizeVertical *
-                                                    2.5),
+                                          color: AppColors.lightGray,
+                                          fontSize: notifier.isPhone
+                                              ? SizeConfig.blockSizeHorizontal *
+                                                  5
+                                              : orientation ==
+                                                      Orientation.portrait
+                                                  ? SizeConfig
+                                                          .blockSizeHorizontal *
+                                                      4
+                                                  : SizeConfig
+                                                          .blockSizeVertical *
+                                                      2,
+                                        ),
                                       ),
                                     ),
                                   )
@@ -473,7 +477,7 @@ class _OptionsState extends State<Options> {
                             ),
                             onTap: () {
                               coins = coins + 100;
-                              widget.prefs.setInt('coins', coins);
+                              settingsProvider.setCoins(coins);
                             }),
                       ),
                       Expanded(
@@ -499,15 +503,9 @@ class _OptionsState extends State<Options> {
                                       ? Navigator.push(
                                           context,
                                           RotationRoute(
-                                              page: WelcomePage(
-                                            prefs: widget.prefs,
-                                          )))
-                                      : Navigator.push(
-                                          context,
-                                          FadeRoute(
-                                              page: WelcomePage(
-                                            prefs: widget.prefs,
-                                          )));
+                                              page: const WelcomePage()))
+                                      : Navigator.push(context,
+                                          FadeRoute(page: const WelcomePage()));
                                 },
                                 child: Padding(
                                   padding: EdgeInsets.symmetric(
@@ -535,23 +533,13 @@ class _OptionsState extends State<Options> {
                                   ),
                                 ),
                                 onPressed: () {
-                                  keysMap.updateAll((key, value) =>
-                                      value = KeyState.unselected);
-
-                                  notifier.resetGame();
                                   settingsProvider.withAnimation
-                                      ? Navigator.push(
+                                      ? Navigator.pushReplacement(
                                           context,
                                           RotationRoute(
-                                              page: GameBoard(
-                                            prefs: widget.prefs,
-                                          )))
-                                      : Navigator.push(
-                                          context,
-                                          FadeRoute(
-                                              page: GameBoard(
-                                            prefs: widget.prefs,
-                                          )));
+                                              page: const GameBoard()))
+                                      : Navigator.pushReplacement(context,
+                                          FadeRoute(page: const GameBoard()));
                                 },
                                 child: Padding(
                                   padding: EdgeInsets.symmetric(

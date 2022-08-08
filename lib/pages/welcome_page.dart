@@ -3,6 +3,8 @@ import 'package:hang7/animations/route.dart';
 import 'package:hang7/constants/help.dart';
 import 'package:hang7/pages/game_board.dart';
 import 'package:hang7/pages/options.dart';
+import 'package:hang7/providers/settings_provider.dart';
+import 'package:hang7/providers/unique_word.dart';
 import 'package:hang7/widgets/app_colors.dart';
 import 'package:hang7/widgets/game_stats_alert.dart';
 import 'package:hang7/widgets/size_config.dart';
@@ -12,8 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../providers/controller.dart';
 
 class WelcomePage extends StatefulWidget {
-  const WelcomePage({Key? key, required this.prefs}) : super(key: key);
-  final SharedPreferences prefs;
+  const WelcomePage({Key? key}) : super(key: key);
 
   @override
   State<WelcomePage> createState() => _WelcomePageState();
@@ -22,56 +23,61 @@ class WelcomePage extends StatefulWidget {
 class _WelcomePageState extends State<WelcomePage> {
   int? coins;
   bool withAnimation = true;
-  // List<String> wp3 = [
-  //   '0',
-  //   "1",
-  //   "2",
-  //   "3",
-  //   "4",
-  //   "5",
-  //   "6",
-  //   "7",
-  //   "8",
-  //   "9",
-  //   "10",
-  //   "11",
-  //   "12",
-  //   "13",
-  //   "14",
-  //   "15",
-  //   "16",
-  //   "17",
-  //   "18",
-  //   "19",
-  //   "20",
-  //   "21",
-  //   "22",
-  //   "23",
-  //   "24",
-  //   "25",
-  //   "26",
-  //   "27",
-  //   "28",
-  //   "29",
-  //   "30",
-  //   "31",
-  //   "32",
-  //   "33",
-  //   "34",
-  //   "35",
-  //   "36",
-  //   "37",
-  //   "38",
-  //   "39",
-  //   "40",
-  //   "41",
-  //   "42",
-  //   "43",
-  //   "44",
-  //   "45",
-  //   "46",
-  //   "47",
-  // ];
+  List<String> wp2 = [
+    '0',
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18",
+    "19",
+    "20",
+    "21",
+    "22",
+    "23",
+    "24",
+    "25",
+    "26",
+    "27",
+    "28",
+    "29",
+    "30",
+    "31",
+    "32",
+    "33",
+    "34",
+    "35",
+    "36",
+    "37",
+    "38",
+    "39",
+    "40",
+    "41",
+    "42",
+    "43",
+    "44",
+    "45",
+    "46",
+    "47",
+  ];
+  late SharedPreferences sharedPrefs;
+  getSPInstance() async {
+    sharedPrefs = await SharedPreferences.getInstance();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -79,12 +85,17 @@ class _WelcomePageState extends State<WelcomePage> {
       Provider.of<Controller>(context, listen: false).getDevice();
     });
     setState(() {
-      coins = (widget.prefs.getInt('coins') ?? 0);
-      withAnimation = widget.prefs.getBool('withAnimation') ?? true;
-      final wordpack = widget.prefs.getString('wordPack') ??
-          widget.prefs.setString('wordPack', "WordPack 1");
-      debugPrint(wordpack.toString());
-      // widget.prefs.setStringList('usedWords3', wp3);
+      getSPInstance().then((_) {
+        var settingsProvider =
+            Provider.of<SettingsProvider>(context, listen: false);
+        var uniqueWord = Provider.of<UniqueWord>(context, listen: false);
+        coins = settingsProvider.coins;
+        withAnimation = settingsProvider.withAnimation;
+        String wordpack = settingsProvider.wordPack;
+        debugPrint("myWordPacks: ${settingsProvider.myWordPacks.toString()}");
+        debugPrint(wordpack);
+        uniqueWord.setUsedWords2(wp2);
+      });
     });
   }
 
@@ -112,8 +123,6 @@ class _WelcomePageState extends State<WelcomePage> {
               ),
               child: LayoutBuilder(
                 builder: (BuildContext context, BoxConstraints constraints) {
-                  debugPrint("BoxCons: ${constraints.maxWidth}");
-                  debugPrint("BoxCons: ${constraints.maxHeight}");
                   // if (constraints.maxWidth < 600 ||
                   //     constraints.maxHeight < 675) {
                   if (constraints.maxWidth < 600) {
@@ -213,18 +222,10 @@ class _WelcomePageState extends State<WelcomePage> {
                         ),
                         onPressed: () {
                           withAnimation
-                              ? Navigator.push(
-                                  context,
-                                  RotationRoute(
-                                      page: GameBoard(
-                                    prefs: widget.prefs,
-                                  )))
+                              ? Navigator.push(context,
+                                  RotationRoute(page: const GameBoard()))
                               : Navigator.push(
-                                  context,
-                                  FadeRoute(
-                                      page: GameBoard(
-                                    prefs: widget.prefs,
-                                  )));
+                                  context, FadeRoute(page: const GameBoard()));
                         },
                         child: Text(
                           "Play",
@@ -266,17 +267,9 @@ class _WelcomePageState extends State<WelcomePage> {
                         onPressed: () {
                           withAnimation
                               ? Navigator.push(
-                                  context,
-                                  RotationRoute(
-                                      page: Options(
-                                    prefs: widget.prefs,
-                                  )))
+                                  context, RotationRoute(page: const Options()))
                               : Navigator.push(
-                                  context,
-                                  FadeRoute(
-                                      page: Options(
-                                    prefs: widget.prefs,
-                                  )));
+                                  context, FadeRoute(page: const Options()));
                         },
                         child: Text(
                           "Options",
@@ -410,7 +403,7 @@ class _WelcomePageState extends State<WelcomePage> {
                           "Figure out the word without",
                           style: TextStyle(
                               letterSpacing:
-                                  orientation == Orientation.portrait ? 3 : 5,
+                                  orientation == Orientation.portrait ? 3 : 4,
                               fontFamily: "Boogaloo",
                               fontSize: orientation == Orientation.portrait
                                   ? SizeConfig.blockSizeVertical * 3
@@ -421,7 +414,7 @@ class _WelcomePageState extends State<WelcomePage> {
                           textAlign: TextAlign.left,
                           style: TextStyle(
                               letterSpacing:
-                                  orientation == Orientation.portrait ? 3 : 5,
+                                  orientation == Orientation.portrait ? 3 : 4,
                               fontFamily: "Boogaloo",
                               fontSize: orientation == Orientation.portrait
                                   ? SizeConfig.blockSizeVertical * 3
@@ -476,18 +469,10 @@ class _WelcomePageState extends State<WelcomePage> {
                           TextButton(
                               onPressed: () {
                                 withAnimation
-                                    ? Navigator.push(
-                                        context,
-                                        RotationRoute(
-                                            page: GameBoard(
-                                          prefs: widget.prefs,
-                                        )))
-                                    : Navigator.push(
-                                        context,
-                                        FadeRoute(
-                                            page: GameBoard(
-                                          prefs: widget.prefs,
-                                        )));
+                                    ? Navigator.push(context,
+                                        RotationRoute(page: const GameBoard()))
+                                    : Navigator.push(context,
+                                        FadeRoute(page: const GameBoard()));
                               },
                               child: Text(
                                 "Play",
@@ -522,18 +507,10 @@ class _WelcomePageState extends State<WelcomePage> {
                           TextButton(
                               onPressed: () {
                                 withAnimation
-                                    ? Navigator.push(
-                                        context,
-                                        RotationRoute(
-                                            page: Options(
-                                          prefs: widget.prefs,
-                                        )))
-                                    : Navigator.push(
-                                        context,
-                                        FadeRoute(
-                                            page: Options(
-                                          prefs: widget.prefs,
-                                        )));
+                                    ? Navigator.push(context,
+                                        RotationRoute(page: const Options()))
+                                    : Navigator.push(context,
+                                        FadeRoute(page: const Options()));
                               },
                               child: Text(
                                 "Options",

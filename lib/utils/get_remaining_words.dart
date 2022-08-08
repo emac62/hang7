@@ -1,43 +1,48 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hang7/providers/settings_provider.dart';
+import 'package:hang7/providers/unique_word.dart';
+import 'package:provider/provider.dart';
 
-getMyWordPackRemainingWords(SharedPreferences prefs) {
+getMyWordPackRemainingWords(context) {
+  var uniqueWords = Provider.of<UniqueWord>(context, listen: false);
+  var settingsProvider = Provider.of<SettingsProvider>(context, listen: false);
   List<String> myRemaningWords = [];
-  List<String> myWordPacks =
-      prefs.getStringList('myWordPacks') ?? ["WordPack 1"];
+  List<String> myWordPacks = settingsProvider.myWordPacks as List<String>;
   debugPrint("getMyWordPackRemainingWords: ${myWordPacks.toString()}");
   for (var i = 0; i < myWordPacks.length; i++) {
-    List<String> l = [];
+    List<String>? l = [];
+    debugPrint("inside for loop: $i, ${myWordPacks[i]}");
     switch (myWordPacks[i]) {
       case "WordPack 1":
-        l = prefs.getStringList('usedWords1') ?? [];
+        l = uniqueWords.usedWords1 as List<String>;
+        debugPrint("inside switch: $l");
         break;
       case "WordPack 2":
-        l = prefs.getStringList('usedWords2') ?? [];
+        l = uniqueWords.usedWords2 as List<String>;
         break;
       case "WordPack 3":
-        l = prefs.getStringList('usedWords3') ?? [];
+        l = uniqueWords.usedWords3 as List<String>;
         break;
       case "WordPack 4":
-        l = prefs.getStringList('usedWords4') ?? [];
+        l = uniqueWords.usedWords4 as List<String>;
         break;
       case "WordPack 5":
-        l = prefs.getStringList('usedWords5') ?? [];
+        l = uniqueWords.usedWords5 as List<String>;
         break;
       case "WordPack 6":
-        l = prefs.getStringList('usedWords6') ?? [];
+        l = uniqueWords.usedWords6 as List<String>;
         break;
       case "WordPack 7":
-        l = prefs.getStringList('usedWords7') ?? [];
+        l = uniqueWords.usedWords7 as List<String>;
         break;
       case "WordPack 8":
-        l = prefs.getStringList('usedWords8') ?? [];
+        l = uniqueWords.usedWords8 as List<String>;
         break;
       case "WordPack 9":
-        l = prefs.getStringList('usedWords9') ?? [];
+        l = uniqueWords.usedWords9 as List<String>;
         break;
       case "WordPack 10":
-        l = prefs.getStringList('usedWords10') ?? [];
+        l = uniqueWords.usedWords10 as List<String>;
         break;
     }
     final int r = 50 - l.length;
@@ -47,39 +52,39 @@ getMyWordPackRemainingWords(SharedPreferences prefs) {
   return myRemaningWords;
 }
 
-resetMyWordPackRemainingWords(SharedPreferences prefs, String name) {
+resetMyWordPackRemainingWords(BuildContext context, String name) {
+  var settingsProvider = Provider.of<UniqueWord>(context, listen: false);
   List<String> myRemaningWords = [];
-
   switch (name) {
     case "WordPack 1":
-      prefs.setStringList('usedWords1', myRemaningWords);
+      settingsProvider.setUsedWords1(myRemaningWords);
       break;
     case "WordPack 2":
-      prefs.setStringList('usedWords2', myRemaningWords);
+      settingsProvider.setUsedWords2(myRemaningWords);
       break;
     case "WordPack 3":
-      prefs.setStringList('usedWords3', myRemaningWords);
+      settingsProvider.setUsedWords3(myRemaningWords);
       break;
     case "WordPack 4":
-      prefs.setStringList('usedWords4', myRemaningWords);
+      settingsProvider.setUsedWords4(myRemaningWords);
       break;
     case "WordPack 5":
-      prefs.setStringList('usedWords5', myRemaningWords);
+      settingsProvider.setUsedWords5(myRemaningWords);
       break;
     case "WordPack 6":
-      prefs.setStringList('usedWords6', myRemaningWords);
+      settingsProvider.setUsedWords6(myRemaningWords);
       break;
     case "WordPack 7":
-      prefs.setStringList('usedWords7', myRemaningWords);
+      settingsProvider.setUsedWords7(myRemaningWords);
       break;
     case "WordPack 8":
-      prefs.setStringList('usedWords8', myRemaningWords);
+      settingsProvider.setUsedWords8(myRemaningWords);
       break;
     case "WordPack 9":
-      prefs.setStringList('usedWords9', myRemaningWords);
+      settingsProvider.setUsedWords9(myRemaningWords);
       break;
     case "WordPack 10":
-      prefs.setStringList('usedWords10', myRemaningWords);
+      settingsProvider.setUsedWords10(myRemaningWords);
       break;
   }
 }

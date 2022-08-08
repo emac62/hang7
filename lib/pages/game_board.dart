@@ -12,6 +12,7 @@ import 'package:hang7/pages/options.dart';
 import 'package:hang7/pages/welcome_page.dart';
 import 'package:hang7/providers/controller.dart';
 import 'package:hang7/providers/settings_provider.dart';
+import 'package:hang7/providers/unique_word.dart';
 import 'package:hang7/widgets/keyboard_row.dart';
 import 'package:hang7/widgets/game_stats_alert.dart';
 import 'package:hang7/widgets/undees_basket.dart';
@@ -27,9 +28,7 @@ import '../widgets/size_config.dart';
 class GameBoard extends StatefulWidget {
   const GameBoard({
     Key? key,
-    required this.prefs,
   }) : super(key: key);
-  final SharedPreferences prefs;
 
   @override
   State<GameBoard> createState() => GameBoardState();
@@ -81,61 +80,74 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
   //   Provider.of<Controller>(context, listen: false).resetGame();
   // }
 
-  getWord() {
-    String group = widget.prefs.getString('wordPack') ?? "WordPack 1";
-    debugPrint("getWord group: $group");
+  late SharedPreferences prefs;
+  getSPInstance() async {
+    prefs = await SharedPreferences.getInstance();
+  }
+
+  getData() {
+    var setProv = Provider.of<SettingsProvider>(context, listen: false);
+    coins = setProv.coins;
+    undeeColor = setProv.gameUndees;
+  }
+
+  getWord() async {
+    var settProv = Provider.of<SettingsProvider>(context, listen: false);
+    var uniqProv = Provider.of<UniqueWord>(context, listen: false);
+    String pack = settProv.wordPack;
+    debugPrint("getWord pack: $pack");
     String listKey = "";
     List<String> words = [];
     List<String> usedWordIndexes = [];
-    switch (group) {
+    switch (pack) {
       case "WordPack 1":
         words = wordPack1;
-        usedWordIndexes = widget.prefs.getStringList('usedWords1') ?? [];
+        usedWordIndexes = uniqProv.usedWords1 as List<String>;
         listKey = "usedWords1";
         break;
       case "WordPack 2":
         words = wordPack2;
-        usedWordIndexes = widget.prefs.getStringList('usedWords2') ?? [];
+        usedWordIndexes = uniqProv.usedWords2 as List<String>;
         listKey = "usedWords2";
         break;
       case "WordPack 3":
         words = wordPack3;
-        usedWordIndexes = widget.prefs.getStringList('usedWords3') ?? [];
+        usedWordIndexes = uniqProv.usedWords3 as List<String>;
         listKey = "usedWords3";
         break;
       case "WordPack 4":
         words = wordPack4;
-        usedWordIndexes = widget.prefs.getStringList('usedWords4') ?? [];
+        usedWordIndexes = uniqProv.usedWords4 as List<String>;
         listKey = "usedWords4";
         break;
       case "WordPack 5":
         words = wordPack5;
-        usedWordIndexes = widget.prefs.getStringList('usedWords5') ?? [];
+        usedWordIndexes = uniqProv.usedWords5 as List<String>;
         listKey = "usedWords5";
         break;
       case "WordPack 6":
         words = wordPack6;
-        usedWordIndexes = widget.prefs.getStringList('usedWords6') ?? [];
+        usedWordIndexes = uniqProv.usedWords6 as List<String>;
         listKey = "usedWords6";
         break;
       case "WordPack 7":
         words = wordPack7;
-        usedWordIndexes = widget.prefs.getStringList('usedWords7') ?? [];
+        usedWordIndexes = uniqProv.usedWords7 as List<String>;
         listKey = "usedWords7";
         break;
       case "WordPack 8":
         words = wordPack8;
-        usedWordIndexes = widget.prefs.getStringList('usedWords8') ?? [];
+        usedWordIndexes = uniqProv.usedWords8 as List<String>;
         listKey = "usedWords8";
         break;
       case "WordPack 9":
         words = wordPack9;
-        usedWordIndexes = widget.prefs.getStringList('usedWords9') ?? [];
+        usedWordIndexes = uniqProv.usedWords9 as List<String>;
         listKey = "usedWords9";
         break;
       case "WordPack 10":
         words = wordPack10;
-        usedWordIndexes = widget.prefs.getStringList('usedWords10') ?? [];
+        usedWordIndexes = uniqProv.usedWords10 as List<String>;
         listKey = "usedWords10";
         break;
       default:
@@ -143,32 +155,29 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
     int r = Random().nextInt(words.length);
     debugPrint("first Random: $r");
     String rAsString = r.toString();
-
-    debugPrint("else called");
     while (usedWordIndexes.contains(rAsString)) {
       r = Random().nextInt(words.length);
       rAsString = r.toString();
     }
 
     usedWordIndexes.add(rAsString);
-    widget.prefs.setStringList(listKey, usedWordIndexes);
+    debugPrint("usedWordIndexes: $usedWordIndexes");
+    uniqProv.setUsedWordsList(listKey, usedWordIndexes);
     currentWord = words[r].toUpperCase();
   }
 
   @override
   void initState() {
     super.initState();
+    getSPInstance();
     getWord();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<Controller>(context, listen: false)
           .setCurrentWord(word: currentWord);
       Provider.of<Controller>(context, listen: false).getDevice();
     });
-    undeeColor = widget.prefs.getString('changeColor');
-    coins = widget.prefs.getInt("coins") ?? 0;
-    debugPrint("init: $currentWord");
-    debugPrint("init: height ${SizeConfig.screenHeight}");
-    debugPrint("init: width ${SizeConfig.screenWidth}");
+    getData();
+    debugPrint("init currentWord: $currentWord");
   }
 
   updateProgressCorrect(int num) {
@@ -333,15 +342,13 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                               ? Navigator.push(
                                                   context,
                                                   RotationRoute(
-                                                      page: WelcomePage(
-                                                    prefs: widget.prefs,
-                                                  )))
+                                                      page:
+                                                          const WelcomePage()))
                                               : Navigator.push(
                                                   context,
                                                   FadeRoute(
-                                                      page: WelcomePage(
-                                                    prefs: widget.prefs,
-                                                  )));
+                                                      page:
+                                                          const WelcomePage()));
                                         },
                                         orientation: orientation),
                                     menuButton(
@@ -368,15 +375,13 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                                   ? Navigator.push(
                                                       context,
                                                       RotationRoute(
-                                                          page: Options(
-                                                        prefs: widget.prefs,
-                                                      )))
+                                                          page:
+                                                              const Options()))
                                                   : Navigator.push(
                                                       context,
                                                       FadeRoute(
-                                                          page: Options(
-                                                        prefs: widget.prefs,
-                                                      )));
+                                                          page:
+                                                              const Options()));
                                             },
                                             icon: Icons.settings)
                                         : const Text(""),
@@ -431,9 +436,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                 bottom: notifier.isPhone
                                     ? SizeConfig.blockSizeVertical * 4
                                     : SizeConfig.blockSizeVertical * 2,
-                                child: UndeesBasket(
-                                  prefs: widget.prefs,
-                                )),
+                                child: const UndeesBasket()),
                             Positioned(
                               top: 0,
                               right: 0,
@@ -491,7 +494,6 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                               ),
                             ),
                             UndeeAnimation(
-                              prefs: widget.prefs,
                               duration: 2000,
                               selected: showUndee1,
                               fromLeft: isPhone
@@ -505,7 +507,6 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                               orientation: orientation,
                             ),
                             UndeeAnimation(
-                              prefs: widget.prefs,
                               duration: 1750,
                               selected: showUndee2,
                               fromLeft: isPhone
@@ -519,7 +520,6 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                               orientation: orientation,
                             ),
                             UndeeAnimation(
-                              prefs: widget.prefs,
                               duration: 1500,
                               selected: showUndee3,
                               fromLeft: isPhone
@@ -533,7 +533,6 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                               orientation: orientation,
                             ),
                             UndeeAnimation(
-                              prefs: widget.prefs,
                               duration: 1250,
                               selected: showUndee4,
                               fromLeft: isPhone
@@ -547,7 +546,6 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                               orientation: orientation,
                             ),
                             UndeeAnimation(
-                              prefs: widget.prefs,
                               duration: 1000,
                               selected: showUndee5,
                               fromLeft: isPhone
@@ -561,7 +559,6 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                               orientation: orientation,
                             ),
                             UndeeAnimation(
-                              prefs: widget.prefs,
                               duration: 750,
                               selected: showUndee6,
                               fromLeft: isPhone
@@ -575,7 +572,6 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                               orientation: orientation,
                             ),
                             UndeeAnimation(
-                              prefs: widget.prefs,
                               duration: 500,
                               selected: showUndee7,
                               fromLeft: isPhone
@@ -708,19 +704,16 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                             : SizeConfig.blockSizeVertical * 0,
                   ),
                   KeyboardRow(
-                    prefs: widget.prefs,
                     min: 1,
                     max: 10,
                     orientation: orientation,
                   ),
                   KeyboardRow(
-                    prefs: widget.prefs,
                     min: 11,
                     max: 19,
                     orientation: orientation,
                   ),
                   KeyboardRow(
-                    prefs: widget.prefs,
                     min: 20,
                     max: 26,
                     orientation: orientation,
@@ -740,13 +733,13 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                         vertical: SizeConfig.blockSizeVertical * 1),
                     child: Container(
                       margin: EdgeInsets.only(
-                          bottom: SizeConfig.blockSizeVertical * 2),
+                          bottom: SizeConfig.blockSizeVertical * 1),
                       child: Stack(alignment: Alignment.center, children: [
                         ClipRRect(
                           borderRadius: BorderRadius.circular(8),
                           child: SizedBox(
                             height: orientation == Orientation.portrait
-                                ? SizeConfig.blockSizeVertical * 5
+                                ? SizeConfig.blockSizeVertical * 4.5
                                 : SizeConfig.blockSizeVertical * 3.5,
                             child: LinearProgressIndicator(
                               value: progressValue,
@@ -763,7 +756,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                             style: TextStyle(
                                 color: AppColors.lightGray,
                                 fontSize: orientation == Orientation.portrait
-                                    ? SizeConfig.blockSizeHorizontal * 5
+                                    ? SizeConfig.blockSizeHorizontal * 4.5
                                     : SizeConfig.blockSizeHorizontal * 2),
                           ),
                         )

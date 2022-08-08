@@ -9,22 +9,20 @@ import 'package:hang7/pages/options.dart';
 import 'package:hang7/providers/controller.dart';
 import 'package:hang7/providers/settings_provider.dart';
 import 'package:hang7/pages/welcome_page.dart';
+import 'package:hang7/providers/unique_word.dart';
 import 'package:hang7/widgets/app_colors.dart';
 import 'package:hang7/widgets/banner_ad_widget.dart';
 import 'package:hang7/widgets/size_config.dart';
 import 'package:hang7/widgets/stats_bar_chart.dart';
 import 'package:hang7/widgets/stats_row.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class EndOfGame extends StatefulWidget {
   const EndOfGame({
     Key? key,
     required this.coinsEarned,
-    required this.prefs,
   }) : super(key: key);
   final int coinsEarned;
-  final SharedPreferences prefs;
 
   @override
   State<EndOfGame> createState() => _EndOfGameState();
@@ -37,11 +35,11 @@ class _EndOfGameState extends State<EndOfGame> {
 
   BannerAdContainer bannerAdContainer = const BannerAdContainer();
 
-  void loadCoins() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  void loadCoins() {
+    var setProv = Provider.of<SettingsProvider>(context, listen: false);
     setState(() {
-      coins = (prefs.getInt('coins') ?? 0);
-      withAnimation = (prefs.getBool('withAnimation') ?? true);
+      coins = setProv.coins;
+      withAnimation = setProv.withAnimation;
     });
   }
 
@@ -57,12 +55,7 @@ class _EndOfGameState extends State<EndOfGame> {
               ElevatedButton(
                 child: const Text('Get More Words!'),
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      FadeRoute(
-                          page: Options(
-                        prefs: widget.prefs,
-                      )));
+                  Navigator.push(context, FadeRoute(page: const Options()));
                 },
               ),
             ],
@@ -72,46 +65,48 @@ class _EndOfGameState extends State<EndOfGame> {
 
   int currentWPRemainingWords = 50;
   getCurrentRemainingWords() {
-    String wp = widget.prefs.getString('wordPack') ?? "WordPack 1";
+    var settProv = Provider.of<SettingsProvider>(context, listen: false);
+    var unqProv = Provider.of<UniqueWord>(context, listen: false);
+    String wp = settProv.wordPack;
     switch (wp) {
       case "WordPack 1":
-        List<String> l = widget.prefs.getStringList('usedWords1') ?? [];
+        List<String> l = unqProv.usedWords1 as List<String>;
         currentWPRemainingWords = l.length;
         break;
       case "WordPack 2":
-        List<String> l = widget.prefs.getStringList('usedWords2') ?? [];
+        List<String> l = unqProv.usedWords2 as List<String>;
         currentWPRemainingWords = l.length;
         break;
       case "WordPack 3":
-        List<String> l = widget.prefs.getStringList('usedWords3') ?? [];
+        List<String> l = unqProv.usedWords3 as List<String>;
         currentWPRemainingWords = l.length;
         break;
       case "WordPack 4":
-        List<String> l = widget.prefs.getStringList('usedWords4') ?? [];
+        List<String> l = unqProv.usedWords4 as List<String>;
         currentWPRemainingWords = l.length;
         break;
       case "WordPack 5":
-        List<String> l = widget.prefs.getStringList('usedWords5') ?? [];
+        List<String> l = unqProv.usedWords5 as List<String>;
         currentWPRemainingWords = l.length;
         break;
       case "WordPack 6":
-        List<String> l = widget.prefs.getStringList('usedWords6') ?? [];
+        List<String> l = unqProv.usedWords6 as List<String>;
         currentWPRemainingWords = l.length;
         break;
       case "WordPack 7":
-        List<String> l = widget.prefs.getStringList('usedWords7') ?? [];
+        List<String> l = unqProv.usedWords7 as List<String>;
         currentWPRemainingWords = l.length;
         break;
       case "WordPack 8":
-        List<String> l = widget.prefs.getStringList('usedWords8') ?? [];
+        List<String> l = unqProv.usedWords8 as List<String>;
         currentWPRemainingWords = l.length;
         break;
       case "WordPack 9":
-        List<String> l = widget.prefs.getStringList('usedWords9') ?? [];
+        List<String> l = unqProv.usedWords9 as List<String>;
         currentWPRemainingWords = l.length;
         break;
       case "WordPack 10":
-        List<String> l = widget.prefs.getStringList('usedWords10') ?? [];
+        List<String> l = unqProv.usedWords10 as List<String>;
         currentWPRemainingWords = l.length;
         break;
     }
@@ -123,17 +118,9 @@ class _EndOfGameState extends State<EndOfGame> {
     Provider.of<Controller>(context, listen: false).resetGame();
     withAnimation
         ? Navigator.pushReplacement(
-            context,
-            SlideRoute(
-                page: GameBoard(
-              prefs: widget.prefs,
-            )))
+            context, SlideRoute(page: const GameBoard()))
         : Navigator.pushReplacement(
-            context,
-            FadeRoute(
-                page: GameBoard(
-              prefs: widget.prefs,
-            )));
+            context, FadeRoute(page: const GameBoard()));
   }
 
   @override
@@ -266,18 +253,10 @@ class _EndOfGameState extends State<EndOfGame> {
 
                                   notifier.resetGame();
                                   withAnimation
-                                      ? Navigator.pushReplacement(
-                                          context,
-                                          SlideRoute(
-                                              page: WelcomePage(
-                                            prefs: widget.prefs,
-                                          )))
-                                      : Navigator.pushReplacement(
-                                          context,
-                                          FadeRoute(
-                                              page: WelcomePage(
-                                            prefs: widget.prefs,
-                                          )));
+                                      ? Navigator.pushReplacement(context,
+                                          SlideRoute(page: const WelcomePage()))
+                                      : Navigator.pushReplacement(context,
+                                          FadeRoute(page: const WelcomePage()));
                                 },
                                 child: Text(
                                   'Main Menu',

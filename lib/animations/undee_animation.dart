@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hang7/providers/controller.dart';
+import 'package:hang7/providers/settings_provider.dart';
 import 'package:hang7/utils/get_current_undee.dart';
 import 'package:hang7/widgets/size_config.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class UndeeAnimation extends StatefulWidget {
   const UndeeAnimation({
@@ -13,13 +13,11 @@ class UndeeAnimation extends StatefulWidget {
     required this.fromLeft,
     required this.imgSize,
     required this.orientation,
-    required this.prefs,
   }) : super(key: key);
   final int duration;
   final bool selected;
   final double fromLeft;
   final Orientation orientation;
-  final SharedPreferences prefs;
 
   final double imgSize;
 
@@ -35,8 +33,9 @@ class _UndeeAnimationState extends State<UndeeAnimation> {
   @override
   void initState() {
     super.initState();
-    undeeImage = Image.asset(setUndees(widget.prefs));
-    withAnimation = widget.prefs.getBool('withWordAnimation') ?? true;
+    var setProv = Provider.of<SettingsProvider>(context, listen: false);
+    undeeImage = Image.asset(setUndees(context));
+    withAnimation = setProv.withAnimation;
   }
 
   @override

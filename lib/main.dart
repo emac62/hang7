@@ -10,7 +10,6 @@ import 'package:hang7/pages/welcome_page.dart';
 import 'package:hang7/providers/unique_word.dart';
 import 'package:hang7/widgets/material_color.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 List<String> testDeviceIDs = [
   "8E3C44E0453B296DEDFBA106CDBB59CC", // Samsung S5
@@ -37,17 +36,14 @@ Future main() async {
     await SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   }
-  var prefs = await SharedPreferences.getInstance();
+
   runApp(
-    Hang7(
-      prefs: prefs,
-    ),
+    const Hang7(),
   );
 }
 
 class Hang7 extends StatelessWidget {
-  const Hang7({Key? key, required this.prefs}) : super(key: key);
-  final SharedPreferences prefs;
+  const Hang7({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -69,14 +65,10 @@ class Hang7 extends StatelessWidget {
           fontFamily: "Boogaloo",
         ),
         routes: {
-          "/": (context) => SplashScreen(
-                prefs: prefs,
-              ),
-          "/gameBoard": (context) => GameBoard(
-                prefs: prefs,
-              ),
-          "/options": (context) => Options(prefs: prefs),
-          "/welcome": (context) => WelcomePage(prefs: prefs)
+          "/": (context) => const SplashScreen(),
+          "/gameBoard": (context) => const GameBoard(),
+          "/options": (context) => const Options(),
+          "/welcome": (context) => const WelcomePage()
         },
       ),
     );

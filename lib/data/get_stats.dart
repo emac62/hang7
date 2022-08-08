@@ -9,8 +9,9 @@ calculateStats({required bool gameWon, required int remainingGuesses}) async {
   int maxStreak = 0;
   int totalUndeesLeft = 0;
   int avgUndeesLeft = 0;
-  int coins = 0;
+
   var prefs = await SharedPreferences.getInstance();
+
   var savedStats = await getGameStats();
   if (savedStats != null) {
     gamesPlayed = int.parse(savedStats[0]);
@@ -21,19 +22,10 @@ calculateStats({required bool gameWon, required int remainingGuesses}) async {
     totalUndeesLeft = int.parse(savedStats[5]);
     avgUndeesLeft = int.parse(savedStats[6]);
   }
-  coins = prefs.getInt('coins') ?? 0;
 
   gamesPlayed += 1;
 
-  if (gamesPlayed == 25 ||
-      gamesPlayed == 50 ||
-      gamesPlayed == 75 ||
-      gamesPlayed == 100) {
-    coins = coins + 10;
-  }
-
   if (gameWon) {
-    coins = coins + 10 + remainingGuesses;
     gamesWon++;
     currentStreak++;
   } else {
@@ -47,7 +39,7 @@ calculateStats({required bool gameWon, required int remainingGuesses}) async {
   totalUndeesLeft = totalUndeesLeft + remainingGuesses;
   avgUndeesLeft = totalUndeesLeft ~/ gamesPlayed;
 
-  prefs.setInt('coins', coins);
+  // prefs.setInt('coins', coins);
   prefs.setStringList('gameStats', <String>[
     gamesPlayed.toString(),
     gamesWon.toString(),

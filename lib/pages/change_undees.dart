@@ -15,8 +15,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ChangeUndees extends StatefulWidget {
-  const ChangeUndees({Key? key, required this.prefs}) : super(key: key);
-  final SharedPreferences prefs;
+  const ChangeUndees({Key? key}) : super(key: key);
 
   @override
   State<ChangeUndees> createState() => _ChangeUndeesState();
@@ -27,7 +26,7 @@ class _ChangeUndeesState extends State<ChangeUndees> {
   late List<String> undColour;
   List<String> availableUndees = [];
   BannerAdContainer bannerAdContainer = const BannerAdContainer();
-  late int coins;
+  int coins = 0;
 
   final myUndeesScrollController = ScrollController();
   final undeesScrollController = ScrollController();
@@ -37,9 +36,9 @@ class _ChangeUndeesState extends State<ChangeUndees> {
     "GreenPlaid",
     "White",
     "DarkBlue",
-    "DarkBlueTighties",
     "WhiteTighties",
-    "GrayTighties"
+    "GrayTighties",
+    "DarkBlueTighties",
   ];
 
   List<Widget> images = [
@@ -67,34 +66,40 @@ class _ChangeUndeesState extends State<ChangeUndees> {
   ];
 
   selectUndees(int index) {
+    var setProv = Provider.of<SettingsProvider>(context, listen: false);
     setState(() {
-      widget.prefs.setString('changeColor', availableUndees[index]);
-      debugPrint("selectUndees: $undeesStr");
-      undeesStr = widget.prefs.getString('changeColor') ?? "Pink";
+      setProv.setGameUndees(availableUndees[index]);
+      undeesStr = setProv.gameUndees;
       debugPrint("selectUndees: $undeesStr");
       if (!undColour.contains(availableUndees[index])) {
         undColour.add(availableUndees[index]);
-        widget.prefs.setStringList('undeeColours', undColour);
+        setProv.setUndeeColours(undColour);
         myUndees.add(availableUndeeImages[index]);
       }
     });
   }
 
   List<Widget> myUndees = [];
+  late SharedPreferences prefs;
+  getSPInstance(BuildContext context) {
+    var settingsProvider =
+        Provider.of<SettingsProvider>(context, listen: false);
+    undeesStr = settingsProvider.gameUndees;
+    debugPrint("undeesStr/gameUndees: $undeesStr");
+    // Image.asset(setUndees(prefs)); doesn't equal anything
+    coins = settingsProvider.coins;
+    undColour = settingsProvider.undeeColours as List<String>;
+    availableUndees =
+        allUndees.where((element) => !undColour.contains(element)).toList();
+    debugPrint(undColour.toString());
+    myUndees = getMyUndeesImages(undColour);
+    getAvailableUndeeImages();
+  }
 
   @override
   void initState() {
     super.initState();
-    undeesStr = widget.prefs.getString('changeColor') ?? "Pink";
-    debugPrint(undeesStr);
-    Image.asset(setUndees(widget.prefs));
-    coins = widget.prefs.getInt('coins') ?? 0;
-    undColour = widget.prefs.getStringList('undeeColours') ?? ["Pink"];
-    availableUndees =
-        allUndees.where((element) => !undColour.contains(element)).toList();
-    debugPrint(undColour.toString());
-    myUndees = getMyUndeesImages(widget.prefs);
-    getAvailableUndeeImages();
+    getSPInstance(context);
   }
 
   List<Widget> availableUndeeImages = [];
@@ -160,7 +165,7 @@ class _ChangeUndeesState extends State<ChangeUndees> {
               style: TextStyle(
                   color: AppColors.darkBlue,
                   fontSize: orientation == Orientation.portrait
-                      ? SizeConfig.blockSizeHorizontal * 7
+                      ? SizeConfig.blockSizeVertical * 4.5
                       : SizeConfig.blockSizeVertical * 6),
             ),
           ),
@@ -246,13 +251,13 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                                       child: GestureDetector(
                                           onTap: () {
                                             setState(() {
-                                              widget.prefs.setString(
-                                                  'changeColor',
+                                              settingsProvider.setGameUndees(
                                                   undColour[index]);
-                                              undeesStr = widget.prefs
-                                                      .getString(
-                                                          'changeColor') ??
-                                                  "Pink";
+                                              debugPrint(
+                                                  "onTap: ${settingsProvider.gameUndees}");
+                                              undeesStr =
+                                                  settingsProvider.gameUndees;
+                                              debugPrint("onTap: $undeesStr");
                                             });
                                           },
                                           child: myUndees[index]),
@@ -286,8 +291,9 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                                 : SizeConfig.blockSizeVertical * 3,
                       ),
                     ),
-                    SizedBox(
+                    Container(
                       height: SizeConfig.blockSizeVertical * 15,
+                      alignment: Alignment.center,
                       child: Scrollbar(
                         controller: undeesScrollController,
                         thumbVisibility: true,
@@ -330,7 +336,7 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                                                                 3,
                                                   ),
                                                 ),
-                                                content: coins > 100
+                                                content: coins >= 100
                                                     ? availableUndeeImages[
                                                         index]
                                                     : Text(
@@ -358,24 +364,20 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                                                           ? () {
                                                               coins =
                                                                   coins - 100;
-                                                              widget.prefs
-                                                                  .setInt(
-                                                                      'coins',
+                                                              settingsProvider
+                                                                  .setCoins(
                                                                       coins);
                                                               selectUndees(
                                                                   index);
                                                               debugPrint(
-                                                                  "SetUndees: ${settingsProvider.changeColor}");
+                                                                  "SetUndees: ${settingsProvider.gameUndees}");
                                                               Navigator.push(
                                                                 context,
                                                                 PageRouteBuilder(
                                                                   pageBuilder: (c,
                                                                           a1,
                                                                           a2) =>
-                                                                      ChangeUndees(
-                                                                    prefs: widget
-                                                                        .prefs,
-                                                                  ),
+                                                                      const ChangeUndees(),
                                                                   transitionsBuilder: (c,
                                                                           anim,
                                                                           a2,
@@ -518,18 +520,10 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                               ),
                               onPressed: () {
                                 settingsProvider.withAnimation
-                                    ? Navigator.push(
-                                        context,
-                                        SlideLeftRoute(
-                                            page: Options(
-                                          prefs: widget.prefs,
-                                        )))
-                                    : Navigator.push(
-                                        context,
-                                        FadeRoute(
-                                            page: Options(
-                                          prefs: widget.prefs,
-                                        )));
+                                    ? Navigator.push(context,
+                                        SlideLeftRoute(page: const Options()))
+                                    : Navigator.push(context,
+                                        FadeRoute(page: const Options()));
                               },
                               child: Padding(
                                 padding: EdgeInsets.symmetric(
@@ -562,20 +556,12 @@ class _ChangeUndeesState extends State<ChangeUndees> {
 
                                 notifier.resetGame();
                                 debugPrint(
-                                    "Change Undees Play: ${settingsProvider.changeColor}");
+                                    "Change Undees Play: ${settingsProvider.gameUndees}");
                                 settingsProvider.withAnimation
-                                    ? Navigator.push(
-                                        context,
-                                        RotationRoute(
-                                            page: GameBoard(
-                                          prefs: widget.prefs,
-                                        )))
-                                    : Navigator.push(
-                                        context,
-                                        FadeRoute(
-                                            page: GameBoard(
-                                          prefs: widget.prefs,
-                                        )));
+                                    ? Navigator.push(context,
+                                        RotationRoute(page: const GameBoard()))
+                                    : Navigator.push(context,
+                                        FadeRoute(page: const GameBoard()));
                               },
                               child: Padding(
                                 padding: EdgeInsets.symmetric(

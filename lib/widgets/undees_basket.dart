@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hang7/widgets/size_config.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../providers/controller.dart';
 import '../utils/get_current_undee.dart';
 
 class UndeesBasket extends StatefulWidget {
-  const UndeesBasket({Key? key, required this.prefs}) : super(key: key);
-  final SharedPreferences prefs;
+  const UndeesBasket({Key? key}) : super(key: key);
 
   @override
   State<UndeesBasket> createState() => _UndeesBasketState();
@@ -20,7 +18,7 @@ class _UndeesBasketState extends State<UndeesBasket> {
   @override
   void initState() {
     super.initState();
-    currentUndees = Image.asset(setUndees(widget.prefs));
+    currentUndees = Image.asset(setUndees(context));
   }
 
   @override
