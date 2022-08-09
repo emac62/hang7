@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -28,7 +29,9 @@ Future main() async {
       tagForChildDirectedTreatment: TagForChildDirectedTreatment.yes,
       testDeviceIds: testDeviceIDs);
   MobileAds.instance.updateRequestConfiguration(requestConfiguration);
-
+  if (kReleaseMode) {
+    debugPrint = (String? message, {int? wrapWidth}) {};
+  }
   final double screenWidth =
       MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.width;
 
