@@ -4,18 +4,17 @@ import 'package:hang7/animations/route.dart';
 
 import 'package:hang7/constants/key_state.dart';
 import 'package:hang7/data/key_map.dart';
-import 'package:hang7/pages/game_board.dart';
 import 'package:hang7/pages/options.dart';
 import 'package:hang7/providers/controller.dart';
 import 'package:hang7/providers/settings_provider.dart';
-import 'package:hang7/pages/welcome_page.dart';
-import 'package:hang7/providers/unique_word.dart';
 import 'package:hang7/widgets/app_colors.dart';
 import 'package:hang7/widgets/banner_ad_widget.dart';
 import 'package:hang7/widgets/size_config.dart';
 import 'package:hang7/widgets/stats_bar_chart.dart';
 import 'package:hang7/widgets/stats_row.dart';
 import 'package:provider/provider.dart';
+
+import '../widgets/check_remaining_words.dart';
 
 class EndOfGame extends StatefulWidget {
   const EndOfGame({
@@ -41,86 +40,6 @@ class _EndOfGameState extends State<EndOfGame> {
       coins = setProv.coins;
       withAnimation = setProv.withAnimation;
     });
-  }
-
-  showOutOfWords(BuildContext context) {
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('No Words!'),
-            content: const Text(
-                'You have used all the words in this word pack. Go to Options to change your pack or buy more coins if needed.'),
-            actions: <Widget>[
-              ElevatedButton(
-                child: const Text('Get More Words!'),
-                onPressed: () {
-                  Navigator.push(context, FadeRoute(page: const Options()));
-                },
-              ),
-            ],
-          );
-        });
-  }
-
-  int currentWPRemainingWords = 50;
-  getCurrentRemainingWords() {
-    var settProv = Provider.of<SettingsProvider>(context, listen: false);
-    var unqProv = Provider.of<UniqueWord>(context, listen: false);
-    String wp = settProv.wordPack;
-    switch (wp) {
-      case "WordPack 1":
-        List<String> l = unqProv.usedWords1 as List<String>;
-        currentWPRemainingWords = l.length;
-        break;
-      case "WordPack 2":
-        List<String> l = unqProv.usedWords2 as List<String>;
-        currentWPRemainingWords = l.length;
-        break;
-      case "WordPack 3":
-        List<String> l = unqProv.usedWords3 as List<String>;
-        currentWPRemainingWords = l.length;
-        break;
-      case "WordPack 4":
-        List<String> l = unqProv.usedWords4 as List<String>;
-        currentWPRemainingWords = l.length;
-        break;
-      case "WordPack 5":
-        List<String> l = unqProv.usedWords5 as List<String>;
-        currentWPRemainingWords = l.length;
-        break;
-      case "WordPack 6":
-        List<String> l = unqProv.usedWords6 as List<String>;
-        currentWPRemainingWords = l.length;
-        break;
-      case "WordPack 7":
-        List<String> l = unqProv.usedWords7 as List<String>;
-        currentWPRemainingWords = l.length;
-        break;
-      case "WordPack 8":
-        List<String> l = unqProv.usedWords8 as List<String>;
-        currentWPRemainingWords = l.length;
-        break;
-      case "WordPack 9":
-        List<String> l = unqProv.usedWords9 as List<String>;
-        currentWPRemainingWords = l.length;
-        break;
-      case "WordPack 10":
-        List<String> l = unqProv.usedWords10 as List<String>;
-        currentWPRemainingWords = l.length;
-        break;
-    }
-  }
-
-  newGame() {
-    keysMap.updateAll((key, value) => value = KeyState.unselected);
-
-    Provider.of<Controller>(context, listen: false).resetGame();
-    withAnimation
-        ? Navigator.pushReplacement(
-            context, SlideRoute(page: const GameBoard()))
-        : Navigator.pushReplacement(
-            context, FadeRoute(page: const GameBoard()));
   }
 
   @override
@@ -254,12 +173,12 @@ class _EndOfGameState extends State<EndOfGame> {
                                   notifier.resetGame();
                                   withAnimation
                                       ? Navigator.pushReplacement(context,
-                                          SlideRoute(page: const WelcomePage()))
+                                          SlideRoute(page: const Options()))
                                       : Navigator.pushReplacement(context,
-                                          FadeRoute(page: const WelcomePage()));
+                                          FadeRoute(page: const Options()));
                                 },
                                 child: Text(
-                                  'Main Menu',
+                                  'Options',
                                   style: TextStyle(
                                     fontSize:
                                         orientation == Orientation.portrait
@@ -272,10 +191,7 @@ class _EndOfGameState extends State<EndOfGame> {
                                   primary: AppColors.green,
                                 ),
                                 onPressed: () {
-                                  getCurrentRemainingWords();
-                                  currentWPRemainingWords >= 50
-                                      ? showOutOfWords(context)
-                                      : newGame();
+                                  checkRemainingWords(context);
                                 },
                                 child: Text(
                                   'New Game',

@@ -4,8 +4,8 @@ import 'package:hang7/constants/help.dart';
 import 'package:hang7/pages/game_board.dart';
 import 'package:hang7/pages/options.dart';
 import 'package:hang7/providers/settings_provider.dart';
-import 'package:hang7/providers/unique_word.dart';
 import 'package:hang7/widgets/app_colors.dart';
+import 'package:hang7/widgets/check_remaining_words.dart';
 import 'package:hang7/widgets/game_stats_alert.dart';
 import 'package:hang7/widgets/size_config.dart';
 import 'package:provider/provider.dart';
@@ -23,56 +23,56 @@ class WelcomePage extends StatefulWidget {
 class _WelcomePageState extends State<WelcomePage> {
   int? coins;
   bool withAnimation = true;
-  List<String> wp2 = [
-    '0',
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    "10",
-    "11",
-    "12",
-    "13",
-    "14",
-    "15",
-    "16",
-    "17",
-    "18",
-    "19",
-    "20",
-    "21",
-    "22",
-    "23",
-    "24",
-    "25",
-    "26",
-    "27",
-    "28",
-    "29",
-    "30",
-    "31",
-    "32",
-    "33",
-    "34",
-    "35",
-    "36",
-    "37",
-    "38",
-    "39",
-    "40",
-    "41",
-    "42",
-    "43",
-    "44",
-    "45",
-    "46",
-    "47",
-  ];
+  // List<String> wp2 = [
+  //   '0',
+  //   "1",
+  //   "2",
+  //   "3",
+  //   "4",
+  //   "5",
+  //   "6",
+  //   "7",
+  //   "8",
+  //   "9",
+  //   "10",
+  //   "11",
+  //   "12",
+  //   "13",
+  //   "14",
+  //   "15",
+  //   "16",
+  //   "17",
+  //   "18",
+  //   "19",
+  //   "20",
+  //   "21",
+  //   "22",
+  //   "23",
+  //   "24",
+  //   "25",
+  //   "26",
+  //   "27",
+  //   "28",
+  //   "29",
+  //   "30",
+  //   "31",
+  //   "32",
+  //   "33",
+  //   "34",
+  //   "35",
+  //   "36",
+  //   "37",
+  //   "38",
+  //   "39",
+  //   "40",
+  //   "41",
+  //   "42",
+  //   "43",
+  //   "44",
+  //   "45",
+  //   "46",
+  //   "47",
+  // ];
   late SharedPreferences sharedPrefs;
   getSPInstance() async {
     sharedPrefs = await SharedPreferences.getInstance();
@@ -88,13 +88,13 @@ class _WelcomePageState extends State<WelcomePage> {
       getSPInstance().then((_) {
         var settingsProvider =
             Provider.of<SettingsProvider>(context, listen: false);
-        var uniqueWord = Provider.of<UniqueWord>(context, listen: false);
+        // var uniqueWord = Provider.of<UniqueWord>(context, listen: false);
         coins = settingsProvider.coins;
         withAnimation = settingsProvider.withAnimation;
-        String wordpack = settingsProvider.wordPack;
+
         debugPrint("myWordPacks: ${settingsProvider.myWordPacks.toString()}");
-        debugPrint(wordpack);
-        uniqueWord.setUsedWords2(wp2);
+
+        // uniqueWord.setUsedWords2(wp2);
       });
     });
   }
@@ -221,11 +221,7 @@ class _WelcomePageState extends State<WelcomePage> {
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         ),
                         onPressed: () {
-                          withAnimation
-                              ? Navigator.push(context,
-                                  RotationRoute(page: const GameBoard()))
-                              : Navigator.push(
-                                  context, FadeRoute(page: const GameBoard()));
+                          checkRemainingWords(context);
                         },
                         child: Text(
                           "Play",

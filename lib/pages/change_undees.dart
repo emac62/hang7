@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hang7/animations/route.dart';
-import 'package:hang7/constants/key_state.dart';
-import 'package:hang7/data/key_map.dart';
-import 'package:hang7/pages/game_board.dart';
 import 'package:hang7/pages/options.dart';
 import 'package:hang7/providers/controller.dart';
 import 'package:hang7/providers/settings_provider.dart';
 import 'package:hang7/utils/get_current_undee.dart';
 import 'package:hang7/widgets/app_colors.dart';
 import 'package:hang7/widgets/banner_ad_widget.dart';
+import 'package:hang7/widgets/check_remaining_words.dart';
 import 'package:hang7/widgets/size_config.dart';
 
 import 'package:provider/provider.dart';
@@ -551,17 +549,7 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                                 ),
                               ),
                               onPressed: () {
-                                keysMap.updateAll((key, value) =>
-                                    value = KeyState.unselected);
-
-                                notifier.resetGame();
-                                debugPrint(
-                                    "Change Undees Play: ${settingsProvider.gameUndees}");
-                                settingsProvider.withAnimation
-                                    ? Navigator.push(context,
-                                        RotationRoute(page: const GameBoard()))
-                                    : Navigator.push(context,
-                                        FadeRoute(page: const GameBoard()));
+                                checkRemainingWords(context);
                               },
                               child: Padding(
                                 padding: EdgeInsets.symmetric(

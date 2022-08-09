@@ -108,6 +108,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
       case "WordPack 2":
         words = wordPack2;
         usedWordIndexes = uniqProv.usedWords2 as List<String>;
+        debugPrint("usedWords2: ${uniqProv.usedWords2}");
         listKey = "usedWords2";
         break;
       case "WordPack 3":

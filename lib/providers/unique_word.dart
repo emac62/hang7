@@ -101,6 +101,7 @@ class UniqueWord with ChangeNotifier {
         break;
       case "usedWords2":
         setUsedWords2(list);
+
         break;
       case "usedWords3":
         setUsedWords3(list);

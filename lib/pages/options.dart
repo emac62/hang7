@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:hang7/animations/route.dart';
 import 'package:hang7/pages/change_undees.dart';
 import 'package:hang7/pages/change_words.dart';
-import 'package:hang7/pages/game_board.dart';
 import 'package:hang7/pages/welcome_page.dart';
 import 'package:hang7/providers/controller.dart';
 import 'package:hang7/providers/settings_provider.dart';
 import 'package:hang7/utils/get_current_undee.dart';
 import 'package:hang7/widgets/app_colors.dart';
 import 'package:hang7/widgets/banner_ad_widget.dart';
+import 'package:hang7/widgets/check_remaining_words.dart';
 import 'package:hang7/widgets/game_stats_alert.dart';
 import 'package:hang7/widgets/size_config.dart';
 import 'package:provider/provider.dart';
@@ -247,9 +247,18 @@ class _OptionsState extends State<Options> {
                         padding: EdgeInsets.symmetric(
                             vertical: SizeConfig.blockSizeVertical * 0.5),
                         child: Text(
-                          "You have ${settingsProvider.coins} Coins! 100 needed for changes.",
+                          "You have ${settingsProvider.coins} Coins!",
                           style: TextStyle(
                               fontSize: SizeConfig.blockSizeVertical * 2.5),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            bottom: SizeConfig.blockSizeVertical * 0.5),
+                        child: Text(
+                          "100 needed to make changes.",
+                          style: TextStyle(
+                              fontSize: SizeConfig.blockSizeVertical * 2),
                         ),
                       ),
                       Padding(
@@ -533,13 +542,7 @@ class _OptionsState extends State<Options> {
                                   ),
                                 ),
                                 onPressed: () {
-                                  settingsProvider.withAnimation
-                                      ? Navigator.pushReplacement(
-                                          context,
-                                          RotationRoute(
-                                              page: const GameBoard()))
-                                      : Navigator.pushReplacement(context,
-                                          FadeRoute(page: const GameBoard()));
+                                  checkRemainingWords(context);
                                 },
                                 child: Padding(
                                   padding: EdgeInsets.symmetric(

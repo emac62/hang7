@@ -15,7 +15,7 @@ getMyWordPackRemainingWords(context) {
     switch (myWordPacks[i]) {
       case "WordPack 1":
         l = uniqueWords.usedWords1 as List<String>;
-        debugPrint("inside switch: $l");
+        debugPrint("inside switch wordPack1: $l");
         break;
       case "WordPack 2":
         l = uniqueWords.usedWords2 as List<String>;
