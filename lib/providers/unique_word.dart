@@ -55,43 +55,64 @@ class UniqueWord with ChangeNotifier {
 
   void setUsedWords1(List usedWords1) {
     _usedWords1 = usedWords1 as List<String>;
-    debugPrint("usedWords1: $usedWords1");
+    debugPrint("Unique Words usedWords1: $usedWords1");
+    // notifyListeners();
+    saveIndexes();
   }
 
   void setUsedWords2(List usedWords2) {
     _usedWords2 = usedWords2 as List<String>;
+    debugPrint("Unique Words usedWords2: $usedWords2");
+    // notifyListeners();
+    saveIndexes();
   }
 
   void setUsedWords3(List usedWords3) {
     _usedWords3 = usedWords3 as List<String>;
+    notifyListeners();
+    saveIndexes();
   }
 
   void setUsedWords4(List usedWords4) {
     _usedWords4 = usedWords4 as List<String>;
+    notifyListeners();
+    saveIndexes();
   }
 
   void setUsedWords5(List usedWords5) {
     _usedWords5 = usedWords5 as List<String>;
+    notifyListeners();
+    saveIndexes();
   }
 
   void setUsedWords6(List usedWords6) {
     _usedWords6 = usedWords6 as List<String>;
+    notifyListeners();
+    saveIndexes();
   }
 
   void setUsedWords7(List usedWords7) {
     _usedWords7 = usedWords7 as List<String>;
+    notifyListeners();
+    saveIndexes();
   }
 
   void setUsedWords8(List usedWords8) {
     _usedWords8 = usedWords8 as List<String>;
+    notifyListeners();
+    saveIndexes();
   }
 
   void setUsedWords9(List usedWords9) {
     _usedWords9 = usedWords9 as List<String>;
+    notifyListeners();
+    saveIndexes();
   }
 
   void setUsedWords10(List usedWords10) {
     _usedWords10 = usedWords10 as List<String>;
+    notifyListeners();
+    saveIndexes();
   }
 
   void setUsedWordsList(String key, List list) {
@@ -128,6 +149,8 @@ class UniqueWord with ChangeNotifier {
         setUsedWords10(list);
         break;
     }
+    // notifyListeners();
+    saveIndexes();
   }
 
   loadUsedWordsIndexes() async {

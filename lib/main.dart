@@ -1,3 +1,4 @@
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,13 +23,14 @@ List<String> testDeviceIDs = [
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await MobileAds.instance.initialize().then((InitializationStatus status) {
-    debugPrint('Initialization done: ${status.adapterStatuses}');
-  });
-  final RequestConfiguration requestConfiguration = RequestConfiguration(
-      tagForChildDirectedTreatment: TagForChildDirectedTreatment.yes,
-      testDeviceIds: testDeviceIDs);
-  MobileAds.instance.updateRequestConfiguration(requestConfiguration);
+  // await MobileAds.instance.initialize().then((InitializationStatus status) {
+  //   debugPrint('Initialization done: ${status.adapterStatuses}');
+  // });
+  // final RequestConfiguration requestConfiguration = RequestConfiguration(
+  //     maxAdContentRating: MaxAdContentRating.g,
+  //     tagForChildDirectedTreatment: TagForChildDirectedTreatment.yes,
+  //     testDeviceIds: testDeviceIDs);
+  // MobileAds.instance.updateRequestConfiguration(requestConfiguration);
   if (kReleaseMode) {
     debugPrint = (String? message, {int? wrapWidth}) {};
   }
@@ -40,9 +42,10 @@ Future main() async {
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   }
 
-  runApp(
-    const Hang7(),
-  );
+  runApp(DevicePreview(
+    enabled: false,
+    builder: ((context) => const Hang7()),
+  ));
 }
 
 class Hang7 extends StatelessWidget {
@@ -61,6 +64,8 @@ class Hang7 extends StatelessWidget {
       ],
       child: MaterialApp(
         useInheritedMediaQuery: true,
+        locale: DevicePreview.locale(context),
+        builder: DevicePreview.appBuilder,
         title: 'Hang 7',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(

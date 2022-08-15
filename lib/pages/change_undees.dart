@@ -163,7 +163,7 @@ class _ChangeUndeesState extends State<ChangeUndees> {
               style: TextStyle(
                   color: AppColors.darkBlue,
                   fontSize: orientation == Orientation.portrait
-                      ? SizeConfig.blockSizeVertical * 4.5
+                      ? SizeConfig.blockSizeVertical * 3.5
                       : SizeConfig.blockSizeVertical * 6),
             ),
           ),
@@ -179,11 +179,7 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                       child: Text(
                         "My Undees",
                         style: TextStyle(
-                          fontSize: notifier.isPhone
-                              ? SizeConfig.blockSizeVertical * 4
-                              : orientation == Orientation.portrait
-                                  ? SizeConfig.blockSizeVertical * 5
-                                  : SizeConfig.blockSizeVertical * 4,
+                          fontSize: SizeConfig.blockSizeVertical * 4,
                         ),
                       ),
                     ),
@@ -191,22 +187,14 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                       "Default (Pink) and all purchased.",
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: notifier.isPhone
-                            ? SizeConfig.blockSizeVertical * 2
-                            : orientation == Orientation.portrait
-                                ? SizeConfig.blockSizeVertical * 3
-                                : SizeConfig.blockSizeVertical * 3,
+                        fontSize: SizeConfig.blockSizeVertical * 2,
                       ),
                     ),
                     Text(
-                      "Current UnDees are outlined.",
+                      "Current chosen Undees are highlighted.",
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: notifier.isPhone
-                            ? SizeConfig.blockSizeVertical * 2
-                            : orientation == Orientation.portrait
-                                ? SizeConfig.blockSizeVertical * 3
-                                : SizeConfig.blockSizeVertical * 2,
+                        fontSize: SizeConfig.blockSizeVertical * 2,
                       ),
                     ),
                     Container(
@@ -269,24 +257,16 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: Text(
-                        "Available Styles and Colours",
+                        "Other Available Styles and Colours",
                         style: TextStyle(
-                          fontSize: notifier.isPhone
-                              ? SizeConfig.blockSizeVertical * 4
-                              : orientation == Orientation.portrait
-                                  ? SizeConfig.blockSizeVertical * 5
-                                  : SizeConfig.blockSizeVertical * 4,
+                          fontSize: SizeConfig.blockSizeVertical * 4,
                         ),
                       ),
                     ),
                     Text(
-                      "Purchase for 100 coins each",
+                      "Purchase for 100 coins each.",
                       style: TextStyle(
-                        fontSize: notifier.isPhone
-                            ? SizeConfig.blockSizeVertical * 2
-                            : orientation == Orientation.portrait
-                                ? SizeConfig.blockSizeVertical * 3
-                                : SizeConfig.blockSizeVertical * 3,
+                        fontSize: SizeConfig.blockSizeVertical * 2,
                       ),
                     ),
                     Container(
@@ -572,7 +552,7 @@ class _ChangeUndeesState extends State<ChangeUndees> {
               );
             },
           ),
-          bottomNavigationBar: bannerAdContainer,
+          // bottomNavigationBar: bannerAdContainer,
           // bottomNavigationBar: Container(
           //   decoration: const BoxDecoration(
           //       color: Colors.transparent,

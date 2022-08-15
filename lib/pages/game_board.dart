@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -42,19 +41,16 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
   static List selectedLetters = [];
   static bool showMenu = false;
 
-  double progressValue = 0;
-  String progressMessage = "Start by picking a letter.";
+  static double progressValue = 0;
+  static String progressMessage = "Start by picking a letter.";
 
-  bool showUndee1 = false;
-  bool showUndee2 = false;
-  bool showUndee3 = false;
-  bool showUndee4 = false;
-  bool showUndee5 = false;
-  bool showUndee6 = false;
-  bool showUndee7 = false;
-
-  late bool isTablet;
-  late bool isPhone;
+  static bool showUndee1 = false;
+  static bool showUndee2 = false;
+  static bool showUndee3 = false;
+  static bool showUndee4 = false;
+  static bool showUndee5 = false;
+  static bool showUndee6 = false;
+  static bool showUndee7 = false;
 
   String? undeeColor;
   late Image undeeImage;
@@ -62,23 +58,19 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
   late double undeeSize;
   late double hWRatio;
 
-  // resetControllers() {
-  //   showMenu = false;
-  //   showUndee1 = false;
-  //   showUndee2 = false;
-  //   showUndee3 = false;
-  //   showUndee4 = false;
-  //   showUndee5 = false;
-  //   showUndee6 = false;
-  //   showUndee7 = false;
+  static resetControllers() {
+    showMenu = false;
+    showUndee1 = false;
+    showUndee2 = false;
+    showUndee3 = false;
+    showUndee4 = false;
+    showUndee5 = false;
+    showUndee6 = false;
+    showUndee7 = false;
 
-  //   progressMessage = "Start by picking a letter.";
-  //   progressValue = 0;
-
-  //   keysMap.updateAll((key, value) => value = KeyState.unselected);
-  //   debugPrint("before resetgame in resetcontrollers");
-  //   Provider.of<Controller>(context, listen: false).resetGame();
-  // }
+    progressMessage = "Start by picking a letter.";
+    progressValue = 0;
+  }
 
   late SharedPreferences prefs;
   getSPInstance() async {
@@ -171,6 +163,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     getSPInstance();
+    resetControllers();
     getWord();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<Controller>(context, listen: false)
@@ -181,45 +174,38 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
     debugPrint("init currentWord: $currentWord");
   }
 
-  updateProgressCorrect(int num) {
+  static updateProgressCorrect(int num) {
     progressValue = num / 7;
     progressMessage = correctLetterMessage.entries
         .firstWhere((element) => element.key == num)
         .value;
   }
 
-  updateProgressIncorrect(int num) {
+  static updateProgressIncorrect(int num) {
     progressMessage = incorrectLetterMessage.entries
         .firstWhere((element) => element.key == (num))
         .value;
     switch (num) {
       case 6:
         showUndee1 = true;
-
         break;
       case 5:
         showUndee2 = true;
-
         break;
       case 4:
         showUndee3 = true;
-
         break;
       case 3:
         showUndee4 = true;
-
         break;
       case 2:
         showUndee5 = true;
-
         break;
       case 1:
         showUndee6 = true;
-
         break;
       case 0:
         showUndee7 = true;
-
         break;
     }
   }
@@ -233,9 +219,14 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     var settingsProvider = Provider.of<SettingsProvider>(context);
+    debugPrint("gameBoard widget build called");
 
+    hWRatio = SizeConfig.screenHeight / SizeConfig.screenWidth;
     return OrientationBuilder(
       builder: ((context, orientation) {
+        undeeSize = orientation == Orientation.portrait
+            ? SizeConfig.blockSizeVertical * 9
+            : SizeConfig.blockSizeHorizontal * 8;
         return Container(
           decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -243,43 +234,14 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                   end: Alignment.bottomCenter,
                   colors: [AppColors.backgroundColor, AppColors.lightGray])),
           child: Scaffold(
-            backgroundColor: Colors.transparent,
-            body: Consumer<Controller>(builder: (_, notifier, __) {
-              if (notifier.selectedLetterCorrect) {
-                updateProgressCorrect(notifier.correctLetters);
-              }
-              if (notifier.selectedLetterIncorrect) {
-                updateProgressIncorrect(notifier.remainingGuesses);
-              }
-              if (notifier.gameCompleted && !notifier.gameWon) {
-                notifier.revealWord();
-                Future.delayed(const Duration(milliseconds: 2000), () {
-                  notifier.revealWord();
-                });
-              }
-
-              if (notifier.isPhone) {
-                isPhone = true;
-                isTablet = false;
-                debugPrint("isPhone: $isPhone");
-              } else {
-                isPhone = false;
-                isTablet = true;
-                debugPrint("isTablet: $isTablet");
-              }
-
-              undeeSize = orientation == Orientation.portrait
-                  ? SizeConfig.blockSizeVertical * 9
-                  : SizeConfig.blockSizeHorizontal * 8;
-
-              hWRatio = SizeConfig.screenHeight / SizeConfig.screenWidth;
-              return SafeArea(
+              backgroundColor: Colors.transparent,
+              body: SafeArea(
                 child: Column(children: [
                   Container(
                     decoration: BoxDecoration(
                         border:
                             Border.all(color: Colors.transparent, width: 2)),
-                    height: isPhone
+                    height: context.select((Controller c) => c.isPhone)
                         ? 60
                         : orientation == Orientation.portrait
                             ? SizeConfig.blockSizeVertical * 12
@@ -311,17 +273,18 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                             '$coins Coins',
                             style: TextStyle(
                               letterSpacing: 1.5,
-                              fontSize: isPhone
-                                  ? SizeConfig.blockSizeHorizontal * 4
-                                  : orientation == Orientation.portrait
-                                      ? SizeConfig.blockSizeHorizontal * 3
-                                      : SizeConfig.blockSizeHorizontal * 2,
+                              fontSize:
+                                  context.select((Controller c) => c.isPhone)
+                                      ? SizeConfig.blockSizeHorizontal * 4
+                                      : orientation == Orientation.portrait
+                                          ? SizeConfig.blockSizeHorizontal * 3
+                                          : SizeConfig.blockSizeHorizontal * 2,
                             ),
                           ),
                         ),
                         Positioned(
                           top: 6,
-                          right: isPhone
+                          right: context.select((Controller c) => c.isPhone)
                               ? SizeConfig.blockSizeHorizontal * 20
                               : SizeConfig.blockSizeHorizontal * 15,
                           child: AnimatedOpacity(
@@ -337,7 +300,8 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                           toggleMenu();
                                           keysMap.updateAll((key, value) =>
                                               value = KeyState.unselected);
-                                          notifier.resetGame();
+                                          context.select(
+                                              (Controller c) => c.resetGame());
 
                                           settingsProvider.withAnimation
                                               ? Navigator.push(
@@ -366,7 +330,8 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                                   ));
                                         },
                                         icon: Icons.bar_chart),
-                                    notifier.gameCompleted
+                                    context.select(
+                                            (Controller c) => c.gameCompleted)
                                         ? menuButton(
                                             orientation: orientation,
                                             onPressed: () {
@@ -407,7 +372,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                               border: Border.all(
                                   color: Colors.transparent, width: 2)),
                           child: Stack(children: <Widget>[
-                            isPhone
+                            context.select((Controller c) => c.isPhone)
                                 ? SizedBox(
                                     width: double.infinity,
                                     child: Image.asset(
@@ -434,9 +399,10 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                       ),
                             Positioned(
                                 right: SizeConfig.blockSizeHorizontal * 10,
-                                bottom: notifier.isPhone
-                                    ? SizeConfig.blockSizeVertical * 4
-                                    : SizeConfig.blockSizeVertical * 2,
+                                bottom:
+                                    context.select((Controller c) => c.isPhone)
+                                        ? SizeConfig.blockSizeVertical * 2
+                                        : SizeConfig.blockSizeVertical * 2,
                                 child: const UndeesBasket()),
                             Positioned(
                               top: 0,
@@ -449,10 +415,11 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                     Padding(
                                       padding: const EdgeInsets.only(right: 8),
                                       child: Text(
-                                        'Remaining UnDees',
+                                        'Remaining Undees',
                                         style: TextStyle(
                                           letterSpacing: 1.5,
-                                          fontSize: isPhone
+                                          fontSize: context.select(
+                                                  (Controller c) => c.isPhone)
                                               ? SizeConfig.blockSizeVertical * 2
                                               : orientation ==
                                                       Orientation.portrait
@@ -474,10 +441,12 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                               : SizeConfig.blockSizeHorizontal *
                                                   6),
                                       child: Text(
-                                        notifier.remainingGuesses.toString(),
+                                        context.select((Controller c) =>
+                                            c.remainingGuesses.toString()),
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: isPhone
+                                          fontSize: context.select(
+                                                  (Controller c) => c.isPhone)
                                               ? SizeConfig.blockSizeVertical * 3
                                               : orientation ==
                                                       Orientation.portrait
@@ -497,7 +466,8 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                             UndeeAnimation(
                               duration: 2000,
                               selected: showUndee1,
-                              fromLeft: isPhone
+                              fromLeft: context
+                                      .select((Controller c) => c.isPhone)
                                   ? SizeConfig.blockSizeHorizontal * 8
                                   : orientation == Orientation.portrait
                                       ? SizeConfig.blockSizeHorizontal * 7
@@ -510,7 +480,8 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                             UndeeAnimation(
                               duration: 1750,
                               selected: showUndee2,
-                              fromLeft: isPhone
+                              fromLeft: context
+                                      .select((Controller c) => c.isPhone)
                                   ? SizeConfig.blockSizeHorizontal * 16
                                   : orientation == Orientation.portrait
                                       ? SizeConfig.blockSizeHorizontal * 19
@@ -523,7 +494,8 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                             UndeeAnimation(
                               duration: 1500,
                               selected: showUndee3,
-                              fromLeft: isPhone
+                              fromLeft: context
+                                      .select((Controller c) => c.isPhone)
                                   ? SizeConfig.blockSizeHorizontal * 26
                                   : orientation == Orientation.portrait
                                       ? SizeConfig.blockSizeHorizontal * 31
@@ -536,7 +508,8 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                             UndeeAnimation(
                               duration: 1250,
                               selected: showUndee4,
-                              fromLeft: isPhone
+                              fromLeft: context
+                                      .select((Controller c) => c.isPhone)
                                   ? SizeConfig.blockSizeHorizontal * 36
                                   : orientation == Orientation.portrait
                                       ? SizeConfig.blockSizeHorizontal * 43
@@ -549,7 +522,8 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                             UndeeAnimation(
                               duration: 1000,
                               selected: showUndee5,
-                              fromLeft: isPhone
+                              fromLeft: context
+                                      .select((Controller c) => c.isPhone)
                                   ? SizeConfig.blockSizeHorizontal * 46
                                   : orientation == Orientation.portrait
                                       ? SizeConfig.blockSizeHorizontal * 55
@@ -562,7 +536,8 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                             UndeeAnimation(
                               duration: 750,
                               selected: showUndee6,
-                              fromLeft: isPhone
+                              fromLeft: context
+                                      .select((Controller c) => c.isPhone)
                                   ? SizeConfig.blockSizeHorizontal * 56
                                   : orientation == Orientation.portrait
                                       ? SizeConfig.blockSizeHorizontal * 67
@@ -575,7 +550,8 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                             UndeeAnimation(
                               duration: 500,
                               selected: showUndee7,
-                              fromLeft: isPhone
+                              fromLeft: context
+                                      .select((Controller c) => c.isPhone)
                                   ? SizeConfig.blockSizeHorizontal * 66
                                   : orientation == Orientation.portrait
                                       ? SizeConfig.blockSizeHorizontal * 79
@@ -587,21 +563,25 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                             ),
                             Positioned(
                                 top: 0,
-                                left: isPhone
+                                left: context
+                                        .select((Controller c) => c.isPhone)
                                     ? SizeConfig.blockSizeHorizontal * 5
                                     : orientation == Orientation.portrait
                                         ? SizeConfig.blockSizeHorizontal * 2
                                         : SizeConfig.blockSizeHorizontal * 0,
                                 child: AnimatedOpacity(
-                                    opacity: (notifier.gameCompleted &&
-                                            !notifier.gameWon)
+                                    opacity: (context.select((Controller c) =>
+                                                c.gameCompleted) &&
+                                            !context.select(
+                                                (Controller c) => c.gameWon))
                                         ? 1
                                         : 0,
                                     duration:
                                         const Duration(milliseconds: 2500),
                                     child: Container(
                                       alignment: Alignment.topCenter,
-                                      width: isPhone
+                                      width: context.select(
+                                              (Controller c) => c.isPhone)
                                           ? SizeConfig.blockSizeHorizontal * 90
                                           : orientation == Orientation.portrait
                                               ? SizeConfig.blockSizeHorizontal *
@@ -611,7 +591,8 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                                       0.76
                                                   : (SizeConfig.screenWidth *
                                                       0.6),
-                                      height: isPhone
+                                      height: context.select(
+                                              (Controller c) => c.isPhone)
                                           ? SizeConfig.screenWidth * 0.54
                                           : orientation == Orientation.portrait
                                               ? SizeConfig.blockSizeVertical *
@@ -641,7 +622,9 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                                 "You got a",
                                                 style: TextStyle(
                                                     fontFamily: "Boogaloo",
-                                                    fontSize: isPhone
+                                                    fontSize: context.select(
+                                                            (Controller c) =>
+                                                                c.isPhone)
                                                         ? SizeConfig
                                                                 .blockSizeHorizontal *
                                                             5
@@ -650,7 +633,9 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                                             4),
                                               ),
                                               SizedBox(
-                                                height: isPhone
+                                                height: context.select(
+                                                        (Controller c) =>
+                                                            c.isPhone)
                                                     ? SizeConfig
                                                             .blockSizeVertical *
                                                         20
@@ -683,13 +668,13 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                         border:
                             Border.all(color: Colors.transparent, width: 2)),
                     width: SizeConfig.blockSizeHorizontal * 100,
-                    height: notifier.isPhone
+                    height: context.select((Controller c) => c.isPhone)
                         ? SizeConfig.blockSizeVertical * 16
                         : orientation == Orientation.portrait
-                            ? SizeConfig.blockSizeVertical * 18
+                            ? SizeConfig.blockSizeVertical * 16
                             : SizeConfig.screenHeight < 760
                                 ? SizeConfig.blockSizeVertical * 10
-                                : SizeConfig.blockSizeVertical * 18,
+                                : SizeConfig.blockSizeVertical * 16,
                     child: Align(
                       alignment: Alignment.center,
                       child: WordGrid(
@@ -698,7 +683,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                     ),
                   ),
                   SizedBox(
-                    height: isPhone
+                    height: context.select((Controller c) => c.isPhone)
                         ? SizeConfig.blockSizeVertical * 1.5
                         : orientation == Orientation.portrait
                             ? SizeConfig.blockSizeVertical * 4
@@ -720,91 +705,87 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                     orientation: orientation,
                   ),
                   SizedBox(
-                    height: isPhone
+                    height: context.select((Controller c) => c.isPhone)
                         ? SizeConfig.blockSizeVertical * 1
                         : orientation == Orientation.portrait
                             ? SizeConfig.blockSizeVertical * 2
                             : SizeConfig.blockSizeVertical * 0,
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: orientation == Orientation.portrait
-                            ? SizeConfig.blockSizeHorizontal * 10
-                            : SizeConfig.blockSizeHorizontal * 20,
-                        vertical: SizeConfig.blockSizeVertical * 1),
-                    child: Container(
-                      margin: EdgeInsets.only(
-                          bottom: SizeConfig.blockSizeVertical * 1),
-                      child: Stack(alignment: Alignment.center, children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: SizedBox(
-                            height: orientation == Orientation.portrait
-                                ? SizeConfig.blockSizeVertical * 4.5
-                                : SizeConfig.blockSizeVertical * 3.5,
-                            child: LinearProgressIndicator(
-                              value: progressValue,
-                              backgroundColor: const Color(0xFF46AD37),
-                              color: AppColors.darkBlue,
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: orientation == Orientation.portrait
+                              ? SizeConfig.blockSizeHorizontal * 10
+                              : SizeConfig.blockSizeHorizontal * 20,
+                          vertical: SizeConfig.blockSizeVertical * 1),
+                      child: Container(
+                        margin: EdgeInsets.only(
+                            bottom: SizeConfig.blockSizeVertical * 1),
+                        child: Stack(alignment: Alignment.center, children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: SizedBox(
+                              height: orientation == Orientation.portrait
+                                  ? SizeConfig.blockSizeVertical * 4.5
+                                  : SizeConfig.blockSizeVertical * 3.5,
+                              child: LinearProgressIndicator(
+                                value: progressValue,
+                                backgroundColor: const Color(0xFF46AD37),
+                                color: AppColors.darkBlue,
+                              ),
                             ),
                           ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              left: SizeConfig.blockSizeHorizontal * 2),
-                          child: Text(
-                            progressMessage,
-                            style: TextStyle(
-                                color: AppColors.lightGray,
-                                fontSize: orientation == Orientation.portrait
-                                    ? SizeConfig.blockSizeHorizontal * 4.5
-                                    : SizeConfig.blockSizeHorizontal * 2),
-                          ),
-                        )
-                      ]),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: SizeConfig.blockSizeHorizontal * 2),
+                            child: Text(
+                              progressMessage,
+                              style: TextStyle(
+                                  color: AppColors.lightGray,
+                                  fontSize: orientation == Orientation.portrait
+                                      ? SizeConfig.blockSizeHorizontal * 4.5
+                                      : SizeConfig.blockSizeHorizontal * 2),
+                            ),
+                          )
+                        ]),
+                      ),
                     ),
                   ),
                 ]),
-              );
-            }),
-            bottomNavigationBar: bannerAdContainer,
-            // bottomNavigationBar: Container(
-            //   decoration: const BoxDecoration(
-            //       color: Colors.transparent,
-            //       border: Border(
-            //           top: BorderSide(color: Colors.transparent, width: 2))),
-            //   height: 60,
-            // )
-          ),
+              )
+
+              // bottomNavigationBar: bannerAdContainer,
+              // bottomNavigationBar: Container(
+              //   decoration: const BoxDecoration(
+              //       color: Colors.transparent,
+              //       border: Border(
+              //           top: BorderSide(color: Colors.transparent, width: 2))),
+              //   height: 60,
+              // )
+              ),
         );
       }),
     );
   }
 
-  Padding menuButton(
+  ElevatedButton menuButton(
       {required Orientation orientation,
       required VoidCallback onPressed,
       required IconData icon}) {
-    return Padding(
-      padding: EdgeInsets.only(
-          right: isPhone
-              ? SizeConfig.blockSizeHorizontal * 0
-              : SizeConfig.blockSizeHorizontal * 5),
-      child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              shape: const CircleBorder(),
-              padding: const EdgeInsets.all(6),
-              primary: AppColors.backgroundColor),
-          onPressed: onPressed,
-          child: Icon(
-            icon,
-            color: AppColors.lightGray,
-            size: isPhone
-                ? SizeConfig.blockSizeHorizontal * 6
-                : orientation == Orientation.portrait
-                    ? SizeConfig.blockSizeHorizontal * 4
-                    : SizeConfig.blockSizeHorizontal * 3,
-          )),
-    );
+    return ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            shape: const CircleBorder(),
+            padding: const EdgeInsets.all(6),
+            primary: AppColors.backgroundColor),
+        onPressed: onPressed,
+        child: Icon(
+          icon,
+          color: AppColors.lightGray,
+          // size: context.select((Controller c) => c.isPhone)
+          //     ? SizeConfig.blockSizeHorizontal * 6
+          //     : orientation == Orientation.portrait
+          //         ? SizeConfig.blockSizeHorizontal * 4
+          //         : SizeConfig.blockSizeHorizontal * 3,
+        ));
   }
 }

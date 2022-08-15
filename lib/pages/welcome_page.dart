@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../providers/controller.dart';
+import '../providers/unique_word.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);
@@ -86,13 +87,7 @@ class _WelcomePageState extends State<WelcomePage> {
     });
     setState(() {
       getSPInstance().then((_) {
-        var settingsProvider =
-            Provider.of<SettingsProvider>(context, listen: false);
         // var uniqueWord = Provider.of<UniqueWord>(context, listen: false);
-        coins = settingsProvider.coins;
-        withAnimation = settingsProvider.withAnimation;
-
-        debugPrint("myWordPacks: ${settingsProvider.myWordPacks.toString()}");
 
         // uniqueWord.setUsedWords2(wp2);
       });
@@ -102,6 +97,11 @@ class _WelcomePageState extends State<WelcomePage> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+    Provider.of<UniqueWord>(context, listen: false).loadUsedWordsIndexes();
+    var settingsProvider = Provider.of<SettingsProvider>(context);
+    coins = settingsProvider.coins;
+    withAnimation = settingsProvider.withAnimation;
+    debugPrint("welcome myWordPacks: ${settingsProvider.myWordPacks}");
     return Scaffold(
       body: OrientationBuilder(
         builder: (context, orientation) {
@@ -343,6 +343,7 @@ class _WelcomePageState extends State<WelcomePage> {
   }
 
   OrientationBuilder landLayout() {
+    debugPrint("landLayout");
     return OrientationBuilder(builder: (context, orientation) {
       return Column(
         mainAxisSize: MainAxisSize.min,
@@ -371,7 +372,7 @@ class _WelcomePageState extends State<WelcomePage> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Flexible(
-                  flex: orientation == Orientation.portrait ? 2 : 5,
+                  flex: orientation == Orientation.portrait ? 2 : 6,
                   child: Padding(
                     padding: orientation == Orientation.portrait
                         ? EdgeInsets.only(
@@ -396,7 +397,7 @@ class _WelcomePageState extends State<WelcomePage> {
                           ),
                         ),
                         Text(
-                          "Figure out the word without",
+                          "Guess the 7 letter word before",
                           style: TextStyle(
                               letterSpacing:
                                   orientation == Orientation.portrait ? 3 : 4,
@@ -406,7 +407,7 @@ class _WelcomePageState extends State<WelcomePage> {
                                   : SizeConfig.blockSizeVertical * 5),
                         ),
                         Text(
-                          "hanging your UnDees!",
+                          "your basket is empty!",
                           textAlign: TextAlign.left,
                           style: TextStyle(
                               letterSpacing:
@@ -434,7 +435,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   ),
                 ),
                 Flexible(
-                  flex: orientation == Orientation.portrait ? 1 : 3,
+                  flex: orientation == Orientation.portrait ? 1 : 2,
                   child: Container(
                     decoration: const BoxDecoration(
                         boxShadow: [
@@ -537,7 +538,7 @@ class _WelcomePageState extends State<WelcomePage> {
                                               const EdgeInsets.only(top: 15),
                                           child: Column(children: [
                                             Text(
-                                              'Guess the word without hanging your UnDees!',
+                                              'Guess the word without hanging out your Undees!',
                                               style: TextStyle(
                                                   fontFamily: "Boogaloo",
                                                   color: AppColors.darkBlue,

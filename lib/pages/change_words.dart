@@ -58,13 +58,13 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
     prefs = await SharedPreferences.getInstance();
   }
 
-  getData(BuildContext context) {
+  getData(context) {
     var settingsProvider =
         Provider.of<SettingsProvider>(context, listen: false);
     coins = settingsProvider.coins;
     debugPrint("change_words: coins $coins");
     myWordPacks = settingsProvider.myWordPacks as List<String>;
-    debugPrint(myWordPacks.toString());
+    debugPrint("change_words getData: ${myWordPacks.toString()}");
     availablePacks =
         wordPacks.where((element) => !myWordPacks.contains(element)).toList();
   }
@@ -74,17 +74,16 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
     super.initState();
     getSPInstance();
 
-    getData(context);
-    remainingWords = getMyWordPackRemainingWords(context);
-
-    debugPrint("game initState  remainingWords $remainingWords");
+    // getData(context);
+    // remainingWords = getMyWordPackRemainingWords(context);
   }
 
   @override
   Widget build(BuildContext context) {
     var settingsProvider = Provider.of<SettingsProvider>(context);
-    debugPrint('currentPack: ${settingsProvider.wordPack}');
-    debugPrint("change_words build remainaingWords $remainingWords");
+    getData(context);
+    remainingWords = getMyWordPackRemainingWords(context);
+
     return OrientationBuilder(builder: (context, orientation) {
       return Container(
         decoration: const BoxDecoration(
@@ -106,13 +105,15 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
                   AppColors.lightGray,
                   AppColors.backgroundColor,
                 ]))),
-            toolbarHeight: SizeConfig.blockSizeVertical * 8,
+            toolbarHeight: orientation == Orientation.portrait
+                ? SizeConfig.blockSizeVertical * 6
+                : SizeConfig.blockSizeVertical * 8,
             title: Text(
-              "Change My Word Pack",
+              "Change My WordPack",
               style: TextStyle(
                   color: AppColors.darkBlue,
                   fontSize: orientation == Orientation.portrait
-                      ? SizeConfig.blockSizeHorizontal * 7
+                      ? SizeConfig.blockSizeVertical * 3.5
                       : SizeConfig.blockSizeVertical * 6),
             ),
           ),
@@ -125,48 +126,32 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
-                    child: Text("My Word Packs:",
+                    child: Text("My WordPacks:",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: AppColors.darkBlue,
-                          fontSize: notifier.isPhone
-                              ? SizeConfig.blockSizeVertical * 4
-                              : orientation == Orientation.portrait
-                                  ? SizeConfig.blockSizeVertical * 5
-                                  : SizeConfig.blockSizeVertical * 4,
+                          fontSize: SizeConfig.blockSizeVertical * 4,
                         )),
-                  ),
-                  Text(
-                    "Default (WordPack 1) and all purchased packs.",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: notifier.isPhone
-                          ? SizeConfig.blockSizeVertical * 2
-                          : orientation == Orientation.portrait
-                              ? SizeConfig.blockSizeVertical * 3
-                              : SizeConfig.blockSizeVertical * 2,
-                    ),
                   ),
                   Text(
                     "Current WordPack is outlined.",
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: notifier.isPhone
-                          ? SizeConfig.blockSizeVertical * 2
-                          : orientation == Orientation.portrait
-                              ? SizeConfig.blockSizeVertical * 3
-                              : SizeConfig.blockSizeVertical * 2,
+                      fontSize: SizeConfig.blockSizeVertical * 2,
                     ),
                   ),
                   Text(
-                    "Once all the words are used, repurchase for 100 coins.",
+                    "Default (WordPack 1) plus eacb purchased WordPack and number of unused words are below.",
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: notifier.isPhone
-                          ? SizeConfig.blockSizeVertical * 2
-                          : orientation == Orientation.portrait
-                              ? SizeConfig.blockSizeVertical * 3
-                              : SizeConfig.blockSizeVertical * 2,
+                      fontSize: SizeConfig.blockSizeVertical * 2,
+                    ),
+                  ),
+                  Text(
+                    "Once all the words are used, refresh that WordPack for 100 coins.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: SizeConfig.blockSizeVertical * 2,
                     ),
                   ),
                   Container(
@@ -223,7 +208,7 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
                                                   return AlertDialog(
                                                     content: coins >= 100
                                                         ? Text(
-                                                            "You have used all the words in this pack. Reset for 100 coins?",
+                                                            "You have used all the words in this WordPack. Reset all 50 words for 100 coins?",
                                                             style: TextStyle(
                                                               fontSize: orientation ==
                                                                       Orientation
@@ -388,41 +373,21 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
-                    child: Text("Available WordPacks",
+                    child: Text("Other Available WordPacks",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: AppColors.darkBlue,
-                          fontSize: notifier.isPhone
-                              ? SizeConfig.blockSizeVertical * 4
-                              : orientation == Orientation.portrait
-                                  ? SizeConfig.blockSizeVertical * 5
-                                  : SizeConfig.blockSizeVertical * 5,
+                          fontSize: SizeConfig.blockSizeVertical * 4,
                         )),
-                  ),
-                  Text(
-                    "Each word pack contains 50 random words.",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: AppColors.darkBlue,
-                      fontSize: notifier.isPhone
-                          ? SizeConfig.blockSizeVertical * 2
-                          : orientation == Orientation.portrait
-                              ? SizeConfig.blockSizeVertical * 3
-                              : SizeConfig.blockSizeVertical * 3,
-                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8.0),
                     child: Text(
-                      "Purchase for 500 coins.",
+                      "Purchase each new WordPack for 500 coins.",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: AppColors.darkBlue,
-                        fontSize: notifier.isPhone
-                            ? SizeConfig.blockSizeVertical * 2
-                            : orientation == Orientation.portrait
-                                ? SizeConfig.blockSizeVertical * 3
-                                : SizeConfig.blockSizeVertical * 3,
+                        fontSize: SizeConfig.blockSizeVertical * 2,
                       ),
                     ),
                   ),
@@ -449,7 +414,7 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
                                             context: context,
                                             builder: (context) {
                                               return AlertDialog(
-                                                content: coins > 500
+                                                content: coins >= 500
                                                     ? Text(
                                                         "Buy ${availablePacks[index]} for 500 coins?",
                                                         style: TextStyle(
@@ -725,7 +690,7 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
               ),
             );
           }),
-          bottomNavigationBar: bannerAdContainer,
+          // bottomNavigationBar: bannerAdContainer,
           // bottomNavigationBar: Container(
           //   decoration: const BoxDecoration(
           //       color: Colors.transparent,

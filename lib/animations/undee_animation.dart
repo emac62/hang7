@@ -35,7 +35,7 @@ class _UndeeAnimationState extends State<UndeeAnimation> {
     super.initState();
     var setProv = Provider.of<SettingsProvider>(context, listen: false);
     undeeImage = Image.asset(setUndees(context));
-    withAnimation = setProv.withAnimation;
+    withAnimation = setProv.withWordAnimation;
   }
 
   @override

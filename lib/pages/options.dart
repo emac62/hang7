@@ -1,5 +1,3 @@
-import 'dart:io' show Platform;
-
 import 'package:flutter/material.dart';
 import 'package:hang7/animations/route.dart';
 import 'package:hang7/pages/change_undees.dart';
@@ -85,8 +83,8 @@ class _OptionsState extends State<Options> {
                 toolbarHeight: controller.isPhone
                     ? SizeConfig.blockSizeVertical * 6
                     : orientation == Orientation.portrait
-                        ? SizeConfig.blockSizeVertical * 10
-                        : SizeConfig.blockSizeVertical * 8,
+                        ? SizeConfig.blockSizeVertical * 8
+                        : SizeConfig.blockSizeVertical * 7,
                 flexibleSpace: Container(
                     decoration: const BoxDecoration(
                         gradient: LinearGradient(
@@ -103,8 +101,8 @@ class _OptionsState extends State<Options> {
                       fontSize: controller.isPhone
                           ? SizeConfig.blockSizeVertical * 4
                           : orientation == Orientation.portrait
-                              ? SizeConfig.blockSizeVertical * 7
-                              : SizeConfig.blockSizeVertical * 5),
+                              ? SizeConfig.blockSizeVertical * 5
+                              : SizeConfig.blockSizeVertical * 4),
                 )),
             body: Consumer<Controller>(
               builder: (_, notifier, __) {
@@ -406,89 +404,89 @@ class _OptionsState extends State<Options> {
                                       FadeRoute(page: const ChangeWordPack()));
                             }),
                       ),
-                      Padding(
-                        padding: orientation == Orientation.portrait
-                            ? EdgeInsets.symmetric(
-                                vertical: SizeConfig.blockSizeVertical * 2)
-                            : const EdgeInsets.all(0),
-                        child: GestureDetector(
-                            child: Padding(
-                              padding: orientation == Orientation.portrait
-                                  ? EdgeInsets.symmetric(
-                                      vertical:
-                                          SizeConfig.blockSizeVertical * 1)
-                                  : const EdgeInsets.all(0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Platform.isIOS
-                                      ? Text(
-                                          "Purchase more coins in the App Store:",
-                                          style: TextStyle(
-                                            fontSize: notifier.isPhone
-                                                ? SizeConfig
-                                                        .blockSizeHorizontal *
-                                                    4
-                                                : orientation ==
-                                                        Orientation.portrait
-                                                    ? SizeConfig
-                                                            .blockSizeHorizontal *
-                                                        4
-                                                    : SizeConfig
-                                                            .blockSizeVertical *
-                                                        3,
-                                          ))
-                                      : Text(
-                                          "Purchase more coins on Google Play:",
-                                          style: TextStyle(
-                                            fontSize: notifier.isPhone
-                                                ? SizeConfig
-                                                        .blockSizeHorizontal *
-                                                    4
-                                                : orientation ==
-                                                        Orientation.portrait
-                                                    ? SizeConfig
-                                                            .blockSizeHorizontal *
-                                                        4
-                                                    : SizeConfig
-                                                            .blockSizeVertical *
-                                                        3,
-                                          )),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(6),
-                                        color: AppColors.green),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 12.0, vertical: 4),
-                                      child: Text(
-                                        "Buy",
-                                        style: TextStyle(
-                                          color: AppColors.lightGray,
-                                          fontSize: notifier.isPhone
-                                              ? SizeConfig.blockSizeHorizontal *
-                                                  5
-                                              : orientation ==
-                                                      Orientation.portrait
-                                                  ? SizeConfig
-                                                          .blockSizeHorizontal *
-                                                      4
-                                                  : SizeConfig
-                                                          .blockSizeVertical *
-                                                      2,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            onTap: () {
-                              coins = coins + 100;
-                              settingsProvider.setCoins(coins);
-                            }),
-                      ),
+                      // Padding(
+                      //   padding: orientation == Orientation.portrait
+                      //       ? EdgeInsets.symmetric(
+                      //           vertical: SizeConfig.blockSizeVertical * 2)
+                      //       : const EdgeInsets.all(0),
+                      //   child: GestureDetector(
+                      //       child: Padding(
+                      //         padding: orientation == Orientation.portrait
+                      //             ? EdgeInsets.symmetric(
+                      //                 vertical:
+                      //                     SizeConfig.blockSizeVertical * 1)
+                      //             : const EdgeInsets.all(0),
+                      //         child: Row(
+                      //           mainAxisAlignment:
+                      //               MainAxisAlignment.spaceBetween,
+                      //           children: [
+                      //             Platform.isIOS
+                      //                 ? Text(
+                      //                     "Purchase more coins in the App Store:",
+                      //                     style: TextStyle(
+                      //                       fontSize: notifier.isPhone
+                      //                           ? SizeConfig
+                      //                                   .blockSizeHorizontal *
+                      //                               4
+                      //                           : orientation ==
+                      //                                   Orientation.portrait
+                      //                               ? SizeConfig
+                      //                                       .blockSizeHorizontal *
+                      //                                   4
+                      //                               : SizeConfig
+                      //                                       .blockSizeVertical *
+                      //                                   3,
+                      //                     ))
+                      //                 : Text(
+                      //                     "Purchase more coins on Google Play:",
+                      //                     style: TextStyle(
+                      //                       fontSize: notifier.isPhone
+                      //                           ? SizeConfig
+                      //                                   .blockSizeHorizontal *
+                      //                               4
+                      //                           : orientation ==
+                      //                                   Orientation.portrait
+                      //                               ? SizeConfig
+                      //                                       .blockSizeHorizontal *
+                      //                                   4
+                      //                               : SizeConfig
+                      //                                       .blockSizeVertical *
+                      //                                   3,
+                      //                     )),
+                      //             Container(
+                      //               decoration: BoxDecoration(
+                      //                   borderRadius: BorderRadius.circular(6),
+                      //                   color: AppColors.green),
+                      //               child: Padding(
+                      //                 padding: const EdgeInsets.symmetric(
+                      //                     horizontal: 12.0, vertical: 4),
+                      //                 child: Text(
+                      //                   "Buy",
+                      //                   style: TextStyle(
+                      //                     color: AppColors.lightGray,
+                      //                     fontSize: notifier.isPhone
+                      //                         ? SizeConfig.blockSizeHorizontal *
+                      //                             5
+                      //                         : orientation ==
+                      //                                 Orientation.portrait
+                      //                             ? SizeConfig
+                      //                                     .blockSizeHorizontal *
+                      //                                 4
+                      //                             : SizeConfig
+                      //                                     .blockSizeVertical *
+                      //                                 2,
+                      //                   ),
+                      //                 ),
+                      //               ),
+                      //             )
+                      //           ],
+                      //         ),
+                      //       ),
+                      //       onTap: () {
+                      //         coins = coins + 100;
+                      //         settingsProvider.setCoins(coins);
+                      //       }),
+                      // ),
                       Expanded(
                         child: Center(
                           child: Row(
@@ -597,7 +595,7 @@ class _OptionsState extends State<Options> {
                 );
               },
             ),
-            bottomNavigationBar: bannerAdContainer,
+            // bottomNavigationBar: bannerAdContainer,
             // bottomNavigationBar: Container(
             //   decoration: const BoxDecoration(
             //       color: Colors.transparent,

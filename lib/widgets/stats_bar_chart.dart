@@ -46,7 +46,7 @@ class StatsBarChart extends StatelessWidget {
                 barRendererDecorator: charts.BarLabelDecorator(
                     labelAnchor: charts.BarLabelAnchor.end),
                 behaviors: [
-                  charts.ChartTitle("UnDees Left!",
+                  charts.ChartTitle("Remaining Undees!",
                       titleStyleSpec: const charts.TextStyleSpec(
                         fontFamily: "Boogaloo",
                         fontSize: 24,

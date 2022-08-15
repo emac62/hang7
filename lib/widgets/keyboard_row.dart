@@ -8,6 +8,7 @@ import 'package:hang7/providers/settings_provider.dart';
 import 'package:hang7/widgets/size_config.dart';
 import 'package:provider/provider.dart';
 import '../animations/route.dart';
+import '../pages/game_board.dart';
 import 'app_colors.dart';
 
 class KeyboardRow extends StatelessWidget {
@@ -66,6 +67,25 @@ class KeyboardRow extends StatelessWidget {
                                     : Provider.of<Controller>(context,
                                             listen: false)
                                         .onUserInput(letter: e.key);
+                                if (notifier.selectedLetterCorrect) {
+                                  GameBoardState.updateProgressCorrect(
+                                      notifier.correctLetters);
+                                  debugPrint("updateProgressCorrect");
+                                }
+                                if (notifier.selectedLetterIncorrect) {
+                                  GameBoardState.updateProgressIncorrect(
+                                      notifier.remainingGuesses);
+                                  debugPrint("updateProgressInCorrect");
+                                }
+                                if (notifier.gameCompleted &&
+                                    !notifier.gameWon) {
+                                  notifier.revealWord();
+                                  Future.delayed(
+                                      const Duration(milliseconds: 2000), () {
+                                    notifier.revealWord();
+                                    debugPrint("revealWord");
+                                  });
+                                }
                                 if (notifier.gameCompleted &&
                                     !notifier.gameWon) {
                                   Future.delayed(
@@ -132,7 +152,7 @@ class KeyboardRow extends StatelessWidget {
                                                       2,
                                               vertical:
                                                   SizeConfig.blockSizeVertical *
-                                                      0.5),
+                                                      0.25),
                                   child: Text(
                                     e.key,
                                     style: TextStyle(

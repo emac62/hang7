@@ -77,7 +77,7 @@ class _EndOfGameState extends State<EndOfGame> {
                             top: SizeConfig.blockSizeHorizontal * 2),
                         child: winner
                             ? Text(
-                                '${widget.coinsEarned} coins won!',
+                                '${widget.coinsEarned} Coins Won!',
                                 style: TextStyle(
                                   fontSize: orientation == Orientation.portrait
                                       ? SizeConfig.blockSizeHorizontal * 6
@@ -209,7 +209,7 @@ class _EndOfGameState extends State<EndOfGame> {
                   ),
                 ),
               ),
-              bottomNavigationBar: bannerAdContainer,
+              // bottomNavigationBar: bannerAdContainer,
               // bottomNavigationBar: Container(
               //   decoration: const BoxDecoration(
               //       color: Colors.transparent,

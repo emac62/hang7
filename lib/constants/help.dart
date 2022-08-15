@@ -26,7 +26,7 @@ showHelpDialog(context) {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Guess the 7 letter word without hanging all your UnDees! There are 7 UnDees in the basket. ",
+                      "Guess the 7 letter word without hanging all your Undees! There are 7 Undees in the basket at the start of each game. ",
                       style: TextStyle(
                           letterSpacing: 1.25,
                           color: AppColors.darkBlue,
@@ -37,7 +37,31 @@ showHelpDialog(context) {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Text(
-                        "Each _ represents a letter in the word. Choose a letter from the keyboard. If the letter is in the word, it will be replace the _ in the word. If it is not in the word, 1 pair of UnDees will be hung on the clothes line for all to see! Solve the word before you run out.",
+                        "Each _ represents a letter in the word. Choose a letter from the keyboard. If the letter(s) is in the word, it will replace the _ on the game board. If it is not in the word, 1 pair of Undees will move to the clothesline for all to see! Solve the puzzle before you run out.",
+                        style: TextStyle(
+                            letterSpacing: 1.25,
+                            color: AppColors.darkBlue,
+                            fontSize: orientation == Orientation.portrait
+                                ? SizeConfig.blockSizeVertical * 2
+                                : SizeConfig.blockSizeVertical * 3),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Text(
+                        "Purchase various styles of Undees and new WordPacks with coins won during play.",
+                        style: TextStyle(
+                            letterSpacing: 1.25,
+                            color: AppColors.darkBlue,
+                            fontSize: orientation == Orientation.portrait
+                                ? SizeConfig.blockSizeVertical * 2
+                                : SizeConfig.blockSizeVertical * 3),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: Text(
+                        "10 coins are awarded for each win plus 1 coin for every pair of Undees left in the basket.",
                         style: TextStyle(
                             letterSpacing: 1.25,
                             color: AppColors.darkBlue,
@@ -47,7 +71,7 @@ showHelpDialog(context) {
                       ),
                     ),
                     Text(
-                      "10 coins are awarded for each win. 1 coin is awarded for every undee left in the basket. Regardless of winning, 10 bonus points are awarded for playing your 25th, 50th, 75th and 100th games.",
+                      "Regardless of winning, 10 bonus points are awarded for every 25 games you finish.",
                       style: TextStyle(
                           letterSpacing: 1.25,
                           color: AppColors.darkBlue,
@@ -58,7 +82,7 @@ showHelpDialog(context) {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Text(
-                        "In the future, coins will be able to purchase various styles of undees and different word packs.",
+                        "Each WordPack contains 50 words. Once used, they will need to be refreshed for 100 coins or you can buy a new WordPack for 500 coins.",
                         style: TextStyle(
                             letterSpacing: 1.25,
                             color: AppColors.darkBlue,
@@ -66,7 +90,7 @@ showHelpDialog(context) {
                                 ? SizeConfig.blockSizeVertical * 2
                                 : SizeConfig.blockSizeVertical * 3),
                       ),
-                    )
+                    ),
                   ],
                 ),
                 actions: [
