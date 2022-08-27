@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 calculateStats({required bool gameWon, required int remainingGuesses}) async {
@@ -49,8 +48,6 @@ calculateStats({required bool gameWon, required int remainingGuesses}) async {
     totalUndeesLeft.toString(),
     avgUndeesLeft.toString(),
   ]);
-
-  debugPrint("calculateStats: gameStats ${prefs.getStringList('gameStats')}");
 }
 
 Future<List<String>?> getGameStats() async {

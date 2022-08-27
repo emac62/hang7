@@ -1,4 +1,4 @@
-import 'package:device_preview/device_preview.dart';
+import 'package:device_preview_screenshot/device_preview_screenshot.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,6 +10,7 @@ import 'package:hang7/providers/settings_provider.dart';
 import 'package:hang7/pages/splash.dart';
 import 'package:hang7/pages/welcome_page.dart';
 import 'package:hang7/providers/unique_word.dart';
+import 'package:hang7/utils/purchase_api.dart';
 import 'package:hang7/widgets/material_color.dart';
 import 'package:provider/provider.dart';
 
@@ -23,14 +24,15 @@ List<String> testDeviceIDs = [
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await MobileAds.instance.initialize().then((InitializationStatus status) {
-  //   debugPrint('Initialization done: ${status.adapterStatuses}');
-  // });
-  // final RequestConfiguration requestConfiguration = RequestConfiguration(
-  //     maxAdContentRating: MaxAdContentRating.g,
-  //     tagForChildDirectedTreatment: TagForChildDirectedTreatment.yes,
-  //     testDeviceIds: testDeviceIDs);
-  // MobileAds.instance.updateRequestConfiguration(requestConfiguration);
+  await PurchaseApi.init();
+  await MobileAds.instance.initialize().then((InitializationStatus status) {
+    debugPrint('Initialization done: ${status.adapterStatuses}');
+  });
+  final RequestConfiguration requestConfiguration = RequestConfiguration(
+      maxAdContentRating: MaxAdContentRating.g,
+      tagForChildDirectedTreatment: TagForChildDirectedTreatment.yes,
+      testDeviceIds: testDeviceIDs);
+  MobileAds.instance.updateRequestConfiguration(requestConfiguration);
   if (kReleaseMode) {
     debugPrint = (String? message, {int? wrapWidth}) {};
   }
@@ -45,6 +47,10 @@ Future main() async {
   runApp(DevicePreview(
     enabled: false,
     builder: ((context) => const Hang7()),
+    tools: const [
+      ...DevicePreview.defaultTools,
+      DevicePreviewScreenshot(),
+    ],
   ));
 }
 

@@ -34,6 +34,7 @@ newGame(BuildContext context, bool withAnimation) {
   keysMap.updateAll((key, value) => value = KeyState.unselected);
 
   Provider.of<Controller>(context, listen: false).resetGame();
+
   withAnimation
       ? Navigator.pushReplacement(context, SlideRoute(page: const GameBoard()))
       : Navigator.pushReplacement(context, FadeRoute(page: const GameBoard()));

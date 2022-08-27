@@ -55,14 +55,14 @@ class UniqueWord with ChangeNotifier {
 
   void setUsedWords1(List usedWords1) {
     _usedWords1 = usedWords1 as List<String>;
-    debugPrint("Unique Words usedWords1: $usedWords1");
+
     // notifyListeners();
     saveIndexes();
   }
 
   void setUsedWords2(List usedWords2) {
     _usedWords2 = usedWords2 as List<String>;
-    debugPrint("Unique Words usedWords2: $usedWords2");
+
     // notifyListeners();
     saveIndexes();
   }

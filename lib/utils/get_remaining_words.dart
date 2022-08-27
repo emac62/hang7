@@ -8,14 +8,14 @@ getMyWordPackRemainingWords(context) {
   var settingsProvider = Provider.of<SettingsProvider>(context, listen: false);
   List<String> myRemaningWords = [];
   List<String> myWordPacks = settingsProvider.myWordPacks as List<String>;
-  debugPrint("getMyWordPackRemainingWords: ${myWordPacks.toString()}");
+
   for (var i = 0; i < myWordPacks.length; i++) {
     List<String>? l = [];
-    debugPrint("inside for loop: $i, ${myWordPacks[i]}");
+
     switch (myWordPacks[i]) {
       case "WordPack 1":
         l = uniqueWords.usedWords1 as List<String>;
-        debugPrint("inside switch wordPack1: $l");
+
         break;
       case "WordPack 2":
         l = uniqueWords.usedWords2 as List<String>;
@@ -48,7 +48,7 @@ getMyWordPackRemainingWords(context) {
     final int r = 50 - l.length;
     myRemaningWords.add(r.toString());
   }
-  debugPrint("myRemainingWords: ${myRemaningWords.toString()}");
+
   return myRemaningWords;
 }
 

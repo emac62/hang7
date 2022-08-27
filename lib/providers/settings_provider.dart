@@ -10,6 +10,7 @@ class SettingsProvider with ChangeNotifier {
   late List<String> _undeeColours;
   late int _coins;
   late List<String> _myWordPacks;
+  late bool _removeAds;
 
   SettingsProvider() {
     _withAnimation = true;
@@ -20,6 +21,8 @@ class SettingsProvider with ChangeNotifier {
     _undeeColours = ["Pink"];
     _coins = 0;
     _myWordPacks = ["WordPack 1"];
+    _removeAds = false;
+
     loadPreferences();
   }
 
@@ -31,6 +34,7 @@ class SettingsProvider with ChangeNotifier {
   List get undeeColours => _undeeColours;
   int get coins => _coins;
   List get myWordPacks => _myWordPacks;
+  bool get removeAds => _removeAds;
 
   savePreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -42,6 +46,7 @@ class SettingsProvider with ChangeNotifier {
     prefs.setStringList('undeeColours', _undeeColours);
     prefs.setInt('coins', _coins);
     prefs.setStringList('myWordPacks', _myWordPacks);
+    prefs.setBool('removeAds', _removeAds);
   }
 
   void setWithAnimation(bool withAnimation) {
@@ -88,6 +93,12 @@ class SettingsProvider with ChangeNotifier {
     _myWordPacks = myWordPacks as List<String>;
   }
 
+  void setRemoveAds(bool removeAds) {
+    _removeAds = removeAds;
+    notifyListeners();
+    savePreferences();
+  }
+
   loadPreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool? withAnimation = prefs.getBool('withAnimation');
@@ -98,6 +109,7 @@ class SettingsProvider with ChangeNotifier {
     List<String>? undeeColours = prefs.getStringList('undeeColours');
     int? coins = prefs.getInt('coins');
     List<String>? myWordPacks = prefs.getStringList('myWordPacks');
+    bool? removeAds = prefs.getBool('removeAds');
 
     if (withSound != null) setWithSound(withSound);
     if (withAnimation != null) setWithAnimation(withAnimation);
@@ -107,5 +119,6 @@ class SettingsProvider with ChangeNotifier {
     if (undeeColours != null) setUndeeColours(undeeColours);
     if (coins != null) setCoins(coins);
     if (myWordPacks != null) setMyWordPacks(myWordPacks);
+    if (removeAds != null) setRemoveAds(removeAds);
   }
 }

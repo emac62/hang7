@@ -2,6 +2,7 @@
     package="com.blB.hang7">
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.android.vending.BILLING" />
    <application
         android:label="Hang 7"
         android:name="${applicationName}"

@@ -25,6 +25,12 @@ String setUndees(BuildContext context) {
 
     case "GrayTighties":
       return "assets/images/grayTighties.png";
+    case "TealBrief":
+      return "assets/images/realBrief.png";
+    case "PurpleBrief":
+      return "assets/images/purpleBrief.png";
+    case "SunsetBrief":
+      return "assets/images/sunsetBrief.png";
 
     default:
       return "assets/images/pinkUndees.png";
@@ -53,6 +59,15 @@ getMyUndeesImages(List undeeColours) {
         break;
       case "GrayTighties":
         myUndees.add(Image.asset("assets/images/grayTighties.png"));
+        break;
+      case "TealBrief":
+        myUndees.add(Image.asset("assets/images/tealBrief.png"));
+        break;
+      case "PurpleBrief":
+        myUndees.add(Image.asset("assets/images/purpleBrief.png"));
+        break;
+      case "SunsetBrief":
+        myUndees.add(Image.asset("assets/images/sunsetBrief.png"));
         break;
     }
   }

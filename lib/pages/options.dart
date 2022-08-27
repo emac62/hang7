@@ -12,8 +12,11 @@ import 'package:hang7/widgets/check_remaining_words.dart';
 import 'package:hang7/widgets/game_stats_alert.dart';
 import 'package:hang7/widgets/size_config.dart';
 import 'package:provider/provider.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../widgets/paywall_widget.dart';
 
 class Options extends StatefulWidget {
   const Options({Key? key}) : super(key: key);
@@ -145,9 +148,6 @@ class _OptionsState extends State<Options> {
                                     setState(() {
                                       settingsProvider
                                           .setWithWordAnimation(value);
-                                      if (value) {
-                                        debugPrint("value $value");
-                                      } else {}
                                     });
                                   }),
                             ),
@@ -180,9 +180,6 @@ class _OptionsState extends State<Options> {
                                   onChanged: (value) {
                                     setState(() {
                                       settingsProvider.setWithAnimation(value);
-                                      if (value) {
-                                        debugPrint("value $value");
-                                      } else {}
                                     });
                                   }),
                             ),
@@ -404,89 +401,67 @@ class _OptionsState extends State<Options> {
                                       FadeRoute(page: const ChangeWordPack()));
                             }),
                       ),
-                      // Padding(
-                      //   padding: orientation == Orientation.portrait
-                      //       ? EdgeInsets.symmetric(
-                      //           vertical: SizeConfig.blockSizeVertical * 2)
-                      //       : const EdgeInsets.all(0),
-                      //   child: GestureDetector(
-                      //       child: Padding(
-                      //         padding: orientation == Orientation.portrait
-                      //             ? EdgeInsets.symmetric(
-                      //                 vertical:
-                      //                     SizeConfig.blockSizeVertical * 1)
-                      //             : const EdgeInsets.all(0),
-                      //         child: Row(
-                      //           mainAxisAlignment:
-                      //               MainAxisAlignment.spaceBetween,
-                      //           children: [
-                      //             Platform.isIOS
-                      //                 ? Text(
-                      //                     "Purchase more coins in the App Store:",
-                      //                     style: TextStyle(
-                      //                       fontSize: notifier.isPhone
-                      //                           ? SizeConfig
-                      //                                   .blockSizeHorizontal *
-                      //                               4
-                      //                           : orientation ==
-                      //                                   Orientation.portrait
-                      //                               ? SizeConfig
-                      //                                       .blockSizeHorizontal *
-                      //                                   4
-                      //                               : SizeConfig
-                      //                                       .blockSizeVertical *
-                      //                                   3,
-                      //                     ))
-                      //                 : Text(
-                      //                     "Purchase more coins on Google Play:",
-                      //                     style: TextStyle(
-                      //                       fontSize: notifier.isPhone
-                      //                           ? SizeConfig
-                      //                                   .blockSizeHorizontal *
-                      //                               4
-                      //                           : orientation ==
-                      //                                   Orientation.portrait
-                      //                               ? SizeConfig
-                      //                                       .blockSizeHorizontal *
-                      //                                   4
-                      //                               : SizeConfig
-                      //                                       .blockSizeVertical *
-                      //                                   3,
-                      //                     )),
-                      //             Container(
-                      //               decoration: BoxDecoration(
-                      //                   borderRadius: BorderRadius.circular(6),
-                      //                   color: AppColors.green),
-                      //               child: Padding(
-                      //                 padding: const EdgeInsets.symmetric(
-                      //                     horizontal: 12.0, vertical: 4),
-                      //                 child: Text(
-                      //                   "Buy",
-                      //                   style: TextStyle(
-                      //                     color: AppColors.lightGray,
-                      //                     fontSize: notifier.isPhone
-                      //                         ? SizeConfig.blockSizeHorizontal *
-                      //                             5
-                      //                         : orientation ==
-                      //                                 Orientation.portrait
-                      //                             ? SizeConfig
-                      //                                     .blockSizeHorizontal *
-                      //                                 4
-                      //                             : SizeConfig
-                      //                                     .blockSizeVertical *
-                      //                                 2,
-                      //                   ),
-                      //                 ),
-                      //               ),
-                      //             )
-                      //           ],
-                      //         ),
-                      //       ),
-                      //       onTap: () {
-                      //         coins = coins + 100;
-                      //         settingsProvider.setCoins(coins);
-                      //       }),
-                      // ),
+                      Padding(
+                        padding: orientation == Orientation.portrait
+                            ? EdgeInsets.symmetric(
+                                vertical: SizeConfig.blockSizeVertical * 2)
+                            : const EdgeInsets.all(0),
+                        child: GestureDetector(
+                            child: Padding(
+                              padding: orientation == Orientation.portrait
+                                  ? EdgeInsets.symmetric(
+                                      vertical:
+                                          SizeConfig.blockSizeVertical * 1)
+                                  : const EdgeInsets.all(0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text("Need more coins?",
+                                      style: TextStyle(
+                                        fontSize: notifier.isPhone
+                                            ? SizeConfig.blockSizeHorizontal * 5
+                                            : orientation ==
+                                                    Orientation.portrait
+                                                ? SizeConfig
+                                                        .blockSizeHorizontal *
+                                                    5
+                                                : SizeConfig.blockSizeVertical *
+                                                    3,
+                                      )),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(6),
+                                        color: AppColors.green),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 12.0, vertical: 4),
+                                      child: Text(
+                                        "See Purchase Options",
+                                        style: TextStyle(
+                                          color: AppColors.lightGray,
+                                          fontSize: notifier.isPhone
+                                              ? SizeConfig.blockSizeHorizontal *
+                                                  5
+                                              : orientation ==
+                                                      Orientation.portrait
+                                                  ? SizeConfig
+                                                          .blockSizeHorizontal *
+                                                      4
+                                                  : SizeConfig
+                                                          .blockSizeVertical *
+                                                      2,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            onTap: () {
+                              fetchOffers(context);
+                            }),
+                      ),
                       Expanded(
                         child: Center(
                           child: Row(
@@ -595,17 +570,96 @@ class _OptionsState extends State<Options> {
                 );
               },
             ),
-            // bottomNavigationBar: bannerAdContainer,
-            // bottomNavigationBar: Container(
-            //   decoration: const BoxDecoration(
-            //       color: Colors.transparent,
-            //       border: Border(
-            //           top: BorderSide(color: Colors.transparent, width: 2))),
-            //   height: 60,
-            // )
+            bottomNavigationBar:
+                (context.select((SettingsProvider sp) => sp.removeAds))
+                    ? null
+                    : bannerAdContainer,
           ),
         );
       },
     );
+  }
+
+  Future fetchOffers(context) async {
+    final offerings = await Purchases.getOfferings();
+
+    if (offerings.current == null) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("No Options Found")));
+    } else {
+      final packages = offerings.current!.availablePackages;
+      if (!mounted) return;
+      showModalBottomSheet(
+          isScrollControlled: true,
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(25), topRight: Radius.circular(25))),
+          context: context,
+          builder: (context) => PaywallWidget(
+                packages: packages,
+                title: 'Purchase Options',
+                description: '',
+                onClickedPackage: (package) async {
+                  try {
+                    await Purchases.purchasePackage(package);
+                    final pkg = package.storeProduct.title;
+
+                    setState(() {
+                      switch (pkg) {
+                        case "100 Coins":
+                          if (!mounted) break;
+                          add100Coins(context);
+                          break;
+                        case "100 Coins (Hang 7)":
+                          if (!mounted) break;
+                          add100Coins(context);
+                          break;
+                        case "250 Coins":
+                          if (!mounted) break;
+                          add250Coins(context);
+                          break;
+                        case "250 Coins (Hang 7)":
+                          if (!mounted) break;
+                          add250Coins(context);
+                          break;
+                        case "Remove Ads":
+                          if (!mounted) break;
+                          removeAds(context);
+                          break;
+                        case "Remove Ads (Hang 7)":
+                          if (!mounted) break;
+                          removeAds(context);
+                          break;
+                        default:
+                      }
+                    });
+                  } catch (e) {
+                    debugPrint("Failed to purchase product.");
+                  }
+                  if (!mounted) return;
+                  Navigator.pop(context);
+                },
+              ));
+    }
+  }
+
+  void add100Coins(BuildContext context) {
+    var settingsProvider =
+        Provider.of<SettingsProvider>(context, listen: false);
+
+    settingsProvider.setCoins(settingsProvider.coins + 100);
+  }
+
+  void add250Coins(BuildContext context) {
+    var settingsProvider =
+        Provider.of<SettingsProvider>(context, listen: false);
+    settingsProvider.setCoins(settingsProvider.coins + 250);
+  }
+
+  void removeAds(BuildContext context) {
+    var settingsProvider =
+        Provider.of<SettingsProvider>(context, listen: false);
+    settingsProvider.setRemoveAds(true);
   }
 }

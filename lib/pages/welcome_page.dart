@@ -101,7 +101,7 @@ class _WelcomePageState extends State<WelcomePage> {
     var settingsProvider = Provider.of<SettingsProvider>(context);
     coins = settingsProvider.coins;
     withAnimation = settingsProvider.withAnimation;
-    debugPrint("welcome myWordPacks: ${settingsProvider.myWordPacks}");
+
     return Scaffold(
       body: OrientationBuilder(
         builder: (context, orientation) {
@@ -123,9 +123,7 @@ class _WelcomePageState extends State<WelcomePage> {
               ),
               child: LayoutBuilder(
                 builder: (BuildContext context, BoxConstraints constraints) {
-                  // if (constraints.maxWidth < 600 ||
-                  //     constraints.maxHeight < 675) {
-                  if (constraints.maxWidth < 600) {
+                  if (constraints.maxWidth <= 600) {
                     return portLayout();
                   } else {
                     return landLayout();
@@ -157,7 +155,7 @@ class _WelcomePageState extends State<WelcomePage> {
             "_______",
             textAlign: TextAlign.center,
             style: TextStyle(
-                letterSpacing: 10,
+                letterSpacing: 9,
                 fontSize: SizeConfig.blockSizeHorizontal * 18),
           ),
         ),
@@ -238,7 +236,6 @@ class _WelcomePageState extends State<WelcomePage> {
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         ),
                         onPressed: () {
-                          debugPrint("Stats pressed");
                           showDialog(
                               context: context,
                               builder: (_) => GameStatsAlert(
@@ -483,7 +480,6 @@ class _WelcomePageState extends State<WelcomePage> {
                               )),
                           TextButton(
                               onPressed: () {
-                                debugPrint("Stats pressed");
                                 showDialog(
                                     context: context,
                                     builder: (_) => GameStatsAlert(

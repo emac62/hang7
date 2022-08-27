@@ -31,9 +31,7 @@ class Controller extends ChangeNotifier {
   getDevice() {
     width = size.width;
     height = size.height;
-    debugPrint("Device2 width: $width");
-    debugPrint("Device2 height: $height");
-    debugPrint("Device2 devicePixelRatio: $devicePixelRatio");
+
     if (devicePixelRatio < 2 && (width > 1200 || height > 1200)) {
       isTablet = true;
       isPhone = false;
@@ -83,7 +81,6 @@ class Controller extends ChangeNotifier {
         notifyListeners();
         if (remainingGuesses == 0) {
           gameCompleted = true;
-          debugPrint("Loser");
         }
       }
       result = lettersInWord
@@ -93,10 +90,8 @@ class Controller extends ChangeNotifier {
         gameWon = true;
         gameCompleted = true;
         notifyListeners();
-        debugPrint("Winner");
       }
       if (gameCompleted) {
-        debugPrint("gameCompleted");
         calculateStats(gameWon: gameWon, remainingGuesses: remainingGuesses);
 
         setChartStats(undeesLeft: remainingGuesses);
@@ -126,6 +121,5 @@ class Controller extends ChangeNotifier {
     selectedLetterCorrect = false;
     selectedLetterIncorrect = false;
     notifyListeners();
-    debugPrint("resetGame Called");
   }
 }

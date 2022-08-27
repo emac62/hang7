@@ -8,25 +8,32 @@ import 'package:hang7/providers/settings_provider.dart';
 import 'package:hang7/widgets/size_config.dart';
 import 'package:provider/provider.dart';
 import '../animations/route.dart';
-import '../pages/game_board.dart';
 import 'app_colors.dart';
 
-class KeyboardRow extends StatelessWidget {
+class KeyboardRow extends StatefulWidget {
   const KeyboardRow({
     Key? key,
     required this.min,
     required this.max,
     required this.orientation,
+    required this.ontap,
   }) : super(key: key);
 
   final int min;
   final int max;
   final Orientation orientation;
+  final VoidCallback ontap;
 
+  @override
+  State<KeyboardRow> createState() => _KeyboardRowState();
+}
+
+class _KeyboardRowState extends State<KeyboardRow> {
   @override
   Widget build(BuildContext context) {
     var settingsProvider = Provider.of<SettingsProvider>(context);
     late bool isPhone;
+
     return Consumer<Controller>(
       builder: (_, notifier, __) {
         if (notifier.isPhone) {
@@ -39,7 +46,7 @@ class KeyboardRow extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: keysMap.entries.map((e) {
               index++;
-              if (index >= min && index <= max) {
+              if (index >= widget.min && index <= widget.max) {
                 Color fontColor = AppColors.lightGray;
                 Color backgroundColor = AppColors.greenGray;
                 if (e.value == KeyState.contains) {
@@ -67,23 +74,14 @@ class KeyboardRow extends StatelessWidget {
                                     : Provider.of<Controller>(context,
                                             listen: false)
                                         .onUserInput(letter: e.key);
-                                if (notifier.selectedLetterCorrect) {
-                                  GameBoardState.updateProgressCorrect(
-                                      notifier.correctLetters);
-                                  debugPrint("updateProgressCorrect");
-                                }
-                                if (notifier.selectedLetterIncorrect) {
-                                  GameBoardState.updateProgressIncorrect(
-                                      notifier.remainingGuesses);
-                                  debugPrint("updateProgressInCorrect");
-                                }
+                                widget.ontap();
+
                                 if (notifier.gameCompleted &&
                                     !notifier.gameWon) {
                                   notifier.revealWord();
                                   Future.delayed(
                                       const Duration(milliseconds: 2000), () {
                                     notifier.revealWord();
-                                    debugPrint("revealWord");
                                   });
                                 }
                                 if (notifier.gameCompleted &&
@@ -106,7 +104,6 @@ class KeyboardRow extends StatelessWidget {
                                   });
                                 }
                                 if (notifier.gameWon) {
-                                  debugPrint("keyInput: Game Won");
                                   int coins = settingsProvider.coins;
                                   coins =
                                       coins + 10 + notifier.remainingGuesses;
@@ -142,7 +139,8 @@ class KeyboardRow extends StatelessWidget {
                                           vertical:
                                               SizeConfig.blockSizeVertical *
                                                   0.75)
-                                      : orientation == Orientation.portrait
+                                      : widget.orientation ==
+                                              Orientation.portrait
                                           ? EdgeInsets.all(
                                               SizeConfig.blockSizeHorizontal *
                                                   1.5)
@@ -160,7 +158,8 @@ class KeyboardRow extends StatelessWidget {
                                       color: fontColor,
                                       fontSize: isPhone
                                           ? SizeConfig.blockSizeHorizontal * 5
-                                          : orientation == Orientation.portrait
+                                          : widget.orientation ==
+                                                  Orientation.portrait
                                               ? SizeConfig.blockSizeHorizontal *
                                                   5
                                               : SizeConfig.blockSizeVertical *

@@ -37,6 +37,9 @@ class _ChangeUndeesState extends State<ChangeUndees> {
     "WhiteTighties",
     "GrayTighties",
     "DarkBlueTighties",
+    "TealBrief",
+    "PurpleBrief",
+    "SunsetBrief",
   ];
 
   List<Widget> images = [
@@ -61,6 +64,15 @@ class _ChangeUndeesState extends State<ChangeUndees> {
     Image.asset(
       'assets/images/blueTighties.png',
     ),
+    Image.asset(
+      'assets/images/tealBrief.png',
+    ),
+    Image.asset(
+      'assets/images/purpleBrief.png',
+    ),
+    Image.asset(
+      'assets/images/sunsetBrief.png',
+    ),
   ];
 
   selectUndees(int index) {
@@ -68,7 +80,7 @@ class _ChangeUndeesState extends State<ChangeUndees> {
     setState(() {
       setProv.setGameUndees(availableUndees[index]);
       undeesStr = setProv.gameUndees;
-      debugPrint("selectUndees: $undeesStr");
+
       if (!undColour.contains(availableUndees[index])) {
         undColour.add(availableUndees[index]);
         setProv.setUndeeColours(undColour);
@@ -83,13 +95,13 @@ class _ChangeUndeesState extends State<ChangeUndees> {
     var settingsProvider =
         Provider.of<SettingsProvider>(context, listen: false);
     undeesStr = settingsProvider.gameUndees;
-    debugPrint("undeesStr/gameUndees: $undeesStr");
+
     // Image.asset(setUndees(prefs)); doesn't equal anything
     coins = settingsProvider.coins;
     undColour = settingsProvider.undeeColours as List<String>;
     availableUndees =
         allUndees.where((element) => !undColour.contains(element)).toList();
-    debugPrint(undColour.toString());
+
     myUndees = getMyUndeesImages(undColour);
     getAvailableUndeeImages();
   }
@@ -126,6 +138,17 @@ class _ChangeUndeesState extends State<ChangeUndees> {
         case "GrayTighties":
           availableUndeeImages
               .add(Image.asset("assets/images/grayTighties.png"));
+          break;
+        case "TealBrief":
+          availableUndeeImages.add(Image.asset("assets/images/tealBrief.png"));
+          break;
+        case "PurpleBrief":
+          availableUndeeImages
+              .add(Image.asset("assets/images/purpleBrief.png"));
+          break;
+        case "SunsetBrief":
+          availableUndeeImages
+              .add(Image.asset("assets/images/sunsetBrief.png"));
           break;
       }
     }
@@ -239,11 +262,9 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                                             setState(() {
                                               settingsProvider.setGameUndees(
                                                   undColour[index]);
-                                              debugPrint(
-                                                  "onTap: ${settingsProvider.gameUndees}");
+
                                               undeesStr =
                                                   settingsProvider.gameUndees;
-                                              debugPrint("onTap: $undeesStr");
                                             });
                                           },
                                           child: myUndees[index]),
@@ -291,7 +312,6 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                                   elevation: 8,
                                   child: GestureDetector(
                                       onTap: () {
-                                        debugPrint(index.toString());
                                         showDialog(
                                             context: context,
                                             builder: (context) {
@@ -347,8 +367,7 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                                                                       coins);
                                                               selectUndees(
                                                                   index);
-                                                              debugPrint(
-                                                                  "SetUndees: ${settingsProvider.gameUndees}");
+
                                                               Navigator.push(
                                                                 context,
                                                                 PageRouteBuilder(
@@ -552,14 +571,13 @@ class _ChangeUndeesState extends State<ChangeUndees> {
               );
             },
           ),
-          // bottomNavigationBar: bannerAdContainer,
-          // bottomNavigationBar: Container(
-          //   decoration: const BoxDecoration(
-          //       color: Colors.transparent,
-          //       border: Border(
-          //           top: BorderSide(color: Colors.transparent, width: 2))),
-          //   height: 60,
-          // )
+          bottomNavigationBar:
+              (context.select((SettingsProvider sp) => sp.removeAds))
+                  ? Container(
+                      color: AppColors.lightGray,
+                      height: 10,
+                    )
+                  : bannerAdContainer,
         ),
       );
     });

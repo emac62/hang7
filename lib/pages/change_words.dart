@@ -62,9 +62,9 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
     var settingsProvider =
         Provider.of<SettingsProvider>(context, listen: false);
     coins = settingsProvider.coins;
-    debugPrint("change_words: coins $coins");
+
     myWordPacks = settingsProvider.myWordPacks as List<String>;
-    debugPrint("change_words getData: ${myWordPacks.toString()}");
+
     availablePacks =
         wordPacks.where((element) => !myWordPacks.contains(element)).toList();
   }
@@ -406,8 +406,6 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
                                 color: Colors.transparent,
                                 child: InkWell(
                                   onTap: (() {
-                                    debugPrint("tapped index: $index");
-
                                     myWordPacks.contains(availablePacks[index])
                                         ? null
                                         : showDialog(
@@ -690,14 +688,10 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
               ),
             );
           }),
-          // bottomNavigationBar: bannerAdContainer,
-          // bottomNavigationBar: Container(
-          //   decoration: const BoxDecoration(
-          //       color: Colors.transparent,
-          //       border: Border(
-          //           top: BorderSide(color: Colors.transparent, width: 2))),
-          //   height: 60,
-          // )
+          bottomNavigationBar:
+              (context.select((SettingsProvider sp) => sp.removeAds))
+                  ? null
+                  : bannerAdContainer,
         ),
       );
     });

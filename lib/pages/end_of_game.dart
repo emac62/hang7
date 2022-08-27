@@ -209,14 +209,10 @@ class _EndOfGameState extends State<EndOfGame> {
                   ),
                 ),
               ),
-              // bottomNavigationBar: bannerAdContainer,
-              // bottomNavigationBar: Container(
-              //   decoration: const BoxDecoration(
-              //       color: Colors.transparent,
-              //       border: Border(
-              //           top: BorderSide(color: Colors.transparent, width: 2))),
-              //   height: 60,
-              // )
+              bottomNavigationBar:
+                  (context.select((SettingsProvider sp) => sp.removeAds))
+                      ? null
+                      : bannerAdContainer,
             ),
           );
         }),
