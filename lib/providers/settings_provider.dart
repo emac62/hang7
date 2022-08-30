@@ -85,7 +85,7 @@ class SettingsProvider with ChangeNotifier {
 
   void setCoins(int coins) {
     _coins = coins;
-    notifyListeners();
+
     savePreferences();
   }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hang7/providers/settings_provider.dart';
 import 'package:hang7/widgets/app_colors.dart';
 import 'package:hang7/widgets/size_config.dart';
@@ -72,7 +73,9 @@ class _PaywallWidgetState extends State<PaywallWidget> {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [AppColors.lightGray, AppColors.backgroundColor])),
-      constraints: BoxConstraints(maxHeight: SizeConfig.blockSizeVertical * 75),
+      constraints: SizeConfig.screenHeight > 750
+          ? BoxConstraints(maxHeight: SizeConfig.blockSizeVertical * 75)
+          : BoxConstraints(maxHeight: SizeConfig.blockSizeVertical * 95),
       child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Padding(
@@ -107,8 +110,53 @@ class _PaywallWidgetState extends State<PaywallWidget> {
                   height: 16,
                 ),
                 buildPackages(),
+                Container(
+                  padding: SizeConfig.screenWidth > 500
+                      ? EdgeInsets.symmetric(
+                          horizontal: SizeConfig.blockSizeHorizontal * 15)
+                      : EdgeInsets.symmetric(
+                          horizontal: SizeConfig.blockSizeHorizontal * 10),
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      try {
+                        CustomerInfo restoredInfo =
+                            await Purchases.restorePurchases();
+                        // ... check restored purchaserInfo to see if entitlement is now active
+                        debugPrint("RestoredInfo: $restoredInfo");
+                        if (restoredInfo.entitlements.all['no_ads']!.isActive) {
+                          settingsProvider.setRemoveAds(true);
+                        }
+                        // showDialog(
+
+                        //   context: context,
+                        //   builder: (context) => AlertDialog(
+                        //     title: const Text("Restore Purchase"),
+                        //     content: const Text("You're all set. No more ads."),
+                        //     actions: <Widget>[
+                        //       TextButton(
+                        //         onPressed: () {
+                        //           Navigator.of(context).pop();
+                        //         },
+                        //         child: Container(
+                        //           color: Colors.green,
+                        //           padding: const EdgeInsets.all(14),
+                        //           child: const Text("OK"),
+                        //         ),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // );
+                      } on PlatformException catch (e) {
+                        debugPrint("Error in restoring purchase: $e");
+                      }
+                      if (!mounted) return;
+                      Navigator.pop(context);
+                    },
+                    child: const Text("Restore Remove Ads Purchase"),
+                  ),
+                ),
                 const SizedBox(
-                  height: 25,
+                  height: 16,
                 )
               ],
             ),

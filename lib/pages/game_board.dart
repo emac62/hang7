@@ -530,11 +530,8 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                       ),
                       Positioned(
                           top: 0,
-                          left: context.select((Controller c) => c.isPhone)
-                              ? SizeConfig.blockSizeHorizontal * 5
-                              : orientation == Orientation.portrait
-                                  ? SizeConfig.blockSizeHorizontal * 2
-                                  : SizeConfig.blockSizeHorizontal * 0,
+                          left: 0,
+                          right: 0,
                           child: AnimatedOpacity(
                               opacity: (context.select(
                                           (Controller c) => c.gameCompleted) &&

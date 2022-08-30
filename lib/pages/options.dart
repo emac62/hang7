@@ -328,7 +328,7 @@ class _OptionsState extends State<Options> {
                       Padding(
                         padding: orientation == Orientation.portrait
                             ? EdgeInsets.symmetric(
-                                vertical: SizeConfig.blockSizeVertical * 2)
+                                vertical: SizeConfig.blockSizeVertical * 1.5)
                             : const EdgeInsets.all(0),
                         child: GestureDetector(
                             child: Padding(
@@ -404,7 +404,7 @@ class _OptionsState extends State<Options> {
                       Padding(
                         padding: orientation == Orientation.portrait
                             ? EdgeInsets.symmetric(
-                                vertical: SizeConfig.blockSizeVertical * 2)
+                                vertical: SizeConfig.blockSizeVertical * 1.5)
                             : const EdgeInsets.all(0),
                         child: GestureDetector(
                             child: Padding(
@@ -602,8 +602,17 @@ class _OptionsState extends State<Options> {
                 description: '',
                 onClickedPackage: (package) async {
                   try {
-                    await Purchases.purchasePackage(package);
+                    CustomerInfo customerInfo =
+                        await Purchases.purchasePackage(package);
+                    debugPrint("CustomerInfo: ${customerInfo.entitlements}");
+
                     final pkg = package.storeProduct.title;
+                    final info = customerInfo.originalAppUserId;
+                    debugPrint("CustomerInfo: $info");
+                    if (customerInfo.entitlements.all['no_ads']!.isActive) {
+                      if (!mounted) return;
+                      removeAds(context);
+                    }
 
                     setState(() {
                       switch (pkg) {
@@ -623,19 +632,12 @@ class _OptionsState extends State<Options> {
                           if (!mounted) break;
                           add250Coins(context);
                           break;
-                        case "Remove Ads":
-                          if (!mounted) break;
-                          removeAds(context);
-                          break;
-                        case "Remove Ads (Hang 7)":
-                          if (!mounted) break;
-                          removeAds(context);
-                          break;
+
                         default:
                       }
                     });
                   } catch (e) {
-                    debugPrint("Failed to purchase product.");
+                    debugPrint("Failed to purchase product. $e");
                   }
                   if (!mounted) return;
                   Navigator.pop(context);

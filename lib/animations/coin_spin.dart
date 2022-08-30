@@ -38,7 +38,7 @@ class _CoinSpinAnimationState extends State<CoinSpinAnimation>
 
   @override
   void initState() {
-    Future.delayed(const Duration(milliseconds: 2000), () {
+    Future.delayed(const Duration(milliseconds: 500), () {
       _timer = Timer.periodic(const Duration(milliseconds: 50), (timer) {
         if (mounted) {
           setState(() {

@@ -67,66 +67,83 @@ class _KeyboardRowState extends State<KeyboardRow> {
                             color: backgroundColor,
                             child: InkWell(
                               onTap: () {
-                                HapticFeedback.lightImpact();
-                                (e.value == KeyState.selected ||
-                                        e.value == KeyState.contains)
-                                    ? null
-                                    : Provider.of<Controller>(context,
-                                            listen: false)
-                                        .onUserInput(letter: e.key);
-                                widget.ontap();
+                                if (e.value == KeyState.unselected) {
+                                  HapticFeedback.lightImpact();
+                                  (e.value == KeyState.selected ||
+                                          e.value == KeyState.contains)
+                                      ? null
+                                      : Provider.of<Controller>(context,
+                                              listen: false)
+                                          .onUserInput(letter: e.key);
+                                  widget.ontap();
 
-                                if (notifier.gameCompleted &&
-                                    !notifier.gameWon) {
-                                  notifier.revealWord();
-                                  Future.delayed(
-                                      const Duration(milliseconds: 2000), () {
+                                  if (notifier.gameCompleted &&
+                                      !notifier.gameWon) {
                                     notifier.revealWord();
-                                  });
-                                }
-                                if (notifier.gameCompleted &&
-                                    !notifier.gameWon) {
-                                  Future.delayed(
-                                      const Duration(milliseconds: 7000), () {
-                                    settingsProvider.withAnimation
-                                        ? Navigator.push(
-                                            context,
-                                            RotationRoute(
-                                                page: const EndOfGame(
-                                              coinsEarned: 0,
-                                            )))
-                                        : Navigator.push(
-                                            context,
-                                            FadeRoute(
-                                                page: const EndOfGame(
-                                              coinsEarned: 0,
-                                            )));
-                                  });
-                                }
-                                if (notifier.gameWon) {
-                                  int coins = settingsProvider.coins;
-                                  coins =
-                                      coins + 10 + notifier.remainingGuesses;
-                                  settingsProvider.setCoins(coins);
+                                    Future.delayed(
+                                        const Duration(milliseconds: 2000), () {
+                                      notifier.revealWord();
+                                    });
+                                  }
+                                  if (notifier.gameCompleted &&
+                                      !notifier.gameWon) {
+                                    Future.delayed(
+                                        const Duration(milliseconds: 7000), () {
+                                      settingsProvider.withAnimation
+                                          ? Navigator.push(
+                                              context,
+                                              RotationRoute(
+                                                  page: const EndOfGame(
+                                                coinsEarned: 0,
+                                              )))
+                                          : Navigator.push(
+                                              context,
+                                              FadeRoute(
+                                                  page: const EndOfGame(
+                                                coinsEarned: 0,
+                                              )));
+                                    });
+                                  }
+                                  if (notifier.gameWon) {
+                                    int coins = settingsProvider.coins;
+                                    coins =
+                                        coins + 10 + notifier.remainingGuesses;
+                                    settingsProvider.setCoins(coins);
 
-                                  Future.delayed(
-                                      const Duration(milliseconds: 4000), () {
-                                    settingsProvider.withAnimation
-                                        ? Navigator.push(
-                                            context,
-                                            RotationRoute(
-                                                page: EndOfGame(
-                                              coinsEarned: (10 +
-                                                  notifier.remainingGuesses),
-                                            )))
-                                        : Navigator.push(
-                                            context,
-                                            FadeRoute(
-                                                page: EndOfGame(
-                                              coinsEarned: (10 +
-                                                  notifier.remainingGuesses),
-                                            )));
-                                  });
+                                    Future.delayed(
+                                        const Duration(milliseconds: 4000), () {
+                                      settingsProvider.withAnimation
+                                          ? Navigator.push(
+                                              context,
+                                              RotationRoute(
+                                                  page: EndOfGame(
+                                                coinsEarned: (10 +
+                                                    notifier.remainingGuesses),
+                                              )))
+                                          : Navigator.push(
+                                              context,
+                                              FadeRoute(
+                                                  page: EndOfGame(
+                                                coinsEarned: (10 +
+                                                    notifier.remainingGuesses),
+                                              )));
+                                    });
+                                  }
+                                } else {
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          AlertDialog(
+                                            content: const Text(
+                                                'You have already selected this letter, choose another one.'),
+                                            actions: <Widget>[
+                                              IconButton(
+                                                  icon: const Icon(Icons.close),
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  })
+                                            ],
+                                          ));
                                 }
                               },
                               child: Center(
