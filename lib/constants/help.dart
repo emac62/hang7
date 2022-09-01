@@ -71,7 +71,7 @@ showHelpDialog(context) {
                       ),
                     ),
                     Text(
-                      "Regardless of winning, 10 bonus points are awarded for every 25 games you finish.",
+                      "Regardless of winning, 10 bonus coins are awarded for every 25 games you finish.",
                       style: TextStyle(
                           letterSpacing: 1.25,
                           color: AppColors.darkBlue,
