@@ -26,11 +26,11 @@ class _WordGridState extends State<WordGrid> {
 
     return ListView.builder(
       physics: const NeverScrollableScrollPhysics(),
-      padding: EdgeInsets.symmetric(
+      padding: EdgeInsets.only(
           // horizontal: widget.orientation == Orientation.portrait
           //     ? SizeConfig.blockSizeHorizontal * 7
           //     : SizeConfig.blockSizeHorizontal * 20,
-          vertical: SizeConfig.blockSizeVertical * 1),
+          bottom: SizeConfig.blockSizeVertical * 1),
       shrinkWrap: true,
       scrollDirection: Axis.horizontal,
       itemCount: 7,

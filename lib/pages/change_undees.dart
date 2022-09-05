@@ -279,6 +279,7 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                       padding: const EdgeInsets.only(top: 8.0),
                       child: Text(
                         "Other Available Styles and Colours",
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: SizeConfig.blockSizeVertical * 4,
                         ),

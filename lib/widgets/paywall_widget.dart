@@ -34,6 +34,9 @@ class _PaywallWidgetState extends State<PaywallWidget> {
     Widget buildPackage(BuildContext context, Package package) {
       final product = package.storeProduct;
       return Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.transparent, width: 1),
+        ),
         padding: SizeConfig.screenWidth > 500
             ? EdgeInsets.symmetric(
                 horizontal: SizeConfig.blockSizeHorizontal * 15)
@@ -56,14 +59,20 @@ class _PaywallWidgetState extends State<PaywallWidget> {
       );
     }
 
-    Widget buildPackages() => ListView.builder(
-        shrinkWrap: true,
-        primary: false,
-        itemCount: widget.packages.length,
-        itemBuilder: (context, index) {
-          final package = widget.packages[index];
-          return buildPackage(context, package);
-        });
+    Widget buildPackages() {
+      return MediaQuery.removePadding(
+        removeBottom: true,
+        context: context,
+        child: ListView.builder(
+            shrinkWrap: true,
+            primary: false,
+            itemCount: widget.packages.length,
+            itemBuilder: (context, index) {
+              final package = widget.packages[index];
+              return buildPackage(context, package);
+            }),
+      );
+    }
 
     return Container(
       decoration: const BoxDecoration(
@@ -85,13 +94,14 @@ class _PaywallWidgetState extends State<PaywallWidget> {
               children: <Widget>[
                 Container(
                     margin: EdgeInsets.symmetric(
-                        vertical: SizeConfig.blockSizeVertical * 5),
+                        vertical: SizeConfig.blockSizeVertical * 2),
                     height: SizeConfig.blockSizeVertical * 8,
-                    decoration: const BoxDecoration(
-                        image: DecorationImage(
-                      image: AssetImage("assets/images/BasketOfCoins.png"),
-                      fit: BoxFit.scaleDown,
-                    )),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.transparent, width: 1),
+                        image: const DecorationImage(
+                          image: AssetImage("assets/images/BasketOfCoins.png"),
+                          fit: BoxFit.scaleDown,
+                        )),
                     child: Center(
                         child: Text(
                       coins.toString(),
@@ -106,11 +116,14 @@ class _PaywallWidgetState extends State<PaywallWidget> {
                 const SizedBox(
                   height: 16,
                 ),
-                const SizedBox(
-                  height: 16,
-                ),
-                buildPackages(),
                 Container(
+                    decoration: BoxDecoration(
+                        border:
+                            Border.all(color: Colors.transparent, width: 1)),
+                    child: buildPackages()),
+                Container(
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.transparent, width: 1)),
                   padding: SizeConfig.screenWidth > 500
                       ? EdgeInsets.symmetric(
                           horizontal: SizeConfig.blockSizeHorizontal * 15)
@@ -126,26 +139,6 @@ class _PaywallWidgetState extends State<PaywallWidget> {
                         if (restoredInfo.entitlements.all['no_ads']!.isActive) {
                           settingsProvider.setRemoveAds(true);
                         }
-                        // showDialog(
-
-                        //   context: context,
-                        //   builder: (context) => AlertDialog(
-                        //     title: const Text("Restore Purchase"),
-                        //     content: const Text("You're all set. No more ads."),
-                        //     actions: <Widget>[
-                        //       TextButton(
-                        //         onPressed: () {
-                        //           Navigator.of(context).pop();
-                        //         },
-                        //         child: Container(
-                        //           color: Colors.green,
-                        //           padding: const EdgeInsets.all(14),
-                        //           child: const Text("OK"),
-                        //         ),
-                        //       ),
-                        //     ],
-                        //   ),
-                        // );
                       } on PlatformException catch (e) {
                         debugPrint("Error in restoring purchase: $e");
                       }
