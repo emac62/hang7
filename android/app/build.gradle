@@ -68,15 +68,13 @@ android {
            storePassword keystoreProperties['storePassword']
        }
    }
-
-    ndkVersion "22.0.7026061"
+   android.defaultConfig.ndk.debugSymbolLevel = 'FULL'
+   
 
    buildTypes {
-       release {
+        release {
            signingConfig signingConfigs.release
-           ndk {
-                debugSymbolLevel 'SYMBOL_TABLE'
-            }
+           
        }
    }
 

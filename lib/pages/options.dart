@@ -622,7 +622,6 @@ class _OptionsState extends State<Options> {
                         await Purchases.purchasePackage(package);
 
                     final pkg = package.storeProduct.title;
-                    final info = customerInfo.originalAppUserId;
 
                     if (customerInfo.entitlements.all['no_ads']!.isActive) {
                       if (!mounted) return;
