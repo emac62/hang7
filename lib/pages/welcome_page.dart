@@ -279,7 +279,7 @@ class _WelcomePageState extends State<WelcomePage> {
 
   OrientationBuilder landLayout() {
     debugPrint("landLayout");
-    debugPrint("screenWidth: ${SizeConfig.screenWidth}");
+    // debugPrint("screenWidth: ${SizeConfig.screenWidth}");
     return OrientationBuilder(builder: (context, orientation) {
       return Column(
         children: [

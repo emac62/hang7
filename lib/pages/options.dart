@@ -620,11 +620,10 @@ class _OptionsState extends State<Options> {
                   try {
                     CustomerInfo customerInfo =
                         await Purchases.purchasePackage(package);
-                    debugPrint("CustomerInfo: ${customerInfo.entitlements}");
 
                     final pkg = package.storeProduct.title;
                     final info = customerInfo.originalAppUserId;
-                    debugPrint("CustomerInfo: $info");
+
                     if (customerInfo.entitlements.all['no_ads']!.isActive) {
                       if (!mounted) return;
                       removeAds(context);

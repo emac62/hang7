@@ -218,9 +218,9 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     var settingsProvider = Provider.of<SettingsProvider>(context);
     removeAds = settingsProvider.removeAds;
-    debugPrint("gameBoard: removeAds: $removeAds");
+    // debugPrint("gameBoard: removeAds: $removeAds");
     hWRatio = SizeConfig.screenHeight / SizeConfig.screenWidth;
-    debugPrint("hWRatio: $hWRatio");
+    // debugPrint("hWRatio: $hWRatio");
     return OrientationBuilder(
       builder: ((context, orientation) {
         undeeSize = orientation == Orientation.portrait
