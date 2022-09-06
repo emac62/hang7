@@ -121,7 +121,7 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
-                // mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Padding(
@@ -617,71 +617,67 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
                           fontSize: SizeConfig.blockSizeVertical * 6,
                         ),
                       ))),
-                  Expanded(
-                    child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              elevation: 10,
-                              padding: EdgeInsets.all(
-                                notifier.isPhone
-                                    ? SizeConfig.blockSizeHorizontal * 2
-                                    : orientation == Orientation.portrait
-                                        ? SizeConfig.blockSizeHorizontal * 2
-                                        : SizeConfig.blockSizeVertical * 2,
-                              ),
-                            ),
-                            onPressed: () {
-                              settingsProvider.withAnimation
-                                  ? Navigator.push(context,
-                                      SlideLeftRoute(page: const Options()))
-                                  : Navigator.push(context,
-                                      FadeRoute(page: const Options()));
-                            },
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal:
-                                      SizeConfig.blockSizeHorizontal * 3),
-                              child: Text(
-                                "Back to Options",
-                                style: TextStyle(
-                                    fontSize: SizeConfig.blockSizeVertical * 3),
-                              ),
+                  Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            elevation: 10,
+                            padding: EdgeInsets.all(
+                              notifier.isPhone
+                                  ? SizeConfig.blockSizeHorizontal * 2
+                                  : orientation == Orientation.portrait
+                                      ? SizeConfig.blockSizeHorizontal * 2
+                                      : SizeConfig.blockSizeVertical * 2,
                             ),
                           ),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              elevation: 10,
-                              padding: EdgeInsets.all(
-                                notifier.isPhone
-                                    ? SizeConfig.blockSizeHorizontal * 2
-                                    : orientation == Orientation.portrait
-                                        ? SizeConfig.blockSizeHorizontal * 2
-                                        : SizeConfig.blockSizeVertical * 2,
-                              ),
-                            ),
-                            onPressed: () {
-                              checkRemainingWords(context);
-                            },
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal:
-                                      SizeConfig.blockSizeHorizontal * 3),
-                              child: Text(
-                                "Play",
-                                style: TextStyle(
-                                    fontSize: SizeConfig.blockSizeVertical * 3),
-                              ),
+                          onPressed: () {
+                            settingsProvider.withAnimation
+                                ? Navigator.push(context,
+                                    SlideLeftRoute(page: const Options()))
+                                : Navigator.push(
+                                    context, FadeRoute(page: const Options()));
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: SizeConfig.blockSizeHorizontal * 3),
+                            child: Text(
+                              "Back to Options",
+                              style: TextStyle(
+                                  fontSize: SizeConfig.blockSizeVertical * 3),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            elevation: 10,
+                            padding: EdgeInsets.all(
+                              notifier.isPhone
+                                  ? SizeConfig.blockSizeHorizontal * 2
+                                  : orientation == Orientation.portrait
+                                      ? SizeConfig.blockSizeHorizontal * 2
+                                      : SizeConfig.blockSizeVertical * 2,
+                            ),
+                          ),
+                          onPressed: () {
+                            checkRemainingWords(context);
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: SizeConfig.blockSizeHorizontal * 3),
+                            child: Text(
+                              "Play",
+                              style: TextStyle(
+                                  fontSize: SizeConfig.blockSizeVertical * 3),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   )
                 ],

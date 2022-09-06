@@ -195,6 +195,7 @@ class _ChangeUndeesState extends State<ChangeUndees> {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Padding(
                       padding:
@@ -498,73 +499,71 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                             fontSize: SizeConfig.blockSizeVertical * 6,
                           ),
                         ))),
-                    Expanded(
-                      child: Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10)),
-                                elevation: 10,
-                                padding: EdgeInsets.all(
-                                  notifier.isPhone
-                                      ? SizeConfig.blockSizeHorizontal * 2
-                                      : orientation == Orientation.portrait
-                                          ? SizeConfig.blockSizeHorizontal * 2
-                                          : SizeConfig.blockSizeVertical * 1,
-                                ),
-                              ),
-                              onPressed: () {
-                                settingsProvider.withAnimation
-                                    ? Navigator.push(context,
-                                        SlideLeftRoute(page: const Options()))
-                                    : Navigator.push(context,
-                                        FadeRoute(page: const Options()));
-                              },
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal:
-                                        SizeConfig.blockSizeHorizontal * 3),
-                                child: Text(
-                                  "Back to Options",
-                                  style: TextStyle(
-                                      fontSize:
-                                          SizeConfig.blockSizeVertical * 2.5),
-                                ),
+                    Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              elevation: 10,
+                              padding: EdgeInsets.all(
+                                notifier.isPhone
+                                    ? SizeConfig.blockSizeHorizontal * 2
+                                    : orientation == Orientation.portrait
+                                        ? SizeConfig.blockSizeHorizontal * 2
+                                        : SizeConfig.blockSizeVertical * 1,
                               ),
                             ),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10)),
-                                elevation: 10,
-                                padding: EdgeInsets.all(
-                                  notifier.isPhone
-                                      ? SizeConfig.blockSizeHorizontal * 2
-                                      : orientation == Orientation.portrait
-                                          ? SizeConfig.blockSizeHorizontal * 2
-                                          : SizeConfig.blockSizeVertical * 1,
-                                ),
-                              ),
-                              onPressed: () {
-                                checkRemainingWords(context);
-                              },
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal:
-                                        SizeConfig.blockSizeHorizontal * 3),
-                                child: Text(
-                                  "Play",
-                                  style: TextStyle(
-                                      fontSize:
-                                          SizeConfig.blockSizeVertical * 2.5),
-                                ),
+                            onPressed: () {
+                              settingsProvider.withAnimation
+                                  ? Navigator.push(context,
+                                      SlideLeftRoute(page: const Options()))
+                                  : Navigator.push(context,
+                                      FadeRoute(page: const Options()));
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal:
+                                      SizeConfig.blockSizeHorizontal * 3),
+                              child: Text(
+                                "Back to Options",
+                                style: TextStyle(
+                                    fontSize:
+                                        SizeConfig.blockSizeVertical * 2.5),
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              elevation: 10,
+                              padding: EdgeInsets.all(
+                                notifier.isPhone
+                                    ? SizeConfig.blockSizeHorizontal * 2
+                                    : orientation == Orientation.portrait
+                                        ? SizeConfig.blockSizeHorizontal * 2
+                                        : SizeConfig.blockSizeVertical * 1,
+                              ),
+                            ),
+                            onPressed: () {
+                              checkRemainingWords(context);
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal:
+                                      SizeConfig.blockSizeHorizontal * 3),
+                              child: Text(
+                                "Play",
+                                style: TextStyle(
+                                    fontSize:
+                                        SizeConfig.blockSizeVertical * 2.5),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     )
                   ],

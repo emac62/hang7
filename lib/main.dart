@@ -13,6 +13,7 @@ import 'package:hang7/providers/unique_word.dart';
 import 'package:hang7/utils/purchase_api.dart';
 import 'package:hang7/widgets/material_color.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 List<String> testDeviceIDs = [
   "8E3C44E0453B296DEDFBA106CDBB59CC", // Samsung S5
@@ -25,14 +26,18 @@ List<String> testDeviceIDs = [
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await PurchaseApi.init();
-  await MobileAds.instance.initialize().then((InitializationStatus status) {
-    debugPrint('Initialization done: ${status.adapterStatuses}');
-  });
-  final RequestConfiguration requestConfiguration = RequestConfiguration(
-      maxAdContentRating: MaxAdContentRating.g,
-      tagForChildDirectedTreatment: TagForChildDirectedTreatment.yes,
-      testDeviceIds: testDeviceIDs);
-  MobileAds.instance.updateRequestConfiguration(requestConfiguration);
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  bool removeAds = prefs.getBool('removeAds') ?? false;
+  if (removeAds) {
+    await MobileAds.instance.initialize().then((InitializationStatus status) {
+      debugPrint('Initialization done: ${status.adapterStatuses}');
+    });
+    final RequestConfiguration requestConfiguration = RequestConfiguration(
+        maxAdContentRating: MaxAdContentRating.g,
+        tagForChildDirectedTreatment: TagForChildDirectedTreatment.yes,
+        testDeviceIds: testDeviceIDs);
+    MobileAds.instance.updateRequestConfiguration(requestConfiguration);
+  }
   if (kReleaseMode) {
     debugPrint = (String? message, {int? wrapWidth}) {};
   }

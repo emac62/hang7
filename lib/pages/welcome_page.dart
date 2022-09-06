@@ -9,7 +9,6 @@ import 'package:hang7/widgets/check_remaining_words.dart';
 import 'package:hang7/widgets/game_stats_alert.dart';
 import 'package:hang7/widgets/size_config.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../providers/controller.dart';
 import '../providers/unique_word.dart';
@@ -24,73 +23,12 @@ class WelcomePage extends StatefulWidget {
 class _WelcomePageState extends State<WelcomePage> {
   int? coins;
   bool withAnimation = true;
-  // List<String> wp2 = [
-  //   '0',
-  //   "1",
-  //   "2",
-  //   "3",
-  //   "4",
-  //   "5",
-  //   "6",
-  //   "7",
-  //   "8",
-  //   "9",
-  //   "10",
-  //   "11",
-  //   "12",
-  //   "13",
-  //   "14",
-  //   "15",
-  //   "16",
-  //   "17",
-  //   "18",
-  //   "19",
-  //   "20",
-  //   "21",
-  //   "22",
-  //   "23",
-  //   "24",
-  //   "25",
-  //   "26",
-  //   "27",
-  //   "28",
-  //   "29",
-  //   "30",
-  //   "31",
-  //   "32",
-  //   "33",
-  //   "34",
-  //   "35",
-  //   "36",
-  //   "37",
-  //   "38",
-  //   "39",
-  //   "40",
-  //   "41",
-  //   "42",
-  //   "43",
-  //   "44",
-  //   "45",
-  //   "46",
-  //   "47",
-  // ];
-  late SharedPreferences sharedPrefs;
-  getSPInstance() async {
-    sharedPrefs = await SharedPreferences.getInstance();
-  }
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<Controller>(context, listen: false).getDevice();
-    });
-    setState(() {
-      getSPInstance().then((_) {
-        // var uniqueWord = Provider.of<UniqueWord>(context, listen: false);
-
-        // uniqueWord.setUsedWords2(wp2);
-      });
     });
   }
 
@@ -341,9 +279,9 @@ class _WelcomePageState extends State<WelcomePage> {
 
   OrientationBuilder landLayout() {
     debugPrint("landLayout");
+    debugPrint("screenWidth: ${SizeConfig.screenWidth}");
     return OrientationBuilder(builder: (context, orientation) {
       return Column(
-        mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
             padding: EdgeInsets.symmetric(
@@ -384,7 +322,7 @@ class _WelcomePageState extends State<WelcomePage> {
                           padding: EdgeInsets.only(
                               bottom: SizeConfig.blockSizeVertical * 5),
                           child: Text(
-                            "_ _ _ _ _ _ _",
+                            "_______",
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 letterSpacing: 10,
@@ -394,21 +332,32 @@ class _WelcomePageState extends State<WelcomePage> {
                           ),
                         ),
                         Text(
-                          "Guess the 7 letter word before",
+                          "Guess the 7 letter word",
                           style: TextStyle(
                               letterSpacing:
-                                  orientation == Orientation.portrait ? 3 : 4,
+                                  orientation == Orientation.portrait ? 2 : 3,
                               fontFamily: "Boogaloo",
                               fontSize: orientation == Orientation.portrait
                                   ? SizeConfig.blockSizeVertical * 3
                                   : SizeConfig.blockSizeVertical * 5),
                         ),
                         Text(
-                          "your basket is empty!",
+                          "before your basket",
                           textAlign: TextAlign.left,
                           style: TextStyle(
                               letterSpacing:
-                                  orientation == Orientation.portrait ? 3 : 4,
+                                  orientation == Orientation.portrait ? 2 : 3,
+                              fontFamily: "Boogaloo",
+                              fontSize: orientation == Orientation.portrait
+                                  ? SizeConfig.blockSizeVertical * 3
+                                  : SizeConfig.blockSizeVertical * 5),
+                        ),
+                        Text(
+                          "is empty!",
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              letterSpacing:
+                                  orientation == Orientation.portrait ? 2 : 3,
                               fontFamily: "Boogaloo",
                               fontSize: orientation == Orientation.portrait
                                   ? SizeConfig.blockSizeVertical * 3
