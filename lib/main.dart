@@ -48,7 +48,6 @@ Future main() async {
     await SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   }
-
   runApp(DevicePreview(
     enabled: false,
     builder: ((context) => const Hang7()),

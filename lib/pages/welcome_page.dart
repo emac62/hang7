@@ -148,6 +148,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 padding: const EdgeInsets.only(right: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     TextButton(
                         style: TextButton.styleFrom(

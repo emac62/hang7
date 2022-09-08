@@ -13,13 +13,21 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  Image wedgieImg = Image.asset('assets/images/wedgie.png');
+
   @override
   void initState() {
     super.initState();
-
+    wedgieImg = Image.asset('assets/images/wedgie.png');
     Timer(const Duration(seconds: 2), () {
       Navigator.push(context, RotationRoute(page: const WelcomePage()));
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    precacheImage(wedgieImg.image, context);
   }
 
   @override
@@ -52,12 +60,13 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
                 SizedBox(
                   height: SizeConfig.blockSizeVertical * 50,
-                  child: Image.asset(
-                    'assets/images/wedgie.png',
+                  child: Image(
+                    image: wedgieImg.image,
                     fit: orientation == Orientation.portrait
                         ? BoxFit.fitWidth
                         : BoxFit.fitHeight,
                   ),
+                  //
                 ),
               ],
             ),

@@ -164,7 +164,7 @@ class _EndOfGameState extends State<EndOfGame> {
                           children: [
                             ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  primary: AppColors.green,
+                                  backgroundColor: AppColors.green,
                                 ),
                                 onPressed: () {
                                   keysMap.updateAll((key, value) =>
@@ -188,7 +188,7 @@ class _EndOfGameState extends State<EndOfGame> {
                                 )),
                             ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  primary: AppColors.green,
+                                  backgroundColor: AppColors.green,
                                 ),
                                 onPressed: () {
                                   checkRemainingWords(context);

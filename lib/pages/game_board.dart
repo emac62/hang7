@@ -44,6 +44,9 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
   static double progressValue = 0;
   static String progressMessage = "Start by picking a letter.";
 
+  late Image phoneLine;
+  late Image tabletLine;
+
   static bool showUndee1 = false;
   static bool showUndee2 = false;
   static bool showUndee3 = false;
@@ -172,6 +175,15 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
       Provider.of<Controller>(context, listen: false).getDevice();
     });
     getData();
+    phoneLine = Image.asset('assets/images/clothesLine.png');
+    tabletLine = Image.asset('assets/images/tabletLine.png');
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    precacheImage(phoneLine.image, context);
+    precacheImage(tabletLine.image, context);
   }
 
   static updateProgressCorrect(int num) {
@@ -257,7 +269,8 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                   style: ElevatedButton.styleFrom(
                                       shape: const CircleBorder(),
                                       padding: const EdgeInsets.all(8),
-                                      primary: AppColors.backgroundColor),
+                                      backgroundColor:
+                                          AppColors.backgroundColor),
                                   child: const Icon(
                                     Icons.menu,
                                     color: AppColors.lightGray,
@@ -379,8 +392,8 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                 context.select((Controller c) => c.isPhone)
                                     ? SizedBox(
                                         width: double.infinity,
-                                        child: Image.asset(
-                                          'assets/images/clothesLine.png',
+                                        child: Image(
+                                          image: phoneLine.image,
                                           fit: BoxFit.fitWidth,
                                         ),
                                       )
@@ -389,8 +402,8 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                             height:
                                                 SizeConfig.blockSizeVertical *
                                                     25,
-                                            child: Image.asset(
-                                              'assets/images/tabletLine.png',
+                                            child: Image(
+                                              image: tabletLine.image,
                                               fit: BoxFit.fitWidth,
                                             ),
                                           )
@@ -855,16 +868,11 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
         style: ElevatedButton.styleFrom(
             shape: const CircleBorder(),
             padding: const EdgeInsets.all(6),
-            primary: AppColors.backgroundColor),
+            backgroundColor: AppColors.backgroundColor),
         onPressed: onPressed,
         child: Icon(
           icon,
           color: AppColors.lightGray,
-          // size: context.select((Controller c) => c.isPhone)
-          //     ? SizeConfig.blockSizeHorizontal * 6
-          //     : orientation == Orientation.portrait
-          //         ? SizeConfig.blockSizeHorizontal * 4
-          //         : SizeConfig.blockSizeHorizontal * 3,
         ));
   }
 }
