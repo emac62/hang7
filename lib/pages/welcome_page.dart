@@ -30,6 +30,21 @@ class _WelcomePageState extends State<WelcomePage> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<Controller>(context, listen: false).getDevice();
     });
+    checkWordPack();
+  }
+
+  checkWordPack() async {
+    var myWordPacks = [];
+
+    myWordPacks =
+        Provider.of<SettingsProvider>(context, listen: false).myWordPacks;
+    debugPrint("myWordPacks: $myWordPacks");
+    if (myWordPacks[0] == "Word Pack 1") {
+      myWordPacks[0] = "WordPack 1";
+      Provider.of<SettingsProvider>(context, listen: false)
+          .setMyWordPacks(myWordPacks);
+    }
+    debugPrint("myWordPacks: $myWordPacks");
   }
 
   @override

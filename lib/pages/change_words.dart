@@ -9,7 +9,6 @@ import 'package:hang7/widgets/banner_ad_widget.dart';
 import 'package:hang7/widgets/check_remaining_words.dart';
 import 'package:hang7/widgets/size_config.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ChangeWordPack extends StatefulWidget {
   const ChangeWordPack({Key? key}) : super(key: key);
@@ -22,7 +21,6 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
   List<String> myWordPacks = ["WordPack 1"];
   List<String> availablePacks = [];
   BannerAdContainer bannerAdContainer = const BannerAdContainer();
-  late SharedPreferences prefs;
 
   List<String> wordPacks = [
     "WordPack 2",
@@ -54,16 +52,13 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
 
   List<String> remainingWords = [];
 
-  getSPInstance() async {
-    prefs = await SharedPreferences.getInstance();
-  }
-
   getData(context) {
     var settingsProvider =
         Provider.of<SettingsProvider>(context, listen: false);
     coins = settingsProvider.coins;
 
     myWordPacks = settingsProvider.myWordPacks as List<String>;
+    debugPrint('changeWords: $myWordPacks');
 
     availablePacks =
         wordPacks.where((element) => !myWordPacks.contains(element)).toList();
@@ -72,10 +67,6 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
   @override
   void initState() {
     super.initState();
-    getSPInstance();
-
-    // getData(context);
-    // remainingWords = getMyWordPackRemainingWords(context);
   }
 
   @override

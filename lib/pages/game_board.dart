@@ -17,7 +17,6 @@ import 'package:hang7/widgets/game_stats_alert.dart';
 import 'package:hang7/widgets/undees_basket.dart';
 import 'package:hang7/widgets/word_grid.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../animations/route.dart';
 import '../widgets/app_colors.dart';
 
@@ -76,11 +75,6 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
     progressValue = 0;
   }
 
-  late SharedPreferences prefs;
-  getSPInstance() async {
-    prefs = await SharedPreferences.getInstance();
-  }
-
   getData() {
     var setProv = Provider.of<SettingsProvider>(context, listen: false);
     coins = setProv.coins;
@@ -99,6 +93,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
       case "WordPack 1":
         words = wordPack1;
         usedWordIndexes = uniqProv.usedWords1 as List<String>;
+
         listKey = "usedWords1";
         break;
       case "WordPack 2":
@@ -149,6 +144,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
         break;
       default:
     }
+
     int r = Random().nextInt(words.length);
 
     String rAsString = r.toString();
@@ -166,7 +162,6 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    getSPInstance();
     resetControllers();
     getWord();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {

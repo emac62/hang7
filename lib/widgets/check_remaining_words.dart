@@ -45,55 +45,58 @@ getCurrentRemainingWords(BuildContext context) {
   var settProv = Provider.of<SettingsProvider>(context, listen: false);
   var unqProv = Provider.of<UniqueWord>(context, listen: false);
   String wp = settProv.wordPack;
+  int numberOfUsedWordsInPack = 0;
+
   switch (wp) {
     case "WordPack 1":
       List<String> l = unqProv.usedWords1 as List<String>;
-      currentWPRemainingWords = l.length;
+      numberOfUsedWordsInPack = l.length;
+      debugPrint("usedWords1: $numberOfUsedWordsInPack");
       break;
     case "WordPack 2":
       List<String> l = unqProv.usedWords2 as List<String>;
-      currentWPRemainingWords = l.length;
+      numberOfUsedWordsInPack = l.length;
       break;
     case "WordPack 3":
       List<String> l = unqProv.usedWords3 as List<String>;
-      currentWPRemainingWords = l.length;
+      numberOfUsedWordsInPack = l.length;
       break;
     case "WordPack 4":
       List<String> l = unqProv.usedWords4 as List<String>;
-      currentWPRemainingWords = l.length;
+      numberOfUsedWordsInPack = l.length;
       break;
     case "WordPack 5":
       List<String> l = unqProv.usedWords5 as List<String>;
-      currentWPRemainingWords = l.length;
+      numberOfUsedWordsInPack = l.length;
       break;
     case "WordPack 6":
       List<String> l = unqProv.usedWords6 as List<String>;
-      currentWPRemainingWords = l.length;
+      numberOfUsedWordsInPack = l.length;
       break;
     case "WordPack 7":
       List<String> l = unqProv.usedWords7 as List<String>;
-      currentWPRemainingWords = l.length;
+      numberOfUsedWordsInPack = l.length;
       break;
     case "WordPack 8":
       List<String> l = unqProv.usedWords8 as List<String>;
-      currentWPRemainingWords = l.length;
+      numberOfUsedWordsInPack = l.length;
       break;
     case "WordPack 9":
       List<String> l = unqProv.usedWords9 as List<String>;
-      currentWPRemainingWords = l.length;
+      numberOfUsedWordsInPack = l.length;
       break;
     case "WordPack 10":
       List<String> l = unqProv.usedWords10 as List<String>;
-      currentWPRemainingWords = l.length;
+      numberOfUsedWordsInPack = l.length;
       break;
   }
+  currentWPRemainingWords = 50 - numberOfUsedWordsInPack;
 }
 
 checkRemainingWords(BuildContext context) {
   var settProv = Provider.of<SettingsProvider>(context, listen: false);
   getCurrentRemainingWords(context);
-  debugPrint("check called");
-  currentWPRemainingWords >= 50
+  currentWPRemainingWords == 0
       ? showOutOfWords(context)
       : newGame(context, settProv.withAnimation);
 }
