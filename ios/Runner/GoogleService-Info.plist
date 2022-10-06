@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>538781243596-iin6b13bkch4i2g0e7rvmof1tuja2d1d.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.538781243596-iin6b13bkch4i2g0e7rvmof1tuja2d1d</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDNjfGqek-vV7rFWzu83ZjOhdPIsvTuiPg</string>
+	<key>GCM_SENDER_ID</key>
+	<string>538781243596</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.blB.hang7</string>
+	<key>PROJECT_ID</key>
+	<string>hang-7</string>
+	<key>STORAGE_BUCKET</key>
+	<string>hang-7.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:538781243596:ios:8a72494e4b209ad4b8ca69</string>
+	<key>ADMOB_APP_ID</key>
+	<string>ca-app-pub-1618980018345182~2791499813</string>
+</dict>
+</plist>

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:hang7/animations/undee_animation.dart';
 import 'package:hang7/constants/help.dart';
@@ -42,6 +43,8 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
 
   static double progressValue = 0;
   static String progressMessage = "Start by picking a letter.";
+
+  late ConfettiController _controllerCenter;
 
   late Image phoneLine;
   late Image tabletLine;
@@ -172,6 +175,8 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
     getData();
     phoneLine = Image.asset('assets/images/clothesLine.png');
     tabletLine = Image.asset('assets/images/tabletLine.png');
+    _controllerCenter =
+        ConfettiController(duration: const Duration(seconds: 1));
   }
 
   @override
@@ -221,13 +226,45 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
     showMenu = !showMenu;
   }
 
+  /// A custom Path to paint stars.
+  Path drawStar(Size size) {
+    // Method to convert degree to radians
+    double degToRad(double deg) => deg * (pi / 180.0);
+
+    const numberOfPoints = 5;
+    final halfWidth = size.width / 2;
+    final externalRadius = halfWidth;
+    final internalRadius = halfWidth / 2.5;
+    final degreesPerStep = degToRad(360 / numberOfPoints);
+    final halfDegreesPerStep = degreesPerStep / 2;
+    final path = Path();
+    final fullAngle = degToRad(360);
+    path.moveTo(size.width, halfWidth);
+
+    for (double step = 0; step < fullAngle; step += degreesPerStep) {
+      path.lineTo(halfWidth + externalRadius * cos(step),
+          halfWidth + externalRadius * sin(step));
+      path.lineTo(halfWidth + internalRadius * cos(step + halfDegreesPerStep),
+          halfWidth + internalRadius * sin(step + halfDegreesPerStep));
+    }
+    path.close();
+    return path;
+  }
+
+  @override
+  void dispose() {
+    _controllerCenter.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     var settingsProvider = Provider.of<SettingsProvider>(context);
     removeAds = settingsProvider.removeAds;
     // debugPrint("gameBoard: removeAds: $removeAds");
     hWRatio = SizeConfig.screenHeight / SizeConfig.screenWidth;
-    // debugPrint("hWRatio: $hWRatio");
+    debugPrint("screenHeight: ${SizeConfig.screenHeight}");
+    debugPrint("word: ${context.select((Controller c) => c.currentWord)}");
     return OrientationBuilder(
       builder: ((context, orientation) {
         undeeSize = orientation == Orientation.portrait
@@ -487,6 +524,26 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                     ),
                                   ),
                                 ),
+                                Positioned(
+                                  top: 50,
+                                  right: SizeConfig.screenWidth / 2,
+                                  child: ConfettiWidget(
+                                    confettiController: _controllerCenter,
+                                    blastDirectionality: BlastDirectionality
+                                        .explosive, // don't specify a direction, blast randomly
+                                    shouldLoop:
+                                        true, // start again as soon as the animation is finished
+                                    colors: const [
+                                      Colors.green,
+                                      Colors.blue,
+                                      Colors.pink,
+                                      Colors.orange,
+                                      Colors.purple
+                                    ], // manually specify the colors to be used
+                                    createParticlePath:
+                                        drawStar, // define a custom shape/path.
+                                  ),
+                                ),
                                 UndeeAnimation(
                                   duration: 2000,
                                   selected: showUndee1,
@@ -741,6 +798,12 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                             setState(() {
                               updateProgressCorrect(context
                                   .select((Controller c) => c.correctLetters));
+                              if (context.select((Controller c) => c.gameWon) &&
+                                  context.select((Controller c) =>
+                                          c.remainingGuesses) ==
+                                      7) {
+                                _controllerCenter.play();
+                              }
                             });
                           }
                           if (context.select(
@@ -762,6 +825,12 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                             setState(() {
                               updateProgressCorrect(context
                                   .select((Controller c) => c.correctLetters));
+                              if (context.select((Controller c) => c.gameWon) &&
+                                  context.select((Controller c) =>
+                                          c.remainingGuesses) ==
+                                      7) {
+                                _controllerCenter.play();
+                              }
                             });
                           }
                           if (context.select(
@@ -783,6 +852,12 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                             setState(() {
                               updateProgressCorrect(context
                                   .select((Controller c) => c.correctLetters));
+                              if (context.select((Controller c) => c.gameWon) &&
+                                  context.select((Controller c) =>
+                                          c.remainingGuesses) ==
+                                      7) {
+                                _controllerCenter.play();
+                              }
                             });
                           }
                           if (context.select(

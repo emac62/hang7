@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hang7/animations/coin_spin.dart';
 import 'package:hang7/animations/route.dart';
 
 import 'package:hang7/constants/key_state.dart';
 import 'package:hang7/data/key_map.dart';
+import 'package:hang7/main.dart';
 import 'package:hang7/pages/options.dart';
 import 'package:hang7/providers/controller.dart';
 import 'package:hang7/providers/settings_provider.dart';
@@ -13,7 +16,9 @@ import 'package:hang7/widgets/size_config.dart';
 import 'package:hang7/widgets/stats_bar_chart.dart';
 import 'package:hang7/widgets/stats_row.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../widgets/ad_helper.dart';
 import '../widgets/check_remaining_words.dart';
 
 class EndOfGame extends StatefulWidget {
@@ -33,6 +38,8 @@ class _EndOfGameState extends State<EndOfGame> {
   bool withAnimation = true;
 
   BannerAdContainer bannerAdContainer = const BannerAdContainer();
+  late InterstitialAd _interstitialAd;
+  bool _isInterstitialAdReady = false;
 
   void loadCoins() {
     var setProv = Provider.of<SettingsProvider>(context, listen: false);
@@ -42,11 +49,39 @@ class _EndOfGameState extends State<EndOfGame> {
     });
   }
 
+  int gamesPlayed = 0;
+
+  void getGamesPlayed() async {
+    var prefs = await SharedPreferences.getInstance();
+    var gameStats = prefs.getStringList('gameStats');
+    gamesPlayed = int.parse(gameStats![0]);
+  }
+
   @override
   void initState() {
     super.initState();
     loadCoins();
     winner = Provider.of<Controller>(context, listen: false).gameWon;
+    getGamesPlayed();
+
+    InterstitialAd.load(
+        adUnitId: useTestAds
+            ? AdHelper.testInterstitialAdUnitId
+            : AdHelper.interstitialAdUnitId,
+        request: const AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(onAdLoaded: (ad) {
+          _interstitialAd = ad;
+          _isInterstitialAdReady = true;
+        }, onAdFailedToLoad: (LoadAdError error) {
+          debugPrint("Failed to Load Interstitial Ad ${error.message}");
+        })); //
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _interstitialAd.dispose();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   }
 
   @override
@@ -64,11 +99,12 @@ class _EndOfGameState extends State<EndOfGame> {
             child: Scaffold(
               backgroundColor: Colors.transparent,
               body: SafeArea(
+                minimum: const EdgeInsets.only(top: 10),
                 child: Padding(
                   padding: EdgeInsets.symmetric(
                       horizontal: SizeConfig.safeBlockHorizontal * 10),
                   child: Column(
-                    mainAxisSize: MainAxisSize.max,
+                    mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -191,6 +227,16 @@ class _EndOfGameState extends State<EndOfGame> {
                                   backgroundColor: AppColors.green,
                                 ),
                                 onPressed: () {
+                                  if (gamesPlayed % 8 == 0) {
+                                    SystemChrome.setEnabledSystemUIMode(
+                                      SystemUiMode.immersive,
+                                    );
+
+                                    if (_isInterstitialAdReady) {
+                                      _interstitialAd.show();
+                                    }
+                                  }
+
                                   checkRemainingWords(context);
                                 },
                                 child: Text(

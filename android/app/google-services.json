@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "538781243596",
+    "project_id": "hang-7",
+    "storage_bucket": "hang-7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:538781243596:android:5e0471620d09511fb8ca69",
+        "android_client_info": {
+          "package_name": "com.blB.hang7"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "538781243596-b7qv6b0ameqd036n1s10l579qouo9jhe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRhoSipoc-AQqLKhRUc0J-fOa3mRzq_GU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "538781243596-b7qv6b0ameqd036n1s10l579qouo9jhe.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "538781243596-iin6b13bkch4i2g0e7rvmof1tuja2d1d.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.blB.hang7"
+              }
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-1618980018345182~4236992165"
+    }
+  ],
+  "configuration_version": "1"
+}

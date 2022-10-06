@@ -19,6 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     wedgieImg = Image.asset('assets/images/wedgie.png');
+
     Timer(const Duration(seconds: 2), () {
       Navigator.push(context, RotationRoute(page: const WelcomePage()));
     });

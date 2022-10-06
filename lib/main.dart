@@ -1,4 +1,5 @@
 import 'package:device_preview_screenshot/device_preview_screenshot.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,6 +15,7 @@ import 'package:hang7/utils/purchase_api.dart';
 import 'package:hang7/widgets/material_color.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'firebase_options.dart';
 
 List<String> testDeviceIDs = [
   "8E3C44E0453B296DEDFBA106CDBB59CC", // Samsung S5
@@ -23,8 +25,14 @@ List<String> testDeviceIDs = [
   "GADSimulatorID",
 ];
 
+bool useTestAds = false;
+
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   await PurchaseApi.init();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool removeAds = prefs.getBool('removeAds') ?? false;

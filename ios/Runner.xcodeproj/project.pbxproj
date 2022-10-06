@@ -17,6 +17,7 @@
 		9BA5E1FD28AE9D7F008277C1 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BA5E1FC28AE9D7F008277C1 /* StoreKit.framework */; };
 		9BF426EB28B29BEE00531794 /* Configuration.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 9BF426EA28B29BEE00531794 /* Configuration.storekit */; };
 		9BF426ED28B29D7400531794 /* StoreKitTestCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = 9BF426EC28B29D7400531794 /* StoreKitTestCertificate.cer */; };
+		D8F23E2042DC4157AA91A6AA /* GoogleService-Info.plist in Sources */ = {isa = PBXBuildFile; fileRef = A0208482B948D1E5303FCDD8 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -50,9 +51,11 @@
 		97C146FD1CF9000F007C117D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9B0ED42D28EDD3F70027D2B0 /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
 		9BA5E1FC28AE9D7F008277C1 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		9BF426EA28B29BEE00531794 /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
 		9BF426EC28B29D7400531794 /* StoreKitTestCertificate.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = StoreKitTestCertificate.cer; sourceTree = "<group>"; };
+		A0208482B948D1E5303FCDD8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Runner/GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +92,7 @@
 				97C146EF1CF9000F007C117D /* Products */,
 				A904C05B46C36CD7F6B14A91 /* Pods */,
 				C3E38B5712B180E3F13AB58F /* Frameworks */,
+				A0208482B948D1E5303FCDD8 /* GoogleService-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -103,6 +107,7 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
+				9B0ED42D28EDD3F70027D2B0 /* Runner.entitlements */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
 				97C146FD1CF9000F007C117D /* Assets.xcassets */,
 				97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */,
@@ -285,6 +290,7 @@
 			files = (
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
+				D8F23E2042DC4157AA91A6AA /* GoogleService-Info.plist in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -368,6 +374,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = PDFNUL4XC5;
 				ENABLE_BITCODE = NO;
@@ -503,6 +510,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = PDFNUL4XC5;
 				ENABLE_BITCODE = NO;
@@ -528,6 +536,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = PDFNUL4XC5;
 				ENABLE_BITCODE = NO;
