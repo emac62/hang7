@@ -227,7 +227,7 @@ class _EndOfGameState extends State<EndOfGame> {
                                   backgroundColor: AppColors.green,
                                 ),
                                 onPressed: () {
-                                  if (gamesPlayed % 8 == 0) {
+                                  if (gamesPlayed % 2 == 0) {
                                     SystemChrome.setEnabledSystemUIMode(
                                       SystemUiMode.immersive,
                                     );
