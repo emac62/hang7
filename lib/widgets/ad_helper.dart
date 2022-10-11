@@ -13,9 +13,9 @@ class AdHelper {
 
   static String get interstitialAdUnitId {
     if (Platform.isAndroid) {
-      return "ca-app-pub-3940256099942544/1033173712";
+      return "ca-app-pub-1618980018345182/7504770449";
     } else if (Platform.isIOS) {
-      return "ca-app-pub-3940256099942544/4411468910";
+      return "ca-app-pub-1618980018345182/2722113407";
     } else {
       throw UnsupportedError("Unsupported platform");
     }

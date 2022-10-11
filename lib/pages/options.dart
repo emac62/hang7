@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hang7/animations/route.dart';
+import 'package:hang7/main.dart';
 import 'package:hang7/pages/change_undees.dart';
 import 'package:hang7/pages/change_words.dart';
 import 'package:hang7/pages/welcome_page.dart';
@@ -16,6 +18,7 @@ import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../widgets/ad_helper.dart';
 import '../widgets/paywall_widget.dart';
 
 class Options extends StatefulWidget {
@@ -35,6 +38,8 @@ class _OptionsState extends State<Options> {
   late SharedPreferences sharedPrefs;
 
   BannerAdContainer bannerAdContainer = const BannerAdContainer();
+  late InterstitialAd _interstitialAd;
+  bool _isInterstitialAdReady = false;
 
   @override
   void initState() {
@@ -48,6 +53,17 @@ class _OptionsState extends State<Options> {
         withWordAnimation = setProv.withWordAnimation;
       });
     });
+    InterstitialAd.load(
+        adUnitId: useTestAds
+            ? AdHelper.testInterstitialAdUnitId
+            : AdHelper.interstitialAdUnitId,
+        request: const AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(onAdLoaded: (ad) {
+          _interstitialAd = ad;
+          _isInterstitialAdReady = true;
+        }, onAdFailedToLoad: (LoadAdError error) {
+          debugPrint("Failed to Load Interstitial Ad ${error.message}");
+        })); //
   }
 
   final Uri _url = Uri.parse('https://dailyquote.ca');
@@ -496,6 +512,9 @@ class _OptionsState extends State<Options> {
                                   ),
                                 ),
                                 onPressed: () {
+                                  if (_isInterstitialAdReady) {
+                                    _interstitialAd.show();
+                                  }
                                   settingsProvider.withAnimation
                                       ? Navigator.push(
                                           context,

@@ -2,12 +2,14 @@ import 'dart:math';
 
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hang7/animations/undee_animation.dart';
 import 'package:hang7/constants/help.dart';
 import 'package:hang7/constants/key_state.dart';
 import 'package:hang7/constants/progress_messages.dart';
 import 'package:hang7/constants/seven_letters.dart';
 import 'package:hang7/data/key_map.dart';
+import 'package:hang7/main.dart';
 import 'package:hang7/pages/options.dart';
 import 'package:hang7/pages/welcome_page.dart';
 import 'package:hang7/providers/controller.dart';
@@ -19,6 +21,7 @@ import 'package:hang7/widgets/undees_basket.dart';
 import 'package:hang7/widgets/word_grid.dart';
 import 'package:provider/provider.dart';
 import '../animations/route.dart';
+import '../widgets/ad_helper.dart';
 import '../widgets/app_colors.dart';
 
 import '../widgets/banner_ad_widget.dart';
@@ -35,6 +38,9 @@ class GameBoard extends StatefulWidget {
 
 class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
   BannerAdContainer bannerAdContainer = const BannerAdContainer();
+  late InterstitialAd _interstitialAd;
+  bool _isInterstitialAdReady = false;
+
   late String currentWord = "";
   static String blankWord = "";
   static List containsSelectedLetters = [];
@@ -177,6 +183,17 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
     tabletLine = Image.asset('assets/images/tabletLine.png');
     _controllerCenter =
         ConfettiController(duration: const Duration(seconds: 1));
+    InterstitialAd.load(
+        adUnitId: useTestAds
+            ? AdHelper.testInterstitialAdUnitId
+            : AdHelper.interstitialAdUnitId,
+        request: const AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(onAdLoaded: (ad) {
+          _interstitialAd = ad;
+          _isInterstitialAdReady = true;
+        }, onAdFailedToLoad: (LoadAdError error) {
+          debugPrint("Failed to Load Interstitial Ad ${error.message}");
+        })); //
   }
 
   @override
@@ -385,7 +402,9 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                                 orientation: orientation,
                                                 onPressed: () {
                                                   toggleMenu();
-
+                                                  if (_isInterstitialAdReady) {
+                                                    _interstitialAd.show();
+                                                  }
                                                   settingsProvider.withAnimation
                                                       ? Navigator.push(
                                                           context,

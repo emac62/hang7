@@ -21,7 +21,7 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
-  int? coins;
+  late int coins;
   bool withAnimation = true;
 
   @override
@@ -77,9 +77,9 @@ class _WelcomePageState extends State<WelcomePage> {
               child: LayoutBuilder(
                 builder: (BuildContext context, BoxConstraints constraints) {
                   if (constraints.maxWidth <= 600) {
-                    return portLayout();
+                    return portLayout(coins);
                   } else {
-                    return landLayout();
+                    return landLayout(coins);
                   }
                 },
               ));
@@ -88,7 +88,7 @@ class _WelcomePageState extends State<WelcomePage> {
     );
   }
 
-  Widget portLayout() {
+  Widget portLayout(int coins) {
     return Column(
       children: [
         Expanded(
@@ -193,7 +193,7 @@ class _WelcomePageState extends State<WelcomePage> {
                           showDialog(
                               context: context,
                               builder: (_) => GameStatsAlert(
-                                    coins: coins ?? 0,
+                                    coins: coins,
                                     orientation: Orientation.portrait,
                                   ));
                         },
@@ -241,7 +241,7 @@ class _WelcomePageState extends State<WelcomePage> {
                                 width: 60,
                               ),
                               applicationName: "Hang7",
-                              applicationVersion: "1.0.0",
+                              applicationVersion: "1.0.2",
                               applicationLegalese: '©2022 borderlineBoomer',
                               children: <Widget>[
                                 Padding(
@@ -293,7 +293,7 @@ class _WelcomePageState extends State<WelcomePage> {
     );
   }
 
-  OrientationBuilder landLayout() {
+  OrientationBuilder landLayout(int coins) {
     debugPrint("landLayout");
     // debugPrint("screenWidth: ${SizeConfig.screenWidth}");
     return OrientationBuilder(builder: (context, orientation) {
@@ -448,7 +448,7 @@ class _WelcomePageState extends State<WelcomePage> {
                                 showDialog(
                                     context: context,
                                     builder: (_) => GameStatsAlert(
-                                          coins: coins ?? 0,
+                                          coins: coins,
                                           orientation: Orientation.portrait,
                                         ));
                               },
