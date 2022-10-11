@@ -47,4 +47,4 @@ app.*.map.json
 /android/app/release
 
 .ad_unit_codes.txt
-firebase_options.dart
+lib/firebase_options.dart
