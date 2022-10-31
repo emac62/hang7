@@ -25,7 +25,7 @@ List<String> testDeviceIDs = [
   "GADSimulatorID",
 ];
 
-bool useTestAds = false;
+bool useTestAds = true;
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();

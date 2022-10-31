@@ -60,6 +60,7 @@ class _EndOfGameState extends State<EndOfGame> {
   @override
   void initState() {
     super.initState();
+    debugPrint("EndOfGameInit");
     loadCoins();
     winner = Provider.of<Controller>(context, listen: false).gameWon;
     getGamesPlayed();
