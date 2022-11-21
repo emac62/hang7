@@ -13,7 +13,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  Image wedgieImg = Image.asset('assets/images/wedgie.png');
+  late Image wedgieImg;
 
   @override
   void initState() {
@@ -21,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
     wedgieImg = Image.asset('assets/images/wedgie.png');
 
     Timer(const Duration(seconds: 2), () {
-      Navigator.push(context, RotationRoute(page: const WelcomePage()));
+      Navigator.push(context, FadeRoute(page: const WelcomePage()));
     });
   }
 

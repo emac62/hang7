@@ -306,15 +306,10 @@ class _WelcomePageState extends State<WelcomePage> {
                 height: orientation == Orientation.portrait
                     ? 300
                     : SizeConfig.blockSizeVertical * 35,
-                child: orientation == Orientation.portrait
-                    ? Image.asset(
-                        'assets/images/wpGraphic.png',
-                        fit: BoxFit.fitHeight,
-                      )
-                    : Image.asset(
-                        'assets/images/wpGraphic.png',
-                        fit: BoxFit.fitHeight,
-                      )),
+                child: Image.asset(
+                  'assets/images/wpGraphic.png',
+                  fit: BoxFit.fitHeight,
+                )),
           ),
           // ,
           Expanded(

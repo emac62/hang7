@@ -199,8 +199,12 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    precacheImage(phoneLine.image, context);
-    precacheImage(tabletLine.image, context);
+    var controller = Provider.of<Controller>(context, listen: false);
+    if (controller.isPhone) {
+      precacheImage(phoneLine.image, context);
+    } else {
+      precacheImage(tabletLine.image, context);
+    }
   }
 
   static updateProgressCorrect(int num) {

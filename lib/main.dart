@@ -1,4 +1,3 @@
-import 'package:device_preview_screenshot/device_preview_screenshot.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +32,7 @@ Future main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  await PurchaseApi.init();
+  // await PurchaseApi.init();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool removeAds = prefs.getBool('removeAds') ?? false;
   if (removeAds) {
@@ -56,14 +55,7 @@ Future main() async {
     await SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   }
-  runApp(DevicePreview(
-    enabled: false,
-    builder: ((context) => const Hang7()),
-    tools: const [
-      ...DevicePreview.defaultTools,
-      DevicePreviewScreenshot(),
-    ],
-  ));
+  runApp(const Hang7());
 }
 
 class Hang7 extends StatelessWidget {
@@ -82,8 +74,6 @@ class Hang7 extends StatelessWidget {
       ],
       child: MaterialApp(
         useInheritedMediaQuery: true,
-        locale: DevicePreview.locale(context),
-        builder: DevicePreview.appBuilder,
         title: 'Hang 7',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
