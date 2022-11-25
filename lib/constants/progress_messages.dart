@@ -16,6 +16,6 @@ Map<int, String> incorrectLetterMessage = {
   4: "Sending you Good Vibes!",
   3: "Come on, think!",
   2: "Oh dear!",
-  1: "Last pair of UnDees!",
+  1: "Last pair of Undees!",
   0: "It's over!",
 };

@@ -93,7 +93,9 @@ getCurrentRemainingWords(BuildContext context) {
   currentWPRemainingWords = 50 - numberOfUsedWordsInPack;
 }
 
-checkRemainingWords(BuildContext context) {
+checkRemainingWords(
+  BuildContext context,
+) {
   var settProv = Provider.of<SettingsProvider>(context, listen: false);
   getCurrentRemainingWords(context);
   currentWPRemainingWords == 0

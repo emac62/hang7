@@ -17,6 +17,7 @@ class StatsRow extends StatelessWidget {
     var settingsProvider =
         Provider.of<SettingsProvider>(context, listen: false);
     int gamesPlayed = 0;
+
     return FutureBuilder(
       future: getGameStats(),
       builder: (context, AsyncSnapshot snapshot) {
@@ -25,6 +26,7 @@ class StatsRow extends StatelessWidget {
         if (snapshot.hasData) {
           results = snapshot.data as List<String>;
           gamesPlayed = int.parse(results[0]);
+
           if (gamesPlayed % 25 == 0) {
             bonus = true;
             int coins = settingsProvider.coins;

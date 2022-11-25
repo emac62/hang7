@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hang7/data/chart_model.dart';
 import 'package:hang7/widgets/size_config.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+import '../providers/controller.dart';
 import 'app_colors.dart';
 
 int currentGameForStats = 0;
@@ -17,6 +19,7 @@ class StatsBarChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var controller = Provider.of<Controller>(context);
     return Padding(
         padding: EdgeInsets.symmetric(
             vertical: SizeConfig.blockSizeHorizontal * 1,
@@ -36,52 +39,50 @@ class StatsBarChart extends StatelessWidget {
               }
               debugPrint("chartData: ${chartData[0].currentGame.toString()}");
 
-              return Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: SizeConfig.blockSizeHorizontal * 2,
-                    vertical: SizeConfig.blockSizeVertical * 2),
-                child: SfCartesianChart(
-                  series: <ChartSeries>[
-                    BarSeries<ChartModel, String>(
-                        animationDelay: 1750,
-                        animationDuration: 1000,
-                        dataSource: chartData,
-                        xValueMapper: ((datum, index) => index.toString()),
-                        yValueMapper: ((datum, index) => datum.score),
-                        borderRadius: const BorderRadius.only(
-                            topRight: Radius.circular(6),
-                            bottomRight: Radius.circular(6)),
-                        onCreateRenderer:
-                            (ChartSeries<ChartModel, String> series) =>
-                                CustomBarColor(chartData),
-                        dataLabelSettings: DataLabelSettings(
-                            labelAlignment: ChartDataLabelAlignment.top,
-                            isVisible: true,
-                            textStyle: TextStyle(
-                                // color: AppColors.lightGray,
-                                fontFamily: "Boogaloo",
-                                fontSize: orientation == Orientation.portrait
-                                    ? SizeConfig.blockSizeVertical * 2
-                                    : SizeConfig.blockSizeVertical * 1)))
-                  ],
-                  primaryXAxis: CategoryAxis(
-                      majorGridLines: const MajorGridLines(width: 0),
-                      axisLine: const AxisLine(width: 0),
-                      isInversed: true,
-                      borderWidth: 0,
-                      labelStyle: TextStyle(
-                          color: AppColors.darkBlue,
-                          fontFamily: "Boogaloo",
-                          fontSize: SizeConfig.blockSizeVertical * 2)),
-                  primaryYAxis: NumericAxis(isVisible: false),
-                  title: ChartTitle(
-                      text: "Remaining Undees",
-                      textStyle: TextStyle(
-                          fontFamily: "Boogaloo",
-                          fontSize: SizeConfig.blockSizeVertical * 2)),
-                  borderColor: Colors.transparent,
-                  plotAreaBorderWidth: 0,
-                ),
+              return SfCartesianChart(
+                series: <ChartSeries>[
+                  BarSeries<ChartModel, String>(
+                      animationDelay: controller.gameWon ? 1750 : 0,
+                      animationDuration: 1000,
+                      dataSource: chartData,
+                      xValueMapper: ((datum, index) => index.toString()),
+                      yValueMapper: ((datum, index) => datum.score),
+                      width: 1.0,
+                      spacing: 0.25,
+                      borderRadius: const BorderRadius.only(
+                          topRight: Radius.circular(6),
+                          bottomRight: Radius.circular(6)),
+                      onCreateRenderer:
+                          (ChartSeries<ChartModel, String> series) =>
+                              CustomBarColor(chartData),
+                      dataLabelSettings: DataLabelSettings(
+                          labelAlignment: ChartDataLabelAlignment.top,
+                          isVisible: true,
+                          textStyle: TextStyle(
+                              // color: AppColors.lightGray,
+                              fontFamily: "Boogaloo",
+                              fontSize: orientation == Orientation.portrait
+                                  ? SizeConfig.blockSizeVertical * 2
+                                  : SizeConfig.blockSizeVertical * 1.75)))
+                ],
+                primaryXAxis: CategoryAxis(
+                    majorGridLines: const MajorGridLines(width: 0),
+                    axisLine: const AxisLine(width: 0),
+                    isInversed: true,
+                    borderWidth: 0,
+                    labelStyle: TextStyle(
+                        color: AppColors.darkBlue,
+                        fontFamily: "Boogaloo",
+                        fontSize: SizeConfig.blockSizeVertical * 2)),
+                primaryYAxis: NumericAxis(isVisible: false),
+                title: ChartTitle(
+                    text: "Remaining Undees",
+                    textStyle: TextStyle(
+                        color: AppColors.darkBlue,
+                        fontFamily: "Boogaloo",
+                        fontSize: SizeConfig.blockSizeVertical * 2.5)),
+                borderColor: Colors.transparent,
+                plotAreaBorderWidth: 0,
               );
             } else {
               return const SizedBox();
@@ -116,7 +117,7 @@ class CustomBarColor extends BarSeriesRenderer {
 }
 
 class BarCustomPainter extends BarSegment {
-  final colorList = [AppColors.darkBlue, AppColors.green];
+  final colorList = [AppColors.greenGray, AppColors.green];
 
   @override
   Paint getFillPaint() {

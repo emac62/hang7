@@ -10,6 +10,7 @@ import 'package:hang7/widgets/check_remaining_words.dart';
 import 'package:hang7/widgets/size_config.dart';
 
 import 'package:provider/provider.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ChangeUndees extends StatefulWidget {
@@ -26,8 +27,11 @@ class _ChangeUndeesState extends State<ChangeUndees> {
   BannerAdContainer bannerAdContainer = const BannerAdContainer();
   int coins = 0;
 
-  final myUndeesScrollController = ScrollController();
   final undeesScrollController = ScrollController();
+  final ItemScrollController myUndeesPostitionedController =
+      ItemScrollController();
+  final ItemPositionsListener myUndeesPositionsListener =
+      ItemPositionsListener.create();
 
   List<String> allUndees = [
     "Pink",
@@ -110,6 +114,11 @@ class _ChangeUndeesState extends State<ChangeUndees> {
   void initState() {
     super.initState();
     getSPInstance(context);
+    Future.delayed(const Duration(milliseconds: 500), () {
+      myUndeesPostitionedController.scrollTo(
+          index: undColour.indexOf(undeesStr),
+          duration: const Duration(microseconds: 250));
+    });
   }
 
   List<Widget> availableUndeeImages = [];
@@ -157,6 +166,7 @@ class _ChangeUndeesState extends State<ChangeUndees> {
   @override
   Widget build(BuildContext context) {
     var settingsProvider = Provider.of<SettingsProvider>(context);
+    debugPrint("undeeColours: $undColour");
     return OrientationBuilder(builder: (context, orientation) {
       return Container(
         decoration: const BoxDecoration(
@@ -229,52 +239,47 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                           ? SizeConfig.blockSizeVertical * 12
                           : SizeConfig.blockSizeVertical * 12,
                       alignment: Alignment.center,
-                      child: Scrollbar(
-                        controller: myUndeesScrollController,
-                        thumbVisibility: true,
-                        thickness: 3,
-                        child: ListView.builder(
-                            itemCount: myUndees.length,
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            controller: myUndeesScrollController,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 2),
-                                child: Card(
-                                  color: AppColors.backgroundColor,
-                                  elevation: 8,
-                                  margin: const EdgeInsets.all(8.0),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(6),
-                                    side: undeesStr == undColour[index]
-                                        ? const BorderSide(
-                                            color: AppColors.darkBlue, width: 4)
-                                        : const BorderSide(
-                                            color: Colors.transparent,
-                                            width: 2),
-                                  ),
-                                  child: Center(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              settingsProvider.setGameUndees(
-                                                  undColour[index]);
+                      child: ScrollablePositionedList.builder(
+                          itemCount: myUndees.length,
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemScrollController: myUndeesPostitionedController,
+                          itemPositionsListener: myUndeesPositionsListener,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 2),
+                              child: Card(
+                                color: AppColors.backgroundColor,
+                                elevation: 8,
+                                margin: const EdgeInsets.all(8.0),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(6),
+                                  side: undeesStr == undColour[index]
+                                      ? const BorderSide(
+                                          color: AppColors.darkBlue, width: 4)
+                                      : const BorderSide(
+                                          color: Colors.transparent, width: 2),
+                                ),
+                                child: Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            settingsProvider.setGameUndees(
+                                                undColour[index]);
 
-                                              undeesStr =
-                                                  settingsProvider.gameUndees;
-                                            });
-                                          },
-                                          child: myUndees[index]),
-                                    ),
+                                            undeesStr =
+                                                settingsProvider.gameUndees;
+                                          });
+                                        },
+                                        child: myUndees[index]),
                                   ),
                                 ),
-                              );
-                            }),
-                      ),
+                              ),
+                            );
+                          }),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0),

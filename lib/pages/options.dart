@@ -512,9 +512,13 @@ class _OptionsState extends State<Options> {
                                   ),
                                 ),
                                 onPressed: () {
-                                  if (_isInterstitialAdReady) {
-                                    _interstitialAd.show();
-                                  }
+                                  (context.select((SettingsProvider sp) =>
+                                          sp.removeAds))
+                                      ? null
+                                      : _isInterstitialAdReady
+                                          ? _interstitialAd.show()
+                                          : null;
+
                                   settingsProvider.withAnimation
                                       ? Navigator.push(
                                           context,

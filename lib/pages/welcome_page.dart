@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hang7/animations/route.dart';
 import 'package:hang7/constants/help.dart';
-import 'package:hang7/pages/game_board.dart';
 import 'package:hang7/pages/options.dart';
 import 'package:hang7/providers/settings_provider.dart';
 import 'package:hang7/widgets/app_colors.dart';
@@ -9,9 +8,9 @@ import 'package:hang7/widgets/check_remaining_words.dart';
 import 'package:hang7/widgets/game_stats_alert.dart';
 import 'package:hang7/widgets/size_config.dart';
 import 'package:provider/provider.dart';
-
 import '../providers/controller.dart';
 import '../providers/unique_word.dart';
+import '../widgets/txt_btn.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);
@@ -23,6 +22,8 @@ class WelcomePage extends StatefulWidget {
 class _WelcomePageState extends State<WelcomePage> {
   late int coins;
   bool withAnimation = true;
+  bool isPhone = false;
+  bool isTablet = false;
 
   @override
   void initState() {
@@ -44,506 +45,262 @@ class _WelcomePageState extends State<WelcomePage> {
       Provider.of<SettingsProvider>(context, listen: false)
           .setMyWordPacks(myWordPacks);
     }
-    debugPrint("myWordPacks: $myWordPacks");
   }
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     Provider.of<UniqueWord>(context, listen: false).loadUsedWordsIndexes();
+    var controller = Provider.of<Controller>(context);
+    if (controller.isPhone) {
+      isPhone = true;
+    } else {
+      isTablet = true;
+      isPhone = false;
+    }
     var settingsProvider = Provider.of<SettingsProvider>(context);
     coins = settingsProvider.coins;
     withAnimation = settingsProvider.withAnimation;
 
     return Scaffold(
-      body: OrientationBuilder(
-        builder: (context, orientation) {
-          return Container(
-              height: SizeConfig.screenHeight,
-              width: SizeConfig.screenWidth,
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                    begin: Alignment.center,
-                    end: Alignment.bottomCenter,
-                    colors: [AppColors.backgroundColor, AppColors.lightGray]),
-                image: orientation == Orientation.portrait
+      body: OrientationBuilder(builder: ((context, orientation) {
+        return Container(
+          height: SizeConfig.screenHeight,
+          width: SizeConfig.screenWidth,
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+                begin: Alignment.center,
+                end: Alignment.bottomCenter,
+                colors: [AppColors.backgroundColor, AppColors.lightGray]),
+            image: isPhone
+                ? const DecorationImage(
+                    image: AssetImage('assets/images/phoneGrass.png'),
+                    fit: BoxFit.cover)
+                : orientation == Orientation.portrait
                     ? const DecorationImage(
-                        image: AssetImage('assets/images/tabletPortBG.png'),
+                        image: AssetImage('assets/images/tabPortGrass.png'),
                         fit: BoxFit.cover)
                     : const DecorationImage(
-                        image: AssetImage('assets/images/tabletLandBG.png'),
+                        image: AssetImage('assets/images/tabLandGrass.png'),
                         fit: BoxFit.cover),
-              ),
-              child: LayoutBuilder(
-                builder: (BuildContext context, BoxConstraints constraints) {
-                  if (constraints.maxWidth <= 600) {
-                    return portLayout(coins);
-                  } else {
-                    return landLayout(coins);
-                  }
-                },
-              ));
-        },
-      ),
-    );
-  }
-
-  Widget portLayout(int coins) {
-    return Column(
-      children: [
-        Expanded(
-          flex: 2,
-          child: Container(
-            margin: EdgeInsets.only(top: SizeConfig.safeBlockVertical * 5),
-            width: SizeConfig.blockSizeHorizontal * 90,
-            child: Image.asset(
-              'assets/images/wpGraphic.png',
-              fit: BoxFit.fitHeight,
-            ),
           ),
-        ),
-        Expanded(
-          flex: 1,
-          child: Text(
-            "_______",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                letterSpacing: 9,
-                fontSize: SizeConfig.blockSizeHorizontal * 18),
-          ),
-        ),
-        Expanded(
-          flex: 1,
-          child:
-              Text("Figure out the 7 letter word without hanging your UnDees!",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: SizeConfig.blockSizeHorizontal * 6,
-                    letterSpacing: 2,
-                    fontFamily: "Boogaloo",
-                  )),
-        ),
-        Expanded(
-          flex: 3,
-          child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding:
-                      EdgeInsets.only(top: SizeConfig.blockSizeHorizontal * 35),
-                  child: Image.asset(
-                    'assets/images/fullBasket.png',
-                    width: SizeConfig.safeBlockHorizontal * 50,
-                  ),
-                ),
-              ],
+          child: Column(children: [
+            SizedBox(
+              height: SizeConfig.blockSizeVertical * 30,
             ),
-            Container(
-              decoration: const BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                        color: AppColors.darkBlue,
-                        blurRadius: 10.0,
-                        offset: Offset(-5, -5))
-                  ],
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(15.0),
-                      bottomLeft: Radius.circular(15.0)),
-                  gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        AppColors.lightGray,
-                        AppColors.green,
-                      ])),
-              width: SizeConfig.blockSizeHorizontal * 45,
-              child: Padding(
-                padding: const EdgeInsets.only(right: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    TextButton(
-                        style: TextButton.styleFrom(
-                          minimumSize: Size.zero,
-                          padding: EdgeInsets.only(
-                              top: SizeConfig.blockSizeVertical * 2),
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        ),
-                        onPressed: () {
-                          checkRemainingWords(context);
-                        },
-                        child: Text(
-                          "Play",
-                          style: TextStyle(
-                              letterSpacing: 2,
-                              fontFamily: "Boogaloo",
-                              fontSize: SizeConfig.blockSizeHorizontal * 7),
-                        )),
-                    TextButton(
-                        style: TextButton.styleFrom(
-                          minimumSize: Size.zero,
-                          padding: EdgeInsets.only(
-                              top: SizeConfig.blockSizeVertical * 2),
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        ),
-                        onPressed: () {
-                          showDialog(
-                              context: context,
-                              builder: (_) => GameStatsAlert(
-                                    coins: coins,
-                                    orientation: Orientation.portrait,
-                                  ));
-                        },
-                        child: Text(
-                          "Stats",
-                          style: TextStyle(
-                              letterSpacing: 2,
-                              fontFamily: "Boogaloo",
-                              fontSize: SizeConfig.blockSizeHorizontal * 7),
-                        )),
-                    TextButton(
-                        style: TextButton.styleFrom(
-                          minimumSize: Size.zero,
-                          padding: EdgeInsets.only(
-                              top: SizeConfig.blockSizeVertical * 2),
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        ),
-                        onPressed: () {
-                          withAnimation
-                              ? Navigator.push(
-                                  context, RotationRoute(page: const Options()))
-                              : Navigator.push(
-                                  context, FadeRoute(page: const Options()));
-                        },
-                        child: Text(
-                          "Options",
-                          style: TextStyle(
-                              letterSpacing: 2,
-                              fontFamily: "Boogaloo",
-                              fontSize: SizeConfig.blockSizeHorizontal * 7),
-                        )),
-                    TextButton(
-                        style: TextButton.styleFrom(
-                          minimumSize: Size.zero,
-                          padding: EdgeInsets.only(
-                              top: SizeConfig.blockSizeVertical * 2),
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        ),
-                        onPressed: () {
-                          showAboutDialog(
-                              context: context,
-                              applicationIcon: Image.asset(
-                                'assets/images/seven.png',
-                                height: 60,
-                                width: 60,
-                              ),
-                              applicationName: "Hang7",
-                              applicationVersion: "1.0.2",
-                              applicationLegalese: '©2022 borderlineBoomer',
-                              children: <Widget>[
-                                Padding(
-                                    padding: const EdgeInsets.only(top: 15),
-                                    child: Column(children: [
-                                      Text(
-                                        'Guess the word without hanging your UnDees!',
-                                        style: TextStyle(
-                                            fontFamily: "Boogaloo",
-                                            color: AppColors.darkBlue,
-                                            fontSize:
-                                                SizeConfig.blockSizeHorizontal *
-                                                    8),
-                                      ),
-                                    ]))
-                              ]);
-                        },
-                        child: Text(
-                          "About",
-                          style: TextStyle(
-                              letterSpacing: 2,
-                              fontFamily: "Boogaloo",
-                              fontSize: SizeConfig.blockSizeHorizontal * 7),
-                        )),
-                    TextButton(
-                        style: TextButton.styleFrom(
-                          minimumSize: Size.zero,
-                          padding: EdgeInsets.only(
-                              top: SizeConfig.blockSizeVertical * 2),
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        ),
-                        onPressed: () {
-                          showHelpDialog(context);
-                        },
-                        child: Text(
-                          "Help",
-                          style: TextStyle(
-                              letterSpacing: 2,
-                              fontFamily: "Boogaloo",
-                              fontSize: SizeConfig.blockSizeHorizontal * 7),
-                        )),
-                  ],
-                ),
-              ),
+            Text(
+              "_______",
+              style: TextStyle(
+                  letterSpacing: isPhone ? 9 : 12,
+                  fontSize: isPhone
+                      ? SizeConfig.blockSizeHorizontal * 9
+                      : orientation == Orientation.portrait
+                          ? SizeConfig.blockSizeVertical * 7
+                          : SizeConfig.blockSizeVertical * 7),
             ),
-          ]),
-        )
-      ],
-    );
-  }
-
-  OrientationBuilder landLayout(int coins) {
-    debugPrint("landLayout");
-    // debugPrint("screenWidth: ${SizeConfig.screenWidth}");
-    return OrientationBuilder(builder: (context, orientation) {
-      return Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(
-                vertical: SizeConfig.blockSizeVertical * 2.5),
-            child: SizedBox(
-                height: orientation == Orientation.portrait
-                    ? 300
-                    : SizeConfig.blockSizeVertical * 35,
-                child: Image.asset(
-                  'assets/images/wpGraphic.png',
-                  fit: BoxFit.fitHeight,
-                )),
-          ),
-          // ,
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Flexible(
-                  flex: orientation == Orientation.portrait ? 2 : 6,
-                  child: Padding(
-                    padding: orientation == Orientation.portrait
-                        ? EdgeInsets.only(
-                            left: SizeConfig.blockSizeHorizontal * 5)
-                        : EdgeInsets.only(
-                            left: SizeConfig.blockSizeHorizontal * 15),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                              bottom: SizeConfig.blockSizeVertical * 5),
-                          child: Text(
-                            "_______",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 10,
-                                fontSize: orientation == Orientation.portrait
-                                    ? SizeConfig.blockSizeVertical * 5
-                                    : SizeConfig.blockSizeVertical * 5),
-                          ),
-                        ),
-                        Text(
-                          "Guess the 7 letter word",
-                          style: TextStyle(
-                              letterSpacing:
-                                  orientation == Orientation.portrait ? 2 : 3,
-                              fontFamily: "Boogaloo",
-                              fontSize: orientation == Orientation.portrait
-                                  ? SizeConfig.blockSizeVertical * 3
-                                  : SizeConfig.blockSizeVertical * 5),
-                        ),
-                        Text(
-                          "before your basket",
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                              letterSpacing:
-                                  orientation == Orientation.portrait ? 2 : 3,
-                              fontFamily: "Boogaloo",
-                              fontSize: orientation == Orientation.portrait
-                                  ? SizeConfig.blockSizeVertical * 3
-                                  : SizeConfig.blockSizeVertical * 5),
-                        ),
-                        Text(
-                          "is empty!",
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                              letterSpacing:
-                                  orientation == Orientation.portrait ? 2 : 3,
-                              fontFamily: "Boogaloo",
-                              fontSize: orientation == Orientation.portrait
-                                  ? SizeConfig.blockSizeVertical * 3
-                                  : SizeConfig.blockSizeVertical * 5),
-                        ),
-                        Padding(
-                          padding: orientation == Orientation.portrait
-                              ? EdgeInsets.only(
-                                  top: SizeConfig.blockSizeHorizontal * 20)
-                              : EdgeInsets.only(
-                                  top: SizeConfig.blockSizeVertical * 5),
-                          child: Image.asset(
-                            'assets/images/fullBasket.png',
-                            width: orientation == Orientation.portrait
-                                ? SizeConfig.safeBlockVertical * 33
-                                : SizeConfig.safeBlockHorizontal * 25,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Flexible(
-                  flex: orientation == Orientation.portrait ? 1 : 2,
-                  child: Container(
-                    decoration: const BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                              color: AppColors.darkBlue,
-                              blurRadius: 10.0,
-                              offset: Offset(-5, -5))
-                        ],
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(15.0),
-                            bottomLeft: Radius.circular(15.0)),
-                        gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              AppColors.lightGray,
-                              AppColors.green,
-                            ])),
-                    width: orientation == Orientation.portrait
-                        ? SizeConfig.blockSizeHorizontal * 40
-                        : SizeConfig.blockSizeHorizontal * 25,
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 20),
+            SizedBox(
+              height: SizeConfig.blockSizeVertical * 10,
+            ),
+            Expanded(
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 3,
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 15),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.transparent)),
+                      width: double.infinity,
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          TextButton(
-                              onPressed: () {
-                                withAnimation
-                                    ? Navigator.push(context,
-                                        RotationRoute(page: const GameBoard()))
-                                    : Navigator.push(context,
-                                        FadeRoute(page: const GameBoard()));
-                              },
-                              child: Text(
-                                "Play",
-                                style: TextStyle(
-                                    letterSpacing: 2,
-                                    fontFamily: "Boogaloo",
-                                    fontSize: orientation ==
-                                            Orientation.portrait
-                                        ? SizeConfig.blockSizeVertical * 5
-                                        : SizeConfig.blockSizeHorizontal * 4),
+                          Text("Figure out",
+                              style: TextStyle(
+                                fontSize: orientation == Orientation.portrait
+                                    ? SizeConfig.blockSizeVertical * 3
+                                    : SizeConfig.blockSizeVertical * 5,
+                                letterSpacing: 1,
+                                fontFamily: "Boogaloo",
                               )),
-                          TextButton(
-                              onPressed: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (_) => GameStatsAlert(
-                                          coins: coins,
-                                          orientation: Orientation.portrait,
-                                        ));
-                              },
-                              child: Text(
-                                "Stats",
-                                style: TextStyle(
-                                    letterSpacing: 2,
-                                    fontFamily: "Boogaloo",
-                                    fontSize: orientation ==
-                                            Orientation.portrait
-                                        ? SizeConfig.blockSizeVertical * 5
-                                        : SizeConfig.blockSizeHorizontal * 4),
+                          Text("the 7 letter word",
+                              style: TextStyle(
+                                fontSize: orientation == Orientation.portrait
+                                    ? SizeConfig.blockSizeVertical * 3
+                                    : SizeConfig.blockSizeVertical * 5,
+                                letterSpacing: 1,
+                                fontFamily: "Boogaloo",
                               )),
-                          TextButton(
-                              onPressed: () {
-                                withAnimation
-                                    ? Navigator.push(context,
-                                        RotationRoute(page: const Options()))
-                                    : Navigator.push(context,
-                                        FadeRoute(page: const Options()));
-                              },
-                              child: Text(
-                                "Options",
-                                style: TextStyle(
-                                    letterSpacing: 2,
-                                    fontFamily: "Boogaloo",
-                                    fontSize: orientation ==
-                                            Orientation.portrait
-                                        ? SizeConfig.blockSizeVertical * 5
-                                        : SizeConfig.blockSizeHorizontal * 4),
+                          Text("without hanging",
+                              // textAlign: TextAlign.left,
+                              style: TextStyle(
+                                fontSize: orientation == Orientation.portrait
+                                    ? SizeConfig.blockSizeVertical * 3
+                                    : SizeConfig.blockSizeVertical * 5,
+                                letterSpacing: 1,
+                                fontFamily: "Boogaloo",
                               )),
-                          TextButton(
-                              onPressed: () {
-                                showAboutDialog(
-                                    context: context,
-                                    applicationIcon: Image.asset(
-                                      'assets/images/seven.png',
-                                      height: 60,
-                                      width: 60,
-                                    ),
-                                    applicationName: "Hang 7",
-                                    applicationVersion: "1.0.0",
-                                    applicationLegalese:
-                                        '©2022 borderlineBoomer',
-                                    children: <Widget>[
-                                      Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 15),
-                                          child: Column(children: [
-                                            Text(
-                                              'Guess the word without hanging out your Undees!',
-                                              style: TextStyle(
-                                                  fontFamily: "Boogaloo",
-                                                  color: AppColors.darkBlue,
-                                                  fontSize: orientation ==
-                                                          Orientation.portrait
-                                                      ? SizeConfig
-                                                              .blockSizeHorizontal *
-                                                          4.5
-                                                      : SizeConfig
-                                                              .blockSizeHorizontal *
-                                                          3),
-                                            ),
-                                          ]))
-                                    ]);
-                              },
-                              child: Text(
-                                "About",
-                                style: TextStyle(
-                                    letterSpacing: 2,
-                                    fontFamily: "Boogaloo",
-                                    fontSize: orientation ==
-                                            Orientation.portrait
-                                        ? SizeConfig.blockSizeVertical * 5
-                                        : SizeConfig.blockSizeHorizontal * 4),
-                              )),
-                          TextButton(
-                              onPressed: () {
-                                showHelpDialog(context);
-                              },
-                              child: Text(
-                                "Help",
-                                style: TextStyle(
-                                    letterSpacing: 2,
-                                    fontFamily: "Boogaloo",
-                                    fontSize: orientation ==
-                                            Orientation.portrait
-                                        ? SizeConfig.blockSizeVertical * 5
-                                        : SizeConfig.blockSizeHorizontal * 4),
+                          Text("a week of Undees!",
+                              // textAlign: TextAlign.left,
+                              style: TextStyle(
+                                fontSize: orientation == Orientation.portrait
+                                    ? SizeConfig.blockSizeVertical * 3
+                                    : SizeConfig.blockSizeVertical * 5,
+                                letterSpacing: 1,
+                                fontFamily: "Boogaloo",
                               )),
                         ],
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
+                  Expanded(
+                    flex: 2,
+                    child: Align(
+                      alignment: Alignment.bottomRight,
+                      child: Container(
+                        decoration: const BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                  color: AppColors.darkBlue,
+                                  blurRadius: 10.0,
+                                  offset: Offset(-5, -5))
+                            ],
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(15.0),
+                                bottomLeft: Radius.circular(15.0)),
+                            gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  AppColors.lightGray,
+                                  AppColors.green,
+                                ])),
+                        width: SizeConfig.blockSizeHorizontal * 35,
+                        // height: orientation == Orientation.portrait
+                        //     ? SizeConfig.blockSizeVertical * 45
+                        //     : SizeConfig.blockSizeVertical * 65,
+                        child: MainMenuBtns(
+                          coins: coins,
+                          withAnimation: withAnimation,
+                          isPhone: isPhone,
+                          orientation: orientation,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ]),
+        );
+      })),
+    );
+  }
+}
+
+class MainMenuBtns extends StatefulWidget {
+  const MainMenuBtns({
+    Key? key,
+    required this.coins,
+    required this.withAnimation,
+    required this.isPhone,
+    required this.orientation,
+  }) : super(key: key);
+
+  final int coins;
+  final bool withAnimation;
+  final Orientation orientation;
+  final bool isPhone;
+
+  @override
+  State<MainMenuBtns> createState() => _MainMenuBtnsState();
+}
+
+class _MainMenuBtnsState extends State<MainMenuBtns> {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: widget.orientation == Orientation.portrait
+          ? EdgeInsets.only(right: SizeConfig.blockSizeHorizontal * 5)
+          : EdgeInsets.only(right: SizeConfig.blockSizeHorizontal * 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          TextBtn(
+            text: "Play",
+            ontap: () {
+              checkRemainingWords(context);
+            },
+            isPhone: widget.isPhone,
+            orientation: widget.orientation,
+          ),
+          TextBtn(
+            text: "Stats",
+            ontap: () {
+              debugPrint("stats");
+              // Navigator.push(context, FadeRoute(page: const Options()));
+              showDialog(
+                  context: context,
+                  builder: (_) => GameStatsAlert(
+                        coins: widget.coins,
+                        orientation: Orientation.portrait,
+                      ));
+            },
+            isPhone: widget.isPhone,
+            orientation: widget.orientation,
+          ),
+          TextBtn(
+            text: "Options",
+            ontap: () {
+              widget.withAnimation
+                  ? Navigator.push(
+                      context, RotationRoute(page: const Options()))
+                  : Navigator.push(context, FadeRoute(page: const Options()));
+            },
+            isPhone: widget.isPhone,
+            orientation: widget.orientation,
+          ),
+          TextBtn(
+            text: "About",
+            ontap: () {
+              showAboutDialog(
+                  context: context,
+                  applicationIcon: Image.asset(
+                    'assets/images/seven.png',
+                    height: 60,
+                    width: 60,
+                  ),
+                  applicationName: "Hang7",
+                  applicationVersion: "1.0.2",
+                  applicationLegalese: '©2022 borderlineBoomer',
+                  children: <Widget>[
+                    Padding(
+                        padding: const EdgeInsets.only(top: 15),
+                        child: Column(children: [
+                          Text(
+                            'Guess the word without hanging your Undees!',
+                            style: TextStyle(
+                                fontFamily: "Boogaloo",
+                                color: AppColors.darkBlue,
+                                fontSize: SizeConfig.blockSizeVertical * 4),
+                          ),
+                        ]))
+                  ]);
+            },
+            isPhone: widget.isPhone,
+            orientation: widget.orientation,
+          ),
+          TextBtn(
+            text: "Help",
+            ontap: () {
+              showHelpDialog(context);
+            },
+            isPhone: widget.isPhone,
+            orientation: widget.orientation,
           )
         ],
-      );
-    });
+      ),
+    );
   }
 }

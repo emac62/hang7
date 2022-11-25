@@ -16,6 +16,7 @@ import 'package:hang7/widgets/size_config.dart';
 import 'package:hang7/widgets/stats_bar_chart.dart';
 import 'package:hang7/widgets/stats_row.dart';
 import 'package:provider/provider.dart';
+import 'package:rate_my_app/rate_my_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../widgets/ad_helper.dart';
@@ -50,12 +51,23 @@ class _EndOfGameState extends State<EndOfGame> {
   }
 
   int gamesPlayed = 0;
+  int winStreak = 0;
 
-  void getGamesPlayed() async {
+  getGamesPlayed() async {
     var prefs = await SharedPreferences.getInstance();
     var gameStats = prefs.getStringList('gameStats');
     gamesPlayed = int.parse(gameStats![0]);
+    winStreak = int.parse(gameStats[3]);
   }
+
+  final RateMyApp rateMyApp = RateMyApp(
+      preferencesPrefix: "rateMyApp_",
+      appStoreIdentifier: 'com.blB.hang7',
+      googlePlayIdentifier: 'com.blB.hang7',
+      minDays: 3,
+      minLaunches: 5,
+      remindDays: 7,
+      remindLaunches: 10);
 
   @override
   void initState() {
@@ -64,6 +76,50 @@ class _EndOfGameState extends State<EndOfGame> {
     loadCoins();
     winner = Provider.of<Controller>(context, listen: false).gameWon;
     getGamesPlayed();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await rateMyApp.init();
+      debugPrint("showRate");
+      debugPrint(
+          "showRate: $mounted, ${rateMyApp.shouldOpenDialog}, $winStreak");
+      if (mounted && rateMyApp.shouldOpenDialog && winStreak > 2) {
+        rateMyApp.showStarRateDialog(
+          context,
+          title: "Enjoying Hang7?",
+          message: "Please consider leaving a rating.",
+          starRatingOptions: const StarRatingOptions(initialRating: 4),
+          dialogStyle: const DialogStyle(
+              titleAlign: TextAlign.center,
+              messageAlign: TextAlign.center,
+              messagePadding: EdgeInsets.only(bottom: 20)),
+          actionsBuilder: (context, stars) {
+            return [
+              RateMyAppNoButton(rateMyApp, text: "CANCEL"),
+              TextButton(
+                onPressed: () async {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Thanks for your feedback!')),
+                  );
+                  final launchAppStore = stars! >= 4;
+
+                  const event = RateMyAppEventType.rateButtonPressed;
+
+                  await rateMyApp.callEvent(event);
+
+                  if (launchAppStore) {
+                    rateMyApp.launchStore();
+                  }
+                  if (!mounted) return;
+                  Navigator.of(context).pop();
+                },
+                child: const Text("OK"),
+              )
+            ];
+          },
+          onDismissed: () =>
+              rateMyApp.callEvent(RateMyAppEventType.laterButtonPressed),
+        );
+      }
+    });
 
     InterstitialAd.load(
         adUnitId: useTestAds
@@ -266,4 +322,37 @@ class _EndOfGameState extends State<EndOfGame> {
       );
     });
   }
+
+  List<Widget> actionsBuilder(BuildContext context, double? stars) =>
+      stars == null
+          ? [buildCancelButton()]
+          : [buildOkButton(stars), buildCancelButton()];
+
+  Widget buildOkButton(double stars) => TextButton(
+        child: const Text('OK'),
+        onPressed: () async {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Thanks for your feedback!')),
+          );
+
+          final launchAppStore = stars >= 4;
+
+          const event = RateMyAppEventType.rateButtonPressed;
+
+          await rateMyApp.callEvent(event);
+
+          if (launchAppStore) {
+            rateMyApp.launchStore();
+          }
+
+          if (mounted) {
+            Navigator.of(context).pop();
+          }
+        },
+      );
+
+  Widget buildCancelButton() => RateMyAppNoButton(
+        rateMyApp,
+        text: 'CANCEL',
+      );
 }

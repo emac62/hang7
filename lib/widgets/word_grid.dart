@@ -39,12 +39,12 @@ class _WordGridState extends State<WordGrid> {
         return Consumer<Controller>(
           builder: (_, notifier, __) {
             bool animate = false;
-            int danceDelay = 1600;
+            int danceDelay = 1200;
             if (notifier.gameWon) {
               for (var i = 0; i < 7; i++) {
                 if (index == i) {
                   animate = true;
-                  danceDelay += 150 * i;
+                  danceDelay += 100 * i;
                 }
               }
             }

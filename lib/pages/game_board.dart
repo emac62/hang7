@@ -28,9 +28,7 @@ import '../widgets/banner_ad_widget.dart';
 import '../widgets/size_config.dart';
 
 class GameBoard extends StatefulWidget {
-  const GameBoard({
-    Key? key,
-  }) : super(key: key);
+  const GameBoard({Key? key}) : super(key: key);
 
   @override
   State<GameBoard> createState() => GameBoardState();
@@ -183,6 +181,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
     tabletLine = Image.asset('assets/images/tabletLine.png');
     _controllerCenter =
         ConfettiController(duration: const Duration(seconds: 1));
+
     InterstitialAd.load(
         adUnitId: useTestAds
             ? AdHelper.testInterstitialAdUnitId
@@ -791,7 +790,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                 color: Colors.transparent, width: 2)),
                         width: SizeConfig.blockSizeHorizontal * 100,
                         height: context.select((Controller c) => c.isPhone)
-                            ? SizeConfig.blockSizeVertical * 16
+                            ? SizeConfig.blockSizeVertical * 15
                             : orientation == Orientation.portrait
                                 ? SizeConfig.blockSizeVertical * 16
                                 : SizeConfig.screenHeight < 740
@@ -941,12 +940,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                     ]),
               ),
             ),
-            bottomNavigationBar: removeAds
-                ? Container(
-                    color: AppColors.lightGray,
-                    height: 10,
-                  )
-                : bannerAdContainer,
+            bottomNavigationBar: removeAds ? null : bannerAdContainer,
           ),
         );
       }),

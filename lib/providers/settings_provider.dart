@@ -11,6 +11,7 @@ class SettingsProvider with ChangeNotifier {
   late int _coins;
   late List<String> _myWordPacks;
   late bool _removeAds;
+  late bool _reviewed;
 
   SettingsProvider() {
     _withAnimation = true;
@@ -22,6 +23,7 @@ class SettingsProvider with ChangeNotifier {
     _coins = 0;
     _myWordPacks = ["WordPack 1"];
     _removeAds = false;
+    _reviewed = false;
 
     loadPreferences();
   }
@@ -35,6 +37,7 @@ class SettingsProvider with ChangeNotifier {
   int get coins => _coins;
   List get myWordPacks => _myWordPacks;
   bool get removeAds => _removeAds;
+  bool get reviewed => _reviewed;
 
   savePreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -47,6 +50,7 @@ class SettingsProvider with ChangeNotifier {
     prefs.setInt('coins', _coins);
     prefs.setStringList('myWordPacks', _myWordPacks);
     prefs.setBool('removeAds', _removeAds);
+    prefs.setBool('reviewed', _reviewed);
   }
 
   void setWithAnimation(bool withAnimation) {
@@ -99,6 +103,12 @@ class SettingsProvider with ChangeNotifier {
     savePreferences();
   }
 
+  void setReviewed(bool reviewed) {
+    _reviewed = reviewed;
+    notifyListeners();
+    savePreferences();
+  }
+
   loadPreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool? withAnimation = prefs.getBool('withAnimation');
@@ -110,6 +120,7 @@ class SettingsProvider with ChangeNotifier {
     int? coins = prefs.getInt('coins');
     List<String>? myWordPacks = prefs.getStringList('myWordPacks');
     bool? removeAds = prefs.getBool('removeAds');
+    bool? reviewed = prefs.getBool('reviewed');
 
     if (withSound != null) setWithSound(withSound);
     if (withAnimation != null) setWithAnimation(withAnimation);
@@ -120,5 +131,6 @@ class SettingsProvider with ChangeNotifier {
     if (coins != null) setCoins(coins);
     if (myWordPacks != null) setMyWordPacks(myWordPacks);
     if (removeAds != null) setRemoveAds(removeAds);
+    if (reviewed != null) setReviewed(reviewed);
   }
 }

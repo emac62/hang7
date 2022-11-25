@@ -7,6 +7,7 @@ import 'package:hang7/providers/controller.dart';
 import 'package:hang7/providers/settings_provider.dart';
 import 'package:hang7/widgets/size_config.dart';
 import 'package:provider/provider.dart';
+
 import '../animations/route.dart';
 import 'app_colors.dart';
 
@@ -81,14 +82,14 @@ class _KeyboardRowState extends State<KeyboardRow> {
                                       !notifier.gameWon) {
                                     notifier.revealWord();
                                     Future.delayed(
-                                        const Duration(milliseconds: 2000), () {
+                                        const Duration(milliseconds: 1500), () {
                                       notifier.revealWord();
                                     });
                                   }
                                   if (notifier.gameCompleted &&
                                       !notifier.gameWon) {
                                     Future.delayed(
-                                        const Duration(milliseconds: 7000), () {
+                                        const Duration(milliseconds: 5000), () {
                                       settingsProvider.withAnimation
                                           ? Navigator.push(
                                               context,
@@ -100,8 +101,7 @@ class _KeyboardRowState extends State<KeyboardRow> {
                                               context,
                                               FadeRoute(
                                                   page: const EndOfGame(
-                                                coinsEarned: 0,
-                                              )));
+                                                      coinsEarned: 0)));
                                     });
                                   }
                                   if (notifier.gameWon) {
@@ -111,7 +111,7 @@ class _KeyboardRowState extends State<KeyboardRow> {
                                     settingsProvider.setCoins(coins);
 
                                     Future.delayed(
-                                        const Duration(milliseconds: 4000), () {
+                                        const Duration(milliseconds: 3500), () {
                                       settingsProvider.withAnimation
                                           ? Navigator.push(
                                               context,
