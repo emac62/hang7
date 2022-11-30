@@ -24,7 +24,7 @@ List<String> testDeviceIDs = [
   "GADSimulatorID",
 ];
 
-bool useTestAds = true;
+bool useTestAds = false;
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,7 +32,7 @@ Future main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // await PurchaseApi.init();
+  await PurchaseApi.init();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool removeAds = prefs.getBool('removeAds') ?? false;
   if (removeAds) {

@@ -491,7 +491,7 @@ class _OptionsState extends State<Options> {
                                 ),
                               ),
                               onTap: () {
-                                // fetchOffers(context);
+                                fetchOffers(context);
                               }),
                         ),
                         Center(

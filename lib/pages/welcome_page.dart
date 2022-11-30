@@ -272,7 +272,7 @@ class _MainMenuBtnsState extends State<MainMenuBtns> {
                     width: 60,
                   ),
                   applicationName: "Hang7",
-                  applicationVersion: "1.0.2",
+                  applicationVersion: "1.1.0",
                   applicationLegalese: '©2022 borderlineBoomer',
                   children: <Widget>[
                     Padding(
