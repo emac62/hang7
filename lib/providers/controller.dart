@@ -1,10 +1,11 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:hang7/constants/key_state.dart';
 import 'package:hang7/data/calculate_chart_stats.dart';
 import 'package:hang7/data/get_stats.dart';
 import 'package:hang7/data/key_map.dart';
 import 'package:hang7/data/letter_tile_model.dart';
-import 'dart:ui' as ui;
 
 class Controller extends ChangeNotifier {
   bool isPhone = true;
@@ -21,16 +22,19 @@ class Controller extends ChangeNotifier {
   int correctLetters = 0;
   bool selectedLetterCorrect = false;
   bool selectedLetterIncorrect = false;
-  final double devicePixelRatio = ui.window.devicePixelRatio;
-  final ui.Size size = ui.window.physicalSize;
+  var physSize = PlatformDispatcher.instance.views.first.physicalSize;
+  // var devicePixelRatio =
+
   double width = 0;
   double height = 0;
+  double devicePixelRatio =
+      WidgetsBinding.instance.platformDispatcher.views.first.devicePixelRatio;
 
   setCurrentWord({required String word}) => currentWord = word;
 
   getDevice() {
-    width = size.width;
-    height = size.height;
+    width = physSize.width;
+    height = physSize.height;
 
     if (devicePixelRatio < 2 && (width > 1200 || height > 1200)) {
       isTablet = true;

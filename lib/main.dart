@@ -1,4 +1,3 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,7 +13,6 @@ import 'package:hang7/utils/purchase_api.dart';
 import 'package:hang7/widgets/material_color.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'firebase_options.dart';
 
 List<String> testDeviceIDs = [
   "8E3C44E0453B296DEDFBA106CDBB59CC", // Samsung S5
@@ -28,9 +26,6 @@ bool useTestAds = false;
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
 
   await PurchaseApi.init();
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -48,10 +43,11 @@ Future main() async {
   if (kReleaseMode) {
     debugPrint = (String? message, {int? wrapWidth}) {};
   }
-  final double screenWidth =
-      MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.width;
+  final physSize = PlatformDispatcher.instance.views.first.physicalSize;
 
-  if (screenWidth <= 600) {
+  final double deviceWidth = physSize.width;
+
+  if (deviceWidth < 600) {
     await SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   }
@@ -73,7 +69,6 @@ class Hang7 extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        useInheritedMediaQuery: true,
         title: 'Hang 7',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(

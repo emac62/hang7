@@ -23,7 +23,7 @@ class StatsBox extends StatelessWidget {
                 padding: const EdgeInsets.all(0.5),
                 child: Text(
                   value.toString(),
-                  style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontSize: 40,
                       ),
                   textAlign: TextAlign.center,
@@ -38,7 +38,7 @@ class StatsBox extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(4, 0, 4, 4),
                 child: Text(
                   heading,
-                  style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.normal,
                         fontSize: 12,
                       ),

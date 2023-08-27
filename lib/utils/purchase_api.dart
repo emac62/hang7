@@ -6,7 +6,7 @@ class PurchaseApi {
   static const apiKeyAS = 'appl_qpBpqgbPPzvoLhAcXmVpAkLsRxt';
 
   static Future init() async {
-    await Purchases.setDebugLogsEnabled(true);
+    await Purchases.setLogLevel(LogLevel.debug);
 
     late PurchasesConfiguration configuration;
 
