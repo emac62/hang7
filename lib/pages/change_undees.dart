@@ -377,7 +377,8 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                                                               selectUndees(
                                                                   index);
 
-                                                              Navigator.push(
+                                                              Navigator
+                                                                  .pushReplacement(
                                                                 context,
                                                                 PageRouteBuilder(
                                                                   pageBuilder: (c,
@@ -524,7 +525,7 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                               ),
                             ),
                             onPressed: () {
-                              Navigator.push(context,
+                              Navigator.pushReplacement(context,
                                   SlideLeftRoute(page: const Options()));
                             },
                             child: Padding(

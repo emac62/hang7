@@ -23,7 +23,8 @@ showOutOfWords(BuildContext context) {
             ElevatedButton(
               child: const Text('Get More Words!'),
               onPressed: () {
-                Navigator.push(context, FadeRoute(page: const Options()));
+                Navigator.pushReplacement(
+                    context, FadeRoute(page: const Options()));
               },
             ),
           ],

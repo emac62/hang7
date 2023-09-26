@@ -258,7 +258,8 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
                                                             }
                                                           });
 
-                                                          Navigator.push(
+                                                          Navigator
+                                                              .pushReplacement(
                                                             context,
                                                             PageRouteBuilder(
                                                               pageBuilder: (c,
@@ -461,7 +462,8 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
                                                                 selectWordPack(
                                                                     index);
                                                               });
-                                                              Navigator.push(
+                                                              Navigator
+                                                                  .pushReplacement(
                                                                 context,
                                                                 PageRouteBuilder(
                                                                   pageBuilder: (c,
@@ -631,7 +633,7 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
                             ),
                           ),
                           onPressed: () {
-                            Navigator.push(
+                            Navigator.pushReplacement(
                                 context, SlideLeftRoute(page: const Options()));
                           },
                           child: Padding(
