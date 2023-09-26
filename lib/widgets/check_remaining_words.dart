@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
 
 import '../animations/route.dart';
@@ -30,14 +31,12 @@ showOutOfWords(BuildContext context) {
       });
 }
 
-newGame(BuildContext context, bool withAnimation) {
+newGame(BuildContext context) {
   keysMap.updateAll((key, value) => value = KeyState.unselected);
 
   Provider.of<Controller>(context, listen: false).resetGame();
 
-  withAnimation
-      ? Navigator.pushReplacement(context, SlideRoute(page: const GameBoard()))
-      : Navigator.pushReplacement(context, FadeRoute(page: const GameBoard()));
+  Navigator.pushReplacement(context, FadeRoute(page: const GameBoard()));
 }
 
 int currentWPRemainingWords = 50;
@@ -51,7 +50,7 @@ getCurrentRemainingWords(BuildContext context) {
     case "WordPack 1":
       List<String> l = unqProv.usedWords1 as List<String>;
       numberOfUsedWordsInPack = l.length;
-      debugPrint("usedWords1: $numberOfUsedWordsInPack");
+
       break;
     case "WordPack 2":
       List<String> l = unqProv.usedWords2 as List<String>;
@@ -93,12 +92,7 @@ getCurrentRemainingWords(BuildContext context) {
   currentWPRemainingWords = 50 - numberOfUsedWordsInPack;
 }
 
-checkRemainingWords(
-  BuildContext context,
-) {
-  var settProv = Provider.of<SettingsProvider>(context, listen: false);
+checkRemainingWords(BuildContext context) {
   getCurrentRemainingWords(context);
-  currentWPRemainingWords == 0
-      ? showOutOfWords(context)
-      : newGame(context, settProv.withAnimation);
+  currentWPRemainingWords == 0 ? showOutOfWords(context) : newGame(context);
 }

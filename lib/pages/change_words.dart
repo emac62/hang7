@@ -12,7 +12,9 @@ import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class ChangeWordPack extends StatefulWidget {
-  const ChangeWordPack({Key? key}) : super(key: key);
+  const ChangeWordPack({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<ChangeWordPack> createState() => _ChangeWordPackState();
@@ -63,7 +65,6 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
     coins = settingsProvider.coins;
 
     myWordPacks = settingsProvider.myWordPacks as List<String>;
-    debugPrint('changeWords: $myWordPacks');
 
     availablePacks =
         wordPacks.where((element) => !myWordPacks.contains(element)).toList();
@@ -630,11 +631,8 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
                             ),
                           ),
                           onPressed: () {
-                            settingsProvider.withAnimation
-                                ? Navigator.push(context,
-                                    SlideLeftRoute(page: const Options()))
-                                : Navigator.push(
-                                    context, FadeRoute(page: const Options()));
+                            Navigator.push(
+                                context, SlideLeftRoute(page: const Options()));
                           },
                           child: Padding(
                             padding: EdgeInsets.symmetric(

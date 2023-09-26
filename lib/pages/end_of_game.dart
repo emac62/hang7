@@ -36,7 +36,6 @@ class EndOfGame extends StatefulWidget {
 class _EndOfGameState extends State<EndOfGame> {
   late bool winner;
   int? coins;
-  bool withAnimation = true;
 
   BannerAdContainer bannerAdContainer = const BannerAdContainer();
   late InterstitialAd _interstitialAd;
@@ -46,7 +45,6 @@ class _EndOfGameState extends State<EndOfGame> {
     var setProv = Provider.of<SettingsProvider>(context, listen: false);
     setState(() {
       coins = setProv.coins;
-      withAnimation = setProv.withAnimation;
     });
   }
 
@@ -72,15 +70,13 @@ class _EndOfGameState extends State<EndOfGame> {
   @override
   void initState() {
     super.initState();
-    debugPrint("EndOfGameInit");
+
     loadCoins();
     winner = Provider.of<Controller>(context, listen: false).gameWon;
     getGamesPlayed();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await rateMyApp.init();
-      debugPrint("showRate");
-      debugPrint(
-          "showRate: $mounted, ${rateMyApp.shouldOpenDialog}, $winStreak");
+
       if (mounted && rateMyApp.shouldOpenDialog && winStreak > 2) {
         rateMyApp.showStarRateDialog(
           context,
@@ -264,11 +260,8 @@ class _EndOfGameState extends State<EndOfGame> {
                                       value = KeyState.unselected);
 
                                   notifier.resetGame();
-                                  withAnimation
-                                      ? Navigator.pushReplacement(context,
-                                          SlideRoute(page: const Options()))
-                                      : Navigator.pushReplacement(context,
-                                          FadeRoute(page: const Options()));
+                                  Navigator.pushReplacement(context,
+                                      SlideRoute(page: const Options()));
                                 },
                                 child: Text(
                                   'Options',

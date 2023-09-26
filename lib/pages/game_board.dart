@@ -15,10 +15,13 @@ import 'package:hang7/pages/welcome_page.dart';
 import 'package:hang7/providers/controller.dart';
 import 'package:hang7/providers/settings_provider.dart';
 import 'package:hang7/providers/unique_word.dart';
+import 'package:hang7/utils/bg_music.dart';
+import 'package:hang7/utils/game_sounds.dart';
 import 'package:hang7/widgets/keyboard_row.dart';
 import 'package:hang7/widgets/game_stats_alert.dart';
 import 'package:hang7/widgets/undees_basket.dart';
 import 'package:hang7/widgets/word_grid.dart';
+
 import 'package:provider/provider.dart';
 import '../animations/route.dart';
 import '../widgets/ad_helper.dart';
@@ -28,7 +31,9 @@ import '../widgets/banner_ad_widget.dart';
 import '../widgets/size_config.dart';
 
 class GameBoard extends StatefulWidget {
-  const GameBoard({Key? key}) : super(key: key);
+  const GameBoard({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<GameBoard> createState() => GameBoardState();
@@ -49,6 +54,9 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
   static String progressMessage = "Start by picking a letter.";
 
   late ConfettiController _controllerCenter;
+
+  var gameSounds = GameSounds();
+  var bgMusic = BackgroundMusic();
 
   late Image phoneLine;
   late Image tabletLine;
@@ -175,6 +183,9 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
       Provider.of<Controller>(context, listen: false)
           .setCurrentWord(word: currentWord);
       Provider.of<Controller>(context, listen: false).getDevice();
+      Provider.of<SettingsProvider>(context, listen: false).withBGSound
+          ? bgMusic.playBackgroundMusic()
+          : bgMusic.pauseBackgroundMusic();
     });
     getData();
     phoneLine = Image.asset('assets/images/clothesLine.png');
@@ -204,6 +215,9 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
     } else {
       precacheImage(tabletLine.image, context);
     }
+    Provider.of<SettingsProvider>(context, listen: false).withBGSound
+        ? bgMusic.playBackgroundMusic()
+        : bgMusic.pauseBackgroundMusic();
   }
 
   static updateProgressCorrect(int num) {
@@ -213,11 +227,13 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
         .value;
   }
 
-  static updateProgressIncorrect(int num) {
+  updateProgressIncorrect(int num) {
     progressMessage = incorrectLetterMessage.entries
         .firstWhere((element) => element.key == (num))
         .value;
     switch (num) {
+      case 7:
+        break;
       case 6:
         showUndee1 = true;
         break;
@@ -274,6 +290,8 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
   @override
   void dispose() {
     _controllerCenter.dispose();
+    gameSounds.disposeGameSound();
+    bgMusic.disposeBackgroundMusic();
     super.dispose();
   }
 
@@ -281,10 +299,10 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     var settingsProvider = Provider.of<SettingsProvider>(context);
     removeAds = settingsProvider.removeAds;
-    // debugPrint("gameBoard: removeAds: $removeAds");
+
     hWRatio = SizeConfig.screenHeight / SizeConfig.screenWidth;
-    debugPrint("screenHeight: ${SizeConfig.screenHeight}");
-    debugPrint("word: ${context.select((Controller c) => c.currentWord)}");
+    debugPrint(
+        "withSound: ${settingsProvider.withSound}, withBGSound: ${settingsProvider.withBGSound}");
     return OrientationBuilder(
       builder: ((context, orientation) {
         undeeSize = orientation == Orientation.portrait
@@ -370,17 +388,11 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                               context.select((Controller c) =>
                                                   c.resetGame());
 
-                                              settingsProvider.withAnimation
-                                                  ? Navigator.push(
-                                                      context,
-                                                      RotationRoute(
-                                                          page:
-                                                              const WelcomePage()))
-                                                  : Navigator.push(
-                                                      context,
-                                                      FadeRoute(
-                                                          page:
-                                                              const WelcomePage()));
+                                              Navigator.pushReplacement(
+                                                  context,
+                                                  FadeRoute(
+                                                      page:
+                                                          const WelcomePage()));
                                             },
                                             orientation: orientation),
                                         menuButton(
@@ -408,17 +420,11 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                                   if (_isInterstitialAdReady) {
                                                     _interstitialAd.show();
                                                   }
-                                                  settingsProvider.withAnimation
-                                                      ? Navigator.push(
-                                                          context,
-                                                          RotationRoute(
-                                                              page:
-                                                                  const Options()))
-                                                      : Navigator.push(
-                                                          context,
-                                                          FadeRoute(
-                                                              page:
-                                                                  const Options()));
+                                                  Navigator.pushReplacement(
+                                                      context,
+                                                      FadeRoute(
+                                                          page:
+                                                              const Options()));
                                                 },
                                                 icon: Icons.settings)
                                             : const Text(""),
@@ -820,16 +826,34 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                             setState(() {
                               updateProgressCorrect(context
                                   .select((Controller c) => c.correctLetters));
+                              context.select(
+                                      (Controller c) => c.remainingGuesses == 7)
+                                  ? null
+                                  : (context.select((SettingsProvider sp) =>
+                                          sp.withSound))
+                                      ? gameSounds.playSuccessSound()
+                                      : null;
                               if (context.select((Controller c) => c.gameWon) &&
                                   context.select((Controller c) =>
                                           c.remainingGuesses) ==
                                       7) {
-                                _controllerCenter.play();
+                                if (context.select(
+                                    (SettingsProvider sp) => sp.withSound)) {
+                                  gameSounds.playFireworksSound();
+                                  _controllerCenter.play();
+                                }
                               }
                             });
                           }
                           if (context.select(
                               (Controller c) => c.selectedLetterIncorrect)) {
+                            if (context.select(
+                                (SettingsProvider sp) => sp.withSound)) {
+                              context.select(
+                                      (Controller c) => c.remainingGuesses == 0)
+                                  ? null
+                                  : gameSounds.playErrorSound();
+                            }
                             setState(() {
                               updateProgressIncorrect(context.select(
                                   (Controller c) => c.remainingGuesses));
@@ -844,6 +868,10 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                         ontap: () {
                           if (context.select(
                               (Controller c) => c.selectedLetterCorrect)) {
+                            if (context.select(
+                                (SettingsProvider sp) => sp.withSound)) {
+                              gameSounds.playSuccessSound();
+                            }
                             setState(() {
                               updateProgressCorrect(context
                                   .select((Controller c) => c.correctLetters));
@@ -857,6 +885,10 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                           }
                           if (context.select(
                               (Controller c) => c.selectedLetterIncorrect)) {
+                            if (context.select(
+                                (SettingsProvider sp) => sp.withSound)) {
+                              gameSounds.playErrorSound();
+                            }
                             setState(() {
                               updateProgressIncorrect(context.select(
                                   (Controller c) => c.remainingGuesses));
@@ -871,6 +903,10 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                         ontap: () {
                           if (context.select(
                               (Controller c) => c.selectedLetterCorrect)) {
+                            if (context.select(
+                                (SettingsProvider sp) => sp.withSound)) {
+                              gameSounds.playSuccessSound();
+                            }
                             setState(() {
                               updateProgressCorrect(context
                                   .select((Controller c) => c.correctLetters));
@@ -884,6 +920,10 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                           }
                           if (context.select(
                               (Controller c) => c.selectedLetterIncorrect)) {
+                            if (context.select(
+                                (SettingsProvider sp) => sp.withSound)) {
+                              gameSounds.playErrorSound();
+                            }
                             setState(() {
                               updateProgressIncorrect(context.select(
                                   (Controller c) => c.remainingGuesses));

@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsProvider with ChangeNotifier {
   late bool _withSound;
+  late bool _withBGSound;
   late bool _withAnimation;
   late bool _withWordAnimation;
   late String _gameUndees;
@@ -17,6 +18,7 @@ class SettingsProvider with ChangeNotifier {
     _withAnimation = true;
     _withWordAnimation = true;
     _withSound = true;
+    _withBGSound = true;
     _gameUndees = "Pink";
     _wordPack = "WordPack 1";
     _undeeColours = ["Pink"];
@@ -31,6 +33,7 @@ class SettingsProvider with ChangeNotifier {
   bool get withAnimation => _withAnimation;
   bool get withWordAnimation => _withWordAnimation;
   bool get withSound => _withSound;
+  bool get withBGSound => _withBGSound;
   String get gameUndees => _gameUndees;
   String get wordPack => _wordPack;
   List get undeeColours => _undeeColours;
@@ -44,6 +47,7 @@ class SettingsProvider with ChangeNotifier {
     prefs.setBool("withAnimation", _withAnimation);
     prefs.setBool("withWordAnimation", _withWordAnimation);
     prefs.setBool("withSound", _withSound);
+    prefs.setBool("withBGSound", _withBGSound);
     prefs.setString("gameUndees", _gameUndees);
     prefs.setString("wordPack", _wordPack);
     prefs.setStringList('undeeColours', _undeeColours);
@@ -67,6 +71,12 @@ class SettingsProvider with ChangeNotifier {
 
   void setWithSound(bool withSound) {
     _withSound = withSound;
+    notifyListeners();
+    savePreferences();
+  }
+
+  void setWithBGSound(bool withBGSound) {
+    _withBGSound = withBGSound;
     notifyListeners();
     savePreferences();
   }
@@ -114,6 +124,7 @@ class SettingsProvider with ChangeNotifier {
     bool? withAnimation = prefs.getBool('withAnimation');
     bool? withWordAnimation = prefs.getBool('withWordAnimation');
     bool? withSound = prefs.getBool('withSound');
+    bool? withBGSound = prefs.getBool('withBGSound');
     String? gameUndees = prefs.getString('gameUndees');
     String? wordPack = prefs.getString('wordPack');
     List<String>? undeeColours = prefs.getStringList('undeeColours');
@@ -123,6 +134,7 @@ class SettingsProvider with ChangeNotifier {
     bool? reviewed = prefs.getBool('reviewed');
 
     if (withSound != null) setWithSound(withSound);
+    if (withBGSound != null) setWithBGSound(withBGSound);
     if (withAnimation != null) setWithAnimation(withAnimation);
     if (withWordAnimation != null) setWithWordAnimation(withWordAnimation);
     if (gameUndees != null) setGameUndees(gameUndees);

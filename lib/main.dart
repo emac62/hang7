@@ -10,7 +10,9 @@ import 'package:hang7/pages/splash.dart';
 import 'package:hang7/pages/welcome_page.dart';
 import 'package:hang7/providers/unique_word.dart';
 import 'package:hang7/utils/purchase_api.dart';
+
 import 'package:hang7/widgets/material_color.dart';
+
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

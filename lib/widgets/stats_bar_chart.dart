@@ -37,7 +37,6 @@ class StatsBarChart extends StatelessWidget {
                   currentGameForStats = i;
                 }
               }
-              debugPrint("chartData: ${chartData[0].currentGame.toString()}");
 
               return SfCartesianChart(
                 series: <ChartSeries>[

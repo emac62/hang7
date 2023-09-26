@@ -7,12 +7,14 @@ import 'package:hang7/pages/change_words.dart';
 import 'package:hang7/pages/welcome_page.dart';
 import 'package:hang7/providers/controller.dart';
 import 'package:hang7/providers/settings_provider.dart';
+import 'package:hang7/utils/bg_music.dart';
 import 'package:hang7/utils/get_current_undee.dart';
 import 'package:hang7/widgets/app_colors.dart';
 import 'package:hang7/widgets/banner_ad_widget.dart';
 import 'package:hang7/widgets/check_remaining_words.dart';
 import 'package:hang7/widgets/game_stats_alert.dart';
 import 'package:hang7/widgets/size_config.dart';
+
 import 'package:provider/provider.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,7 +24,9 @@ import '../widgets/ad_helper.dart';
 import '../widgets/paywall_widget.dart';
 
 class Options extends StatefulWidget {
-  const Options({Key? key}) : super(key: key);
+  const Options({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<Options> createState() => _OptionsState();
@@ -32,8 +36,11 @@ class _OptionsState extends State<Options> {
   late Image undeesImage = Image.asset('assets/images/pinkUndees.png');
 
   int coins = 0;
-  bool withAnimations = true;
+
   bool withWordAnimation = true;
+  bool withBGSound = true;
+
+  var bgMusic = BackgroundMusic();
 
   late SharedPreferences sharedPrefs;
 
@@ -49,7 +56,7 @@ class _OptionsState extends State<Options> {
         var setProv = Provider.of<SettingsProvider>(context, listen: false);
         coins = setProv.coins;
         undeesImage = Image.asset(setUndees(context));
-        withAnimations = setProv.withAnimation;
+        withBGSound = setProv.withBGSound;
         withWordAnimation = setProv.withWordAnimation;
       });
     });
@@ -91,9 +98,12 @@ class _OptionsState extends State<Options> {
         return Container(
           decoration: const BoxDecoration(
               gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [AppColors.backgroundColor, AppColors.lightGray])),
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                AppColors.lightGray,
+                AppColors.backgroundColor,
+              ])),
           child: Scaffold(
             backgroundColor: Colors.transparent,
             appBar: AppBar(
@@ -110,8 +120,8 @@ class _OptionsState extends State<Options> {
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
                             colors: [
-                      AppColors.lightGray,
                       AppColors.backgroundColor,
+                      AppColors.lightGray,
                     ]))),
                 title: Text(
                   "OPTIONS",
@@ -151,32 +161,23 @@ class _OptionsState extends State<Options> {
                                         : SizeConfig.blockSizeVertical * 3,
                               ),
                             ),
-                            SizedBox(
-                              height: orientation == Orientation.portrait
-                                  ? SizeConfig.blockSizeVertical * 8
-                                  : SizeConfig.blockSizeVertical * 5,
-                              child: FittedBox(
-                                fit: BoxFit.fitHeight,
-                                child: Switch(
-                                    activeColor: AppColors.green,
-                                    inactiveThumbColor:
-                                        AppColors.backgroundColor,
-                                    value: settingsProvider.withWordAnimation,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        settingsProvider
-                                            .setWithWordAnimation(value);
-                                      });
-                                    }),
-                              ),
-                            ),
+                            Switch(
+                                activeColor: AppColors.green,
+                                inactiveThumbColor: AppColors.backgroundColor,
+                                value: settingsProvider.withWordAnimation,
+                                onChanged: (value) {
+                                  setState(() {
+                                    settingsProvider
+                                        .setWithWordAnimation(value);
+                                  });
+                                }),
                           ],
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Play page transition animations?',
+                              'Play sound effects?',
                               style: TextStyle(
                                 fontSize: notifier.isPhone
                                     ? SizeConfig.blockSizeHorizontal * 5
@@ -185,25 +186,47 @@ class _OptionsState extends State<Options> {
                                         : SizeConfig.blockSizeVertical * 3,
                               ),
                             ),
-                            SizedBox(
-                              height: orientation == Orientation.portrait
-                                  ? SizeConfig.blockSizeVertical * 8
-                                  : SizeConfig.blockSizeVertical * 5,
-                              child: FittedBox(
-                                fit: BoxFit.fitHeight,
-                                child: Switch(
-                                    activeColor: AppColors.green,
-                                    inactiveThumbColor:
-                                        AppColors.backgroundColor,
-                                    value: settingsProvider.withAnimation,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        settingsProvider
-                                            .setWithAnimation(value);
-                                      });
-                                    }),
+                            Switch(
+                                activeColor: AppColors.green,
+                                inactiveThumbColor: AppColors.backgroundColor,
+                                value: settingsProvider.withSound,
+                                onChanged: (value) {
+                                  setState(() {
+                                    settingsProvider.setWithSound(value);
+                                  });
+                                }),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Play background nature sounds?',
+                              style: TextStyle(
+                                fontSize: notifier.isPhone
+                                    ? SizeConfig.blockSizeHorizontal * 5
+                                    : orientation == Orientation.portrait
+                                        ? SizeConfig.blockSizeHorizontal * 5
+                                        : SizeConfig.blockSizeVertical * 3,
                               ),
                             ),
+                            Switch(
+                                activeColor: AppColors.green,
+                                inactiveThumbColor: AppColors.backgroundColor,
+                                value: settingsProvider.withBGSound,
+                                onChanged: (value) {
+                                  setState(() {
+                                    debugPrint("switch value: $value");
+                                    settingsProvider.setWithBGSound(value);
+                                    debugPrint(
+                                        "switch sp: ${settingsProvider.withBGSound}");
+                                    if (settingsProvider.withBGSound) {
+                                      bgMusic.playBackgroundMusic();
+                                    } else {
+                                      bgMusic.pauseBackgroundMusic();
+                                    }
+                                  });
+                                }),
                           ],
                         ),
                         Padding(
@@ -235,6 +258,8 @@ class _OptionsState extends State<Options> {
                                 child: Container(
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(6),
+                                      border: Border.all(
+                                          color: AppColors.lightGray),
                                       color: AppColors.green),
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -305,6 +330,8 @@ class _OptionsState extends State<Options> {
                                         child: undeesImage),
                                     Container(
                                       decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: AppColors.lightGray),
                                           borderRadius:
                                               BorderRadius.circular(6),
                                           color: AppColors.green),
@@ -335,13 +362,10 @@ class _OptionsState extends State<Options> {
                                 ),
                               ),
                               onTap: () {
-                                settingsProvider.withAnimation
-                                    ? Navigator.push(
-                                        context,
-                                        SlideRightRoute(
-                                            page: const ChangeUndees()))
-                                    : Navigator.push(context,
-                                        FadeRoute(page: const ChangeUndees()));
+                                Navigator.pushReplacement(
+                                    context,
+                                    SlideRightRoute(
+                                        page: const ChangeUndees()));
                               }),
                         ),
                         Padding(
@@ -390,6 +414,8 @@ class _OptionsState extends State<Options> {
                                       decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(6),
+                                          border: Border.all(
+                                              color: AppColors.lightGray),
                                           color: AppColors.green),
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(
@@ -418,15 +444,10 @@ class _OptionsState extends State<Options> {
                                 ),
                               ),
                               onTap: () {
-                                settingsProvider.withAnimation
-                                    ? Navigator.push(
-                                        context,
-                                        SlideRightRoute(
-                                            page: const ChangeWordPack()))
-                                    : Navigator.push(
-                                        context,
-                                        FadeRoute(
-                                            page: const ChangeWordPack()));
+                                Navigator.pushReplacement(
+                                    context,
+                                    SlideRightRoute(
+                                        page: const ChangeWordPack()));
                               }),
                         ),
                         Padding(
@@ -445,22 +466,46 @@ class _OptionsState extends State<Options> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text("Need more coins?",
-                                        style: TextStyle(
-                                          fontSize: notifier.isPhone
-                                              ? SizeConfig.blockSizeHorizontal *
-                                                  5
-                                              : orientation ==
-                                                      Orientation.portrait
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text("Need more coins?",
+                                            style: TextStyle(
+                                              fontSize: notifier.isPhone
                                                   ? SizeConfig
                                                           .blockSizeHorizontal *
                                                       5
-                                                  : SizeConfig
-                                                          .blockSizeVertical *
-                                                      3,
-                                        )),
+                                                  : orientation ==
+                                                          Orientation.portrait
+                                                      ? SizeConfig
+                                                              .blockSizeHorizontal *
+                                                          5
+                                                      : SizeConfig
+                                                              .blockSizeVertical *
+                                                          3,
+                                            )),
+                                        Text("Hide advertisements?",
+                                            style: TextStyle(
+                                              fontSize: notifier.isPhone
+                                                  ? SizeConfig
+                                                          .blockSizeHorizontal *
+                                                      5
+                                                  : orientation ==
+                                                          Orientation.portrait
+                                                      ? SizeConfig
+                                                              .blockSizeHorizontal *
+                                                          5
+                                                      : SizeConfig
+                                                              .blockSizeVertical *
+                                                          3,
+                                            )),
+                                      ],
+                                    ),
                                     Container(
                                       decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: AppColors.lightGray),
                                           borderRadius:
                                               BorderRadius.circular(6),
                                           color: AppColors.green),
@@ -501,6 +546,8 @@ class _OptionsState extends State<Options> {
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   shape: RoundedRectangleBorder(
+                                      side: const BorderSide(
+                                          color: AppColors.lightGray),
                                       borderRadius: BorderRadius.circular(10)),
                                   elevation: 10,
                                   padding: EdgeInsets.all(
@@ -519,13 +566,8 @@ class _OptionsState extends State<Options> {
                                           ? _interstitialAd.show()
                                           : null;
 
-                                  settingsProvider.withAnimation
-                                      ? Navigator.push(
-                                          context,
-                                          RotationRoute(
-                                              page: const WelcomePage()))
-                                      : Navigator.push(context,
-                                          FadeRoute(page: const WelcomePage()));
+                                  Navigator.pushReplacement(context,
+                                      FadeRoute(page: const WelcomePage()));
                                 },
                                 child: Padding(
                                   padding: EdgeInsets.symmetric(
@@ -542,6 +584,8 @@ class _OptionsState extends State<Options> {
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   shape: RoundedRectangleBorder(
+                                      side: const BorderSide(
+                                          color: AppColors.lightGray),
                                       borderRadius: BorderRadius.circular(10)),
                                   elevation: 10,
                                   padding: EdgeInsets.all(
@@ -582,6 +626,8 @@ class _OptionsState extends State<Options> {
                                           'assets/images/quotes.png'),
                                       fit: BoxFit.contain),
                                   borderRadius: BorderRadius.circular(10),
+                                  border:
+                                      Border.all(color: AppColors.lightGray),
                                 ),
                                 height: SizeConfig.blockSizeVertical * 7,
                                 width: notifier.isPhone

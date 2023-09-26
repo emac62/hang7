@@ -14,7 +14,9 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ChangeUndees extends StatefulWidget {
-  const ChangeUndees({Key? key}) : super(key: key);
+  const ChangeUndees({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<ChangeUndees> createState() => _ChangeUndeesState();
@@ -166,7 +168,7 @@ class _ChangeUndeesState extends State<ChangeUndees> {
   @override
   Widget build(BuildContext context) {
     var settingsProvider = Provider.of<SettingsProvider>(context);
-    debugPrint("undeeColours: $undColour");
+
     return OrientationBuilder(builder: (context, orientation) {
       return Container(
         decoration: const BoxDecoration(
@@ -522,11 +524,8 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                               ),
                             ),
                             onPressed: () {
-                              settingsProvider.withAnimation
-                                  ? Navigator.push(context,
-                                      SlideLeftRoute(page: const Options()))
-                                  : Navigator.push(context,
-                                      FadeRoute(page: const Options()));
+                              Navigator.push(context,
+                                  SlideLeftRoute(page: const Options()));
                             },
                             child: Padding(
                               padding: EdgeInsets.symmetric(

@@ -3,17 +3,21 @@ import 'package:hang7/animations/route.dart';
 import 'package:hang7/constants/help.dart';
 import 'package:hang7/pages/options.dart';
 import 'package:hang7/providers/settings_provider.dart';
+import 'package:hang7/utils/bg_music.dart';
 import 'package:hang7/widgets/app_colors.dart';
 import 'package:hang7/widgets/check_remaining_words.dart';
 import 'package:hang7/widgets/game_stats_alert.dart';
 import 'package:hang7/widgets/size_config.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../providers/controller.dart';
 import '../providers/unique_word.dart';
 import '../widgets/txt_btn.dart';
 
 class WelcomePage extends StatefulWidget {
-  const WelcomePage({Key? key}) : super(key: key);
+  const WelcomePage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<WelcomePage> createState() => _WelcomePageState();
@@ -21,17 +25,29 @@ class WelcomePage extends StatefulWidget {
 
 class _WelcomePageState extends State<WelcomePage> {
   late int coins;
-  bool withAnimation = true;
+
   bool isPhone = false;
   bool isTablet = false;
+
+  var bgMusic = BackgroundMusic();
 
   @override
   void initState() {
     super.initState();
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<Controller>(context, listen: false).getDevice();
     });
     checkWordPack();
+  }
+
+  checkBGMusic() async {
+    final withBGSound =
+        Provider.of<SettingsProvider>(context, listen: false).withBGSound;
+    debugPrint("withBG: $withBGSound");
+    withBGSound
+        ? bgMusic.playBackgroundMusic()
+        : bgMusic.pauseBackgroundMusic();
   }
 
   checkWordPack() async {
@@ -39,7 +55,7 @@ class _WelcomePageState extends State<WelcomePage> {
 
     myWordPacks =
         Provider.of<SettingsProvider>(context, listen: false).myWordPacks;
-    debugPrint("myWordPacks: $myWordPacks");
+
     if (myWordPacks[0] == "Word Pack 1") {
       myWordPacks[0] = "WordPack 1";
       Provider.of<SettingsProvider>(context, listen: false)
@@ -60,7 +76,7 @@ class _WelcomePageState extends State<WelcomePage> {
     }
     var settingsProvider = Provider.of<SettingsProvider>(context);
     coins = settingsProvider.coins;
-    withAnimation = settingsProvider.withAnimation;
+    checkBGMusic();
 
     return Scaffold(
       body: OrientationBuilder(builder: ((context, orientation) {
@@ -181,7 +197,6 @@ class _WelcomePageState extends State<WelcomePage> {
                         //     : SizeConfig.blockSizeVertical * 65,
                         child: MainMenuBtns(
                           coins: coins,
-                          withAnimation: withAnimation,
                           isPhone: isPhone,
                           orientation: orientation,
                         ),
@@ -202,13 +217,12 @@ class MainMenuBtns extends StatefulWidget {
   const MainMenuBtns({
     Key? key,
     required this.coins,
-    required this.withAnimation,
     required this.isPhone,
     required this.orientation,
   }) : super(key: key);
 
   final int coins;
-  final bool withAnimation;
+
   final Orientation orientation;
   final bool isPhone;
 
@@ -217,6 +231,13 @@ class MainMenuBtns extends StatefulWidget {
 }
 
 class _MainMenuBtnsState extends State<MainMenuBtns> {
+  final Uri _url = Uri.parse(
+      'https://pixabay.com/sound-effects/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=96523');
+
+  void _launchUrl() async {
+    if (!await launchUrl(_url)) throw 'Could not launch $_url';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -238,8 +259,6 @@ class _MainMenuBtnsState extends State<MainMenuBtns> {
           TextBtn(
             text: "Stats",
             ontap: () {
-              debugPrint("stats");
-              // Navigator.push(context, FadeRoute(page: const Options()));
               showDialog(
                   context: context,
                   builder: (_) => GameStatsAlert(
@@ -253,10 +272,8 @@ class _MainMenuBtnsState extends State<MainMenuBtns> {
           TextBtn(
             text: "Options",
             ontap: () {
-              widget.withAnimation
-                  ? Navigator.push(
-                      context, RotationRoute(page: const Options()))
-                  : Navigator.push(context, FadeRoute(page: const Options()));
+              Navigator.pushReplacement(
+                  context, FadeRoute(page: const Options()));
             },
             isPhone: widget.isPhone,
             orientation: widget.orientation,
@@ -272,18 +289,41 @@ class _MainMenuBtnsState extends State<MainMenuBtns> {
                     width: 60,
                   ),
                   applicationName: "Hang7",
-                  applicationVersion: "1.1.0",
-                  applicationLegalese: '©2022 borderlineBoomer',
+                  applicationVersion: "2.0.1",
+                  applicationLegalese: '©2023 borderlineBoomer',
                   children: <Widget>[
                     Padding(
                         padding: const EdgeInsets.only(top: 15),
-                        child: Column(children: [
+                        child:
+                            Column(mainAxisSize: MainAxisSize.min, children: [
                           Text(
                             'Guess the word without hanging your Undees!',
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontFamily: "Boogaloo",
                                 color: AppColors.darkBlue,
-                                fontSize: SizeConfig.blockSizeVertical * 4),
+                                fontSize: SizeConfig.screenWidth < 425
+                                    ? SizeConfig.blockSizeVertical * 2.5
+                                    : SizeConfig.blockSizeVertical * 4),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: GestureDetector(
+                              onTap: _launchUrl,
+                              child: Center(
+                                child: Text(
+                                  "Sound Effects from Pixaby",
+                                  style: TextStyle(
+                                      color: AppColors.darkBlue,
+                                      fontSize: SizeConfig.screenWidth > 425
+                                          ? SizeConfig.blockSizeVertical * 4
+                                          : SizeConfig.blockSizeVertical * 2),
+                                ),
+                              ),
+                            ),
                           ),
                         ]))
                   ]);

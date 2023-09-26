@@ -5,10 +5,13 @@ import 'package:hang7/data/key_map.dart';
 import 'package:hang7/pages/end_of_game.dart';
 import 'package:hang7/providers/controller.dart';
 import 'package:hang7/providers/settings_provider.dart';
+import 'package:hang7/utils/game_sounds.dart';
 import 'package:hang7/widgets/size_config.dart';
+
 import 'package:provider/provider.dart';
 
 import '../animations/route.dart';
+
 import 'app_colors.dart';
 
 class KeyboardRow extends StatefulWidget {
@@ -30,6 +33,7 @@ class KeyboardRow extends StatefulWidget {
 }
 
 class _KeyboardRowState extends State<KeyboardRow> {
+  var gameSounds = GameSounds();
   @override
   Widget build(BuildContext context) {
     var settingsProvider = Provider.of<SettingsProvider>(context);
@@ -68,6 +72,7 @@ class _KeyboardRowState extends State<KeyboardRow> {
                             color: backgroundColor,
                             child: InkWell(
                               onTap: () {
+                                gameSounds.stopGameSound();
                                 if (e.value == KeyState.unselected) {
                                   HapticFeedback.lightImpact();
                                   (e.value == KeyState.selected ||
@@ -80,9 +85,12 @@ class _KeyboardRowState extends State<KeyboardRow> {
 
                                   if (notifier.gameCompleted &&
                                       !notifier.gameWon) {
-                                    notifier.revealWord();
+                                    // notifier.revealWord();
                                     Future.delayed(
                                         const Duration(milliseconds: 1500), () {
+                                      settingsProvider.withSound
+                                          ? gameSounds.playWedgieSound()
+                                          : null;
                                       notifier.revealWord();
                                     });
                                   }
@@ -90,18 +98,11 @@ class _KeyboardRowState extends State<KeyboardRow> {
                                       !notifier.gameWon) {
                                     Future.delayed(
                                         const Duration(milliseconds: 5000), () {
-                                      settingsProvider.withAnimation
-                                          ? Navigator.push(
-                                              context,
-                                              RotationRoute(
-                                                  page: const EndOfGame(
-                                                coinsEarned: 0,
-                                              )))
-                                          : Navigator.push(
-                                              context,
-                                              FadeRoute(
-                                                  page: const EndOfGame(
-                                                      coinsEarned: 0)));
+                                      Navigator.pushReplacement(
+                                          context,
+                                          FadeRoute(
+                                              page: const EndOfGame(
+                                                  coinsEarned: 0)));
                                     });
                                   }
                                   if (notifier.gameWon) {
@@ -109,24 +110,22 @@ class _KeyboardRowState extends State<KeyboardRow> {
                                     coins =
                                         coins + 10 + notifier.remainingGuesses;
                                     settingsProvider.setCoins(coins);
-
+                                    settingsProvider.withSound
+                                        ? Future.delayed(
+                                            const Duration(milliseconds: 1500),
+                                            () {
+                                            gameSounds.playWinningSound();
+                                          })
+                                        : null;
                                     Future.delayed(
                                         const Duration(milliseconds: 3500), () {
-                                      settingsProvider.withAnimation
-                                          ? Navigator.push(
-                                              context,
-                                              RotationRoute(
-                                                  page: EndOfGame(
-                                                coinsEarned: (10 +
-                                                    notifier.remainingGuesses),
-                                              )))
-                                          : Navigator.push(
-                                              context,
-                                              FadeRoute(
-                                                  page: EndOfGame(
-                                                coinsEarned: (10 +
-                                                    notifier.remainingGuesses),
-                                              )));
+                                      Navigator.pushReplacement(
+                                          context,
+                                          FadeRoute(
+                                              page: EndOfGame(
+                                            coinsEarned: (10 +
+                                                notifier.remainingGuesses),
+                                          )));
                                     });
                                   }
                                 } else {
