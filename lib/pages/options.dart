@@ -7,7 +7,7 @@ import 'package:hang7/pages/change_words.dart';
 import 'package:hang7/pages/welcome_page.dart';
 import 'package:hang7/providers/controller.dart';
 import 'package:hang7/providers/settings_provider.dart';
-import 'package:hang7/utils/bg_music.dart';
+
 import 'package:hang7/utils/get_current_undee.dart';
 import 'package:hang7/widgets/app_colors.dart';
 import 'package:hang7/widgets/banner_ad_widget.dart';
@@ -39,8 +39,6 @@ class _OptionsState extends State<Options> {
 
   bool withWordAnimation = true;
   bool withBGSound = true;
-
-  var bgMusic = BackgroundMusic();
 
   late SharedPreferences sharedPrefs;
 
@@ -220,11 +218,6 @@ class _OptionsState extends State<Options> {
                                     settingsProvider.setWithBGSound(value);
                                     debugPrint(
                                         "switch sp: ${settingsProvider.withBGSound}");
-                                    if (settingsProvider.withBGSound) {
-                                      bgMusic.playBackgroundMusic();
-                                    } else {
-                                      bgMusic.pauseBackgroundMusic();
-                                    }
                                   });
                                 }),
                           ],

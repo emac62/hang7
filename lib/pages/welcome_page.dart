@@ -3,7 +3,7 @@ import 'package:hang7/animations/route.dart';
 import 'package:hang7/constants/help.dart';
 import 'package:hang7/pages/options.dart';
 import 'package:hang7/providers/settings_provider.dart';
-import 'package:hang7/utils/bg_music.dart';
+
 import 'package:hang7/widgets/app_colors.dart';
 import 'package:hang7/widgets/check_remaining_words.dart';
 import 'package:hang7/widgets/game_stats_alert.dart';
@@ -29,8 +29,6 @@ class _WelcomePageState extends State<WelcomePage> {
   bool isPhone = false;
   bool isTablet = false;
 
-  var bgMusic = BackgroundMusic();
-
   @override
   void initState() {
     super.initState();
@@ -39,15 +37,6 @@ class _WelcomePageState extends State<WelcomePage> {
       Provider.of<Controller>(context, listen: false).getDevice();
     });
     checkWordPack();
-  }
-
-  checkBGMusic() async {
-    final withBGSound =
-        Provider.of<SettingsProvider>(context, listen: false).withBGSound;
-    debugPrint("withBG: $withBGSound");
-    withBGSound
-        ? bgMusic.playBackgroundMusic()
-        : bgMusic.pauseBackgroundMusic();
   }
 
   checkWordPack() async {
@@ -76,7 +65,6 @@ class _WelcomePageState extends State<WelcomePage> {
     }
     var settingsProvider = Provider.of<SettingsProvider>(context);
     coins = settingsProvider.coins;
-    checkBGMusic();
 
     return Scaffold(
       body: OrientationBuilder(builder: ((context, orientation) {

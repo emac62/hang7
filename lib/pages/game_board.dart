@@ -15,7 +15,7 @@ import 'package:hang7/pages/welcome_page.dart';
 import 'package:hang7/providers/controller.dart';
 import 'package:hang7/providers/settings_provider.dart';
 import 'package:hang7/providers/unique_word.dart';
-import 'package:hang7/utils/bg_music.dart';
+
 import 'package:hang7/utils/game_sounds.dart';
 import 'package:hang7/widgets/keyboard_row.dart';
 import 'package:hang7/widgets/game_stats_alert.dart';
@@ -56,7 +56,6 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
   late ConfettiController _controllerCenter;
 
   var gameSounds = GameSounds();
-  var bgMusic = BackgroundMusic();
 
   late Image phoneLine;
   late Image tabletLine;
@@ -183,9 +182,6 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
       Provider.of<Controller>(context, listen: false)
           .setCurrentWord(word: currentWord);
       Provider.of<Controller>(context, listen: false).getDevice();
-      Provider.of<SettingsProvider>(context, listen: false).withBGSound
-          ? bgMusic.playBackgroundMusic()
-          : bgMusic.pauseBackgroundMusic();
     });
     getData();
     phoneLine = Image.asset('assets/images/clothesLine.png');
@@ -215,9 +211,6 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
     } else {
       precacheImage(tabletLine.image, context);
     }
-    Provider.of<SettingsProvider>(context, listen: false).withBGSound
-        ? bgMusic.playBackgroundMusic()
-        : bgMusic.pauseBackgroundMusic();
   }
 
   static updateProgressCorrect(int num) {
@@ -291,7 +284,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
   void dispose() {
     _controllerCenter.dispose();
     gameSounds.disposeGameSound();
-    bgMusic.disposeBackgroundMusic();
+
     super.dispose();
   }
 
