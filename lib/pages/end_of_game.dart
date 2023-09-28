@@ -164,64 +164,101 @@ class _EndOfGameState extends State<EndOfGame> {
                       Padding(
                         padding: EdgeInsets.only(
                             top: SizeConfig.blockSizeHorizontal * 2),
-                        child: winner
-                            ? Text(
-                                '${widget.coinsEarned} Coins Won!',
-                                style: TextStyle(
-                                  fontSize: orientation == Orientation.portrait
-                                      ? SizeConfig.blockSizeHorizontal * 6
-                                      : SizeConfig.blockSizeVertical * 4,
+                        child: Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.transparent),
+                          ),
+                          child: winner
+                              ? Column(
+                                  children: [
+                                    Text(
+                                      '${widget.coinsEarned} coins won',
+                                      style: TextStyle(
+                                        fontSize: orientation ==
+                                                Orientation.portrait
+                                            ? SizeConfig.blockSizeHorizontal * 6
+                                            : SizeConfig.blockSizeVertical * 4,
+                                      ),
+                                    ),
+                                    settings.withWordAnimation
+                                        ? SizedBox(
+                                            height:
+                                                SizeConfig.blockSizeVertical *
+                                                    10,
+                                            child:
+                                                CoinSpinAnimation(coins: coins))
+                                        : Container(
+                                            height:
+                                                SizeConfig.blockSizeVertical *
+                                                    10,
+                                            width: double.infinity,
+                                            decoration: const BoxDecoration(
+                                                image: DecorationImage(
+                                              image: AssetImage(
+                                                  "assets/images/BasketOfCoins.png"),
+                                              fit: BoxFit.scaleDown,
+                                            )),
+                                            child: Center(
+                                              child: Text(
+                                                "$coins",
+                                                style: TextStyle(
+                                                  fontSize: SizeConfig
+                                                          .blockSizeVertical *
+                                                      6,
+                                                ),
+                                              ),
+                                            )),
+                                    Text(
+                                      "for a total of $coins in the basket!",
+                                      style: TextStyle(
+                                        fontSize: orientation ==
+                                                Orientation.portrait
+                                            ? SizeConfig.blockSizeHorizontal * 6
+                                            : SizeConfig.blockSizeVertical * 4,
+                                      ),
+                                    )
+                                  ],
+                                )
+                              : Column(
+                                  children: [
+                                    Text(
+                                      "YOU GOT A ",
+                                      style: TextStyle(
+                                        fontSize: orientation ==
+                                                Orientation.portrait
+                                            ? SizeConfig.blockSizeHorizontal * 6
+                                            : SizeConfig.blockSizeVertical * 4,
+                                      ),
+                                    ),
+                                    Image.asset(
+                                      "assets/images/wedgie.png",
+                                      height: SizeConfig.blockSizeVertical * 10,
+                                      fit: BoxFit.fitHeight,
+                                    ),
+                                    Text(
+                                      "Better luck next game!",
+                                      style: TextStyle(
+                                        fontSize: orientation ==
+                                                Orientation.portrait
+                                            ? SizeConfig.blockSizeHorizontal * 6
+                                            : SizeConfig.blockSizeVertical * 4,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              )
-                            : Text(
-                                "YOU GOT A ",
-                                style: TextStyle(
-                                  fontSize: orientation == Orientation.portrait
-                                      ? SizeConfig.blockSizeHorizontal * 6
-                                      : SizeConfig.blockSizeVertical * 4,
-                                ),
-                              ),
+                        ),
                       ),
-                      Expanded(
-                          child: SizedBox(
-                        height: SizeConfig.blockSizeVertical * 8,
-                        child: !winner
-                            ? Image.asset(
-                                "assets/images/wedgie.png",
-                                fit: BoxFit.fitHeight,
-                              )
-                            : settings.withWordAnimation
-                                ? const CoinSpinAnimation()
-                                : Image.asset(
-                                    'assets/images/BasketOfCoins.png',
-                                    fit: BoxFit.fitHeight,
-                                  ),
-                      )),
-                      Expanded(
-                        child: winner
-                            ? Text(
-                                "$coins Coins in the Basket",
-                                style: TextStyle(
-                                  fontSize: orientation == Orientation.portrait
-                                      ? SizeConfig.blockSizeHorizontal * 6
-                                      : SizeConfig.blockSizeVertical * 4,
-                                ),
-                              )
-                            : Text(
-                                "Better luck next game!",
-                                style: TextStyle(
-                                  fontSize: orientation == Orientation.portrait
-                                      ? SizeConfig.blockSizeHorizontal * 6
-                                      : SizeConfig.blockSizeVertical * 4,
-                                ),
-                              ),
-                      ),
-                      Text(
-                        'STATISTICS',
-                        style: TextStyle(
-                          fontSize: orientation == Orientation.portrait
-                              ? SizeConfig.blockSizeHorizontal * 6
-                              : SizeConfig.blockSizeVertical * 4,
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: SizeConfig.blockSizeVertical * 2),
+                        child: Text(
+                          'STATISTICS',
+                          style: TextStyle(
+                            fontSize: orientation == Orientation.portrait
+                                ? SizeConfig.blockSizeHorizontal * 6
+                                : SizeConfig.blockSizeVertical * 4,
+                          ),
                         ),
                       ),
                       Expanded(

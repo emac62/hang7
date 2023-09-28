@@ -3,11 +3,14 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import '../widgets/size_config.dart';
+
 class CoinSpinAnimation extends StatefulWidget {
   const CoinSpinAnimation({
     Key? key,
+    required this.coins,
   }) : super(key: key);
-
+  final int? coins;
   @override
   State<CoinSpinAnimation> createState() => _CoinSpinAnimationState();
 }
@@ -71,7 +74,22 @@ class _CoinSpinAnimationState extends State<CoinSpinAnimation>
     }
     final angle = degrees * (pi / 180);
     return showCoinBasket
-        ? Image.asset('assets/images/BasketOfCoins.png')
+        ? Container(
+            height: SizeConfig.blockSizeVertical * 8,
+            width: SizeConfig.blockSizeHorizontal * 40,
+            decoration: const BoxDecoration(
+                image: DecorationImage(
+              image: AssetImage("assets/images/BasketOfCoins.png"),
+              fit: BoxFit.scaleDown,
+            )),
+            child: Center(
+              child: Text(
+                "${widget.coins}",
+                style: TextStyle(
+                  fontSize: SizeConfig.blockSizeVertical * 6,
+                ),
+              ),
+            ))
         : Transform(
             transform: Matrix4.identity()
               ..setEntry(3, 2, 0.001)

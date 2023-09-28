@@ -32,7 +32,7 @@ Future main() async {
   await PurchaseApi.init();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool removeAds = prefs.getBool('removeAds') ?? false;
-  if (removeAds) {
+  if (!removeAds) {
     await MobileAds.instance.initialize().then((InitializationStatus status) {
       debugPrint('Initialization done: ${status.adapterStatuses}');
     });

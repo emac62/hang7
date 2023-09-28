@@ -178,6 +178,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
     super.initState();
     resetControllers();
     getWord();
+    debugPrint("currentWord: $currentWord");
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<Controller>(context, listen: false)
           .setCurrentWord(word: currentWord);
@@ -818,21 +819,21 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                             setState(() {
                               updateProgressCorrect(context
                                   .select((Controller c) => c.correctLetters));
-                              context.select(
-                                      (Controller c) => c.remainingGuesses == 0)
-                                  ? null
-                                  : (context.select((SettingsProvider sp) =>
-                                          sp.withSound))
-                                      ? gameSounds.playSuccessSound()
-                                      : null;
+                              if (context
+                                  .select((Controller c) => !c.gameWon)) {
+                                (context.select(
+                                        (SettingsProvider sp) => sp.withSound))
+                                    ? gameSounds.playSuccessSound()
+                                    : null;
+                              }
                               if (context.select((Controller c) => c.gameWon) &&
                                   context.select((Controller c) =>
                                           c.remainingGuesses) ==
                                       7) {
+                                _controllerCenter.play();
                                 if (context.select(
                                     (SettingsProvider sp) => sp.withSound)) {
                                   gameSounds.playFireworksSound();
-                                  _controllerCenter.play();
                                 }
                               }
                             });
@@ -860,18 +861,25 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                         ontap: () {
                           if (context.select(
                               (Controller c) => c.selectedLetterCorrect)) {
-                            if (context.select(
-                                (SettingsProvider sp) => sp.withSound)) {
-                              gameSounds.playSuccessSound();
-                            }
                             setState(() {
                               updateProgressCorrect(context
                                   .select((Controller c) => c.correctLetters));
+                              if (context
+                                  .select((Controller c) => !c.gameWon)) {
+                                (context.select(
+                                        (SettingsProvider sp) => sp.withSound))
+                                    ? gameSounds.playSuccessSound()
+                                    : null;
+                              }
                               if (context.select((Controller c) => c.gameWon) &&
                                   context.select((Controller c) =>
                                           c.remainingGuesses) ==
                                       7) {
                                 _controllerCenter.play();
+                                if (context.select(
+                                    (SettingsProvider sp) => sp.withSound)) {
+                                  gameSounds.playFireworksSound();
+                                }
                               }
                             });
                           }
@@ -895,18 +903,25 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                         ontap: () {
                           if (context.select(
                               (Controller c) => c.selectedLetterCorrect)) {
-                            if (context.select(
-                                (SettingsProvider sp) => sp.withSound)) {
-                              gameSounds.playSuccessSound();
-                            }
                             setState(() {
                               updateProgressCorrect(context
                                   .select((Controller c) => c.correctLetters));
+                              if (context
+                                  .select((Controller c) => !c.gameWon)) {
+                                (context.select(
+                                        (SettingsProvider sp) => sp.withSound))
+                                    ? gameSounds.playSuccessSound()
+                                    : null;
+                              }
                               if (context.select((Controller c) => c.gameWon) &&
                                   context.select((Controller c) =>
                                           c.remainingGuesses) ==
                                       7) {
                                 _controllerCenter.play();
+                                if (context.select(
+                                    (SettingsProvider sp) => sp.withSound)) {
+                                  gameSounds.playFireworksSound();
+                                }
                               }
                             });
                           }

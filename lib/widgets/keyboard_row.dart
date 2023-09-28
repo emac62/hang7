@@ -85,13 +85,13 @@ class _KeyboardRowState extends State<KeyboardRow> {
 
                                   if (notifier.gameCompleted &&
                                       !notifier.gameWon) {
-                                    // notifier.revealWord();
+                                    notifier.revealWord();
                                     Future.delayed(
                                         const Duration(milliseconds: 1500), () {
+                                      // notifier.revealWord();
                                       settingsProvider.withSound
                                           ? gameSounds.playWedgieSound()
                                           : null;
-                                      notifier.revealWord();
                                     });
                                   }
                                   if (notifier.gameCompleted &&
