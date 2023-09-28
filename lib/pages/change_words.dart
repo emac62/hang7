@@ -111,7 +111,7 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
                 ? SizeConfig.blockSizeVertical * 6
                 : SizeConfig.blockSizeVertical * 8,
             title: Text(
-              "Change My WordPack",
+              "Change My Word Pack",
               style: TextStyle(
                   color: AppColors.darkBlue,
                   fontSize: orientation == Orientation.portrait
@@ -123,38 +123,35 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
-                    child: Text("My WordPacks:",
+                    child: Text("My Word Packs:",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: AppColors.darkBlue,
                           fontSize: SizeConfig.blockSizeVertical * 4,
                         )),
                   ),
-                  Text(
-                    "Current WordPack is outlined.",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: SizeConfig.blockSizeVertical * 2,
-                    ),
-                  ),
-                  Text(
-                    "Default (WordPack 1) plus eacb purchased WordPack and number of unused words are below.",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: SizeConfig.blockSizeVertical * 2,
-                    ),
-                  ),
-                  Text(
-                    "Once all the words are used, refresh that WordPack for 100 coins.",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: SizeConfig.blockSizeVertical * 2,
-                    ),
+                  Column(
+                    children: [
+                      Text(
+                        "Current Word Pack is outlined.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: SizeConfig.blockSizeVertical * 2,
+                        ),
+                      ),
+                      Text(
+                        "Play again for 100 coins.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: SizeConfig.blockSizeVertical * 2,
+                        ),
+                      ),
+                    ],
                   ),
                   Container(
                     decoration: BoxDecoration(
@@ -346,7 +343,9 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
                                           if (remainingWords.length ==
                                               myWordPacks.length)
                                             Text(
-                                              "${remainingWords[index]} words left",
+                                              remainingWords[index] == "0"
+                                                  ? "Play Again"
+                                                  : "${remainingWords[index]} words left",
                                               style: TextStyle(
                                                 fontSize: orientation ==
                                                         Orientation.portrait
@@ -370,23 +369,32 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
-                    child: Text("Other Available WordPacks",
+                    child: Text("Available Word Packs",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: AppColors.darkBlue,
                           fontSize: SizeConfig.blockSizeVertical * 4,
                         )),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: Text(
-                      "Purchase each new WordPack for 500 coins.",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: AppColors.darkBlue,
-                        fontSize: SizeConfig.blockSizeVertical * 2,
+                  Column(
+                    children: [
+                      Text(
+                        "Each Word Pack contains 50 random 7 letter words.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: AppColors.darkBlue,
+                          fontSize: SizeConfig.blockSizeVertical * 2,
+                        ),
                       ),
-                    ),
+                      Text(
+                        "Purchase a new Word Pack for 500 coins.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: AppColors.darkBlue,
+                          fontSize: SizeConfig.blockSizeVertical * 2,
+                        ),
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: SizeConfig.blockSizeVertical * 12,
@@ -599,23 +607,45 @@ class _ChangeWordPackState extends State<ChangeWordPack> {
                           })),
                     ),
                   ),
-                  Container(
-                      margin: EdgeInsets.only(
-                          top: SizeConfig.blockSizeVertical * 5),
-                      height: SizeConfig.blockSizeVertical * 8,
-                      decoration: const BoxDecoration(
-                          image: DecorationImage(
-                        image: AssetImage("assets/images/BasketOfCoins.png"),
-                        fit: BoxFit.scaleDown,
-                      )),
-                      child: Center(
-                          child: Text(
-                        coins.toString(),
-                        style: TextStyle(
-                          fontSize: SizeConfig.blockSizeVertical * 6,
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        vertical: SizeConfig.blockSizeVertical * 3),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "You have",
+                          style: TextStyle(
+                            fontSize: SizeConfig.blockSizeVertical * 4,
+                          ),
                         ),
-                      ))),
-                  Center(
+                        Container(
+                            height: SizeConfig.blockSizeVertical * 8,
+                            width: SizeConfig.blockSizeHorizontal * 40,
+                            decoration: const BoxDecoration(
+                                image: DecorationImage(
+                              image:
+                                  AssetImage("assets/images/BasketOfCoins.png"),
+                              fit: BoxFit.scaleDown,
+                            )),
+                            child: Center(
+                              child: Text(
+                                "$coins",
+                                style: TextStyle(
+                                  fontSize: SizeConfig.blockSizeVertical * 6,
+                                ),
+                              ),
+                            )),
+                        Text(
+                          "coins!",
+                          style: TextStyle(
+                            fontSize: SizeConfig.blockSizeVertical * 4,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [

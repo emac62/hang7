@@ -144,7 +144,7 @@ class _WelcomePageState extends State<WelcomePage> {
                                 letterSpacing: 1,
                                 fontFamily: "Boogaloo",
                               )),
-                          Text("a week of Undees!",
+                          Text("all your",
                               // textAlign: TextAlign.left,
                               style: TextStyle(
                                 fontSize: orientation == Orientation.portrait
@@ -153,6 +153,21 @@ class _WelcomePageState extends State<WelcomePage> {
                                 letterSpacing: 1,
                                 fontFamily: "Boogaloo",
                               )),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Image.asset(
+                              'assets/images/whiteTighties.png',
+                              width: double.infinity,
+                            ),
+                          ),
+                          // Text("'Undees'!",
+                          //     style: TextStyle(
+                          //       fontSize: orientation == Orientation.portrait
+                          //           ? SizeConfig.blockSizeVertical * 3
+                          //           : SizeConfig.blockSizeVertical * 5,
+                          //       letterSpacing: 1,
+                          //       fontFamily: "Boogaloo",
+                          //     )),
                         ],
                       ),
                     ),

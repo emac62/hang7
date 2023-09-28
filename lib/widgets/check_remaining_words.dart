@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hang7/utils/game_sounds.dart';
 
 import 'package:provider/provider.dart';
 
@@ -36,7 +37,8 @@ newGame(BuildContext context) {
   keysMap.updateAll((key, value) => value = KeyState.unselected);
 
   Provider.of<Controller>(context, listen: false).resetGame();
-
+  var gameSounds = GameSounds();
+  gameSounds.playSound();
   Navigator.pushReplacement(context, FadeRoute(page: const GameBoard()));
 }
 

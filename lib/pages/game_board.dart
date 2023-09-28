@@ -294,8 +294,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
     removeAds = settingsProvider.removeAds;
 
     hWRatio = SizeConfig.screenHeight / SizeConfig.screenWidth;
-    debugPrint(
-        "withSound: ${settingsProvider.withSound}, withBGSound: ${settingsProvider.withBGSound}");
+
     return OrientationBuilder(
       builder: ((context, orientation) {
         undeeSize = orientation == Orientation.portrait
@@ -820,7 +819,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                               updateProgressCorrect(context
                                   .select((Controller c) => c.correctLetters));
                               context.select(
-                                      (Controller c) => c.remainingGuesses == 7)
+                                      (Controller c) => c.remainingGuesses == 0)
                                   ? null
                                   : (context.select((SettingsProvider sp) =>
                                           sp.withSound))

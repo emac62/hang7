@@ -220,14 +220,7 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                       ),
                     ),
                     Text(
-                      "Default (Pink) and all purchased.",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: SizeConfig.blockSizeVertical * 2,
-                      ),
-                    ),
-                    Text(
-                      "Current chosen Undees are highlighted.",
+                      "Current Undees are highlighted.",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: SizeConfig.blockSizeVertical * 2,
@@ -286,7 +279,7 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: Text(
-                        "Other Available Styles and Colours",
+                        "Available Styles and Colours",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: SizeConfig.blockSizeVertical * 4,
@@ -491,23 +484,45 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                         ),
                       ),
                     ),
-                    Container(
-                        margin: EdgeInsets.only(
-                            top: SizeConfig.blockSizeVertical * 5),
-                        height: SizeConfig.blockSizeVertical * 8,
-                        decoration: const BoxDecoration(
-                            image: DecorationImage(
-                          image: AssetImage("assets/images/BasketOfCoins.png"),
-                          fit: BoxFit.scaleDown,
-                        )),
-                        child: Center(
-                            child: Text(
-                          coins.toString(),
-                          style: TextStyle(
-                            fontSize: SizeConfig.blockSizeVertical * 6,
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          vertical: SizeConfig.blockSizeVertical * 3),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "You have",
+                            style: TextStyle(
+                              fontSize: SizeConfig.blockSizeVertical * 4,
+                            ),
                           ),
-                        ))),
-                    Center(
+                          Container(
+                              height: SizeConfig.blockSizeVertical * 8,
+                              width: SizeConfig.blockSizeHorizontal * 40,
+                              decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                image: AssetImage(
+                                    "assets/images/BasketOfCoins.png"),
+                                fit: BoxFit.scaleDown,
+                              )),
+                              child: Center(
+                                child: Text(
+                                  "$coins",
+                                  style: TextStyle(
+                                    fontSize: SizeConfig.blockSizeVertical * 6,
+                                  ),
+                                ),
+                              )),
+                          Text(
+                            "coins!",
+                            style: TextStyle(
+                              fontSize: SizeConfig.blockSizeVertical * 4,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [

@@ -195,33 +195,6 @@ class _OptionsState extends State<Options> {
                                 }),
                           ],
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Play background nature sounds?',
-                              style: TextStyle(
-                                fontSize: notifier.isPhone
-                                    ? SizeConfig.blockSizeHorizontal * 5
-                                    : orientation == Orientation.portrait
-                                        ? SizeConfig.blockSizeHorizontal * 5
-                                        : SizeConfig.blockSizeVertical * 3,
-                              ),
-                            ),
-                            Switch(
-                                activeColor: AppColors.green,
-                                inactiveThumbColor: AppColors.backgroundColor,
-                                value: settingsProvider.withBGSound,
-                                onChanged: (value) {
-                                  setState(() {
-                                    debugPrint("switch value: $value");
-                                    settingsProvider.setWithBGSound(value);
-                                    debugPrint(
-                                        "switch sp: ${settingsProvider.withBGSound}");
-                                  });
-                                }),
-                          ],
-                        ),
                         Padding(
                           padding: orientation == Orientation.portrait
                               ? EdgeInsets.symmetric(

@@ -6,19 +6,19 @@ import 'package:flutter/material.dart';
 class GameSounds {
   final AudioPlayer _audioPlayer = AudioPlayer();
 
-  void playErrorSound() {
+  void playErrorSound() async {
     List errorSounds = [
       "failure1.mp3",
-      "hhh.mov",
-      "aww.mov",
+      "inhale.mp3",
+      "aww.mp3",
       "drum.mp3",
     ];
     bool isPlaying = _audioPlayer.state == PlayerState.playing;
-    int randomIndex = Random().nextInt(3);
-    _audioPlayer.setSource(AssetSource(errorSounds[randomIndex]));
+    int randomIndex = Random().nextInt(errorSounds.length);
+    await _audioPlayer.setSource(AssetSource(errorSounds[randomIndex]));
     try {
       if (!isPlaying) {
-        _audioPlayer.play(AssetSource(errorSounds[randomIndex]));
+        await _audioPlayer.play(AssetSource(errorSounds[randomIndex]));
       }
     } catch (e) {
       debugPrint("Error playing error sound: $e");
@@ -33,13 +33,29 @@ class GameSounds {
     }
   }
 
-  void playSuccessSound() {
+  void playSound() {
     bool isPlaying = _audioPlayer.state == PlayerState.playing;
-    _audioPlayer.setSource(AssetSource("success.mov"));
     try {
       if (!isPlaying) {
-        _audioPlayer.play(AssetSource("success.mov"));
+        _audioPlayer.play(AssetSource("whoosh.mp3"));
         bool result = _audioPlayer.state == PlayerState.playing;
+        if (result) {
+          isPlaying = true;
+        }
+      }
+    } catch (e) {
+      debugPrint("Error playing start sound: $e");
+    }
+  }
+
+  void playSuccessSound() {
+    final AudioPlayer playSuccess = AudioPlayer();
+    bool isPlaying = playSuccess.state == PlayerState.playing;
+
+    try {
+      if (!isPlaying) {
+        playSuccess.play(AssetSource('success.mp3'));
+        bool result = playSuccess.state == PlayerState.playing;
         if (result) {
           isPlaying = true;
         }
@@ -51,7 +67,7 @@ class GameSounds {
 
   void playWinningSound() {
     bool isPlaying = _audioPlayer.state == PlayerState.playing;
-    _audioPlayer.setSource(AssetSource("fanfare.mp3"));
+
     try {
       if (!isPlaying) {
         _audioPlayer.play(AssetSource("fanfare.mp3"));
@@ -67,7 +83,7 @@ class GameSounds {
 
   void playWedgieSound() {
     bool isPlaying = _audioPlayer.state == PlayerState.playing;
-    _audioPlayer.setSource(AssetSource("fail.mp3"));
+
     try {
       if (!isPlaying) {
         _audioPlayer.play(AssetSource("fail.mp3"));
@@ -83,10 +99,10 @@ class GameSounds {
 
   void playFireworksSound() {
     bool isPlaying = _audioPlayer.state == PlayerState.playing;
-    _audioPlayer.setSource(AssetSource("fireworks.mp3"));
+
     try {
       if (!isPlaying) {
-        _audioPlayer.play(AssetSource("fireworks.mp3"));
+        _audioPlayer.play(AssetSource('fireworks.mp3'));
         bool result = _audioPlayer.state == PlayerState.playing;
         if (result) {
           isPlaying = true;

@@ -26,38 +26,38 @@ showHelpDialog(context) {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Guess the 7 letter word without hanging all your Undees! There are 7 Undees in the basket at the start of each game. ",
+                      "Guess the 7 letter word!",
                       style: TextStyle(
                           letterSpacing: 1.25,
                           fontFamily: 'Roboto',
                           color: AppColors.darkBlue,
                           fontSize: orientation == Orientation.portrait
-                              ? SizeConfig.blockSizeVertical * 1.75
+                              ? SizeConfig.blockSizeVertical * 1.5
                               : SizeConfig.blockSizeVertical * 3),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Text(
-                        "Each underscore ( _ ) represents a letter in the word. Choose a letter from the keyboard. If the letter(s) is in the word, it will replace the underscore on the game board. If it is not in the word, 1 pair of Undees will move to the clothesline for all to see! Solve the puzzle before you run out.",
+                        "Choose a letter from the keyboard. If the letter is in the hidden word, it will be revealed on the game board. If it is not in the word, 1 pair of 'Undees' will move from the basket to the clothesline! Solve the puzzle before you run out.",
                         style: TextStyle(
                             letterSpacing: 1.25,
                             fontFamily: 'Roboto',
                             color: AppColors.darkBlue,
                             fontSize: orientation == Orientation.portrait
-                                ? SizeConfig.blockSizeVertical * 1.75
+                                ? SizeConfig.blockSizeVertical * 1.5
                                 : SizeConfig.blockSizeVertical * 3),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Text(
-                        "Purchase various styles of Undees and new Word Packs with coins won during play.",
+                        "There are 7 pairs of 'Undees' in the basket at the start of the game.",
                         style: TextStyle(
                             letterSpacing: 1.25,
                             fontFamily: 'Roboto',
                             color: AppColors.darkBlue,
                             fontSize: orientation == Orientation.portrait
-                                ? SizeConfig.blockSizeVertical * 1.75
+                                ? SizeConfig.blockSizeVertical * 1.5
                                 : SizeConfig.blockSizeVertical * 3),
                       ),
                     ),
@@ -70,30 +70,43 @@ showHelpDialog(context) {
                             fontFamily: 'Roboto',
                             color: AppColors.darkBlue,
                             fontSize: orientation == Orientation.portrait
-                                ? SizeConfig.blockSizeVertical * 1.75
+                                ? SizeConfig.blockSizeVertical * 1.5
                                 : SizeConfig.blockSizeVertical * 3),
                       ),
                     ),
                     Text(
-                      "Regardless of winning, 10 bonus coins are awarded for every 25 games you finish.",
+                      "10 bonus coins are awarded for every 25 games you finish.",
                       style: TextStyle(
                           letterSpacing: 1.25,
                           fontFamily: 'Roboto',
                           color: AppColors.darkBlue,
                           fontSize: orientation == Orientation.portrait
-                              ? SizeConfig.blockSizeVertical * 1.75
+                              ? SizeConfig.blockSizeVertical * 1.5
                               : SizeConfig.blockSizeVertical * 3),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Text(
-                        "Each Word Pack contains 50 words. Once used, they will need to be refreshed for 100 coins or you can buy a new Word Pack for 500 coins.",
+                        "Use your coins to change the style of Undees or get new Word Packs.",
                         style: TextStyle(
                             letterSpacing: 1.25,
                             fontFamily: 'Roboto',
                             color: AppColors.darkBlue,
                             fontSize: orientation == Orientation.portrait
-                                ? SizeConfig.blockSizeVertical * 1.75
+                                ? SizeConfig.blockSizeVertical * 1.5
+                                : SizeConfig.blockSizeVertical * 3),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Text(
+                        "Everyone starts with 'Pink Undees' and 50 words in Work Pack 1! Add more colours or styles to your basket for 100 coins each. Get new Words for 500 coins or use the same words again for 100 coins.",
+                        style: TextStyle(
+                            letterSpacing: 1.25,
+                            fontFamily: 'Roboto',
+                            color: AppColors.darkBlue,
+                            fontSize: orientation == Orientation.portrait
+                                ? SizeConfig.blockSizeVertical * 1.5
                                 : SizeConfig.blockSizeVertical * 3),
                       ),
                     ),
