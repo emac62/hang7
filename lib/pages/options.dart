@@ -43,7 +43,7 @@ class _OptionsState extends State<Options> {
   late SharedPreferences sharedPrefs;
 
   BannerAdContainer bannerAdContainer = const BannerAdContainer();
-  late InterstitialAd _interstitialAd;
+  InterstitialAd? _interstitialAd;
   bool _isInterstitialAdReady = false;
 
   @override
@@ -58,17 +58,36 @@ class _OptionsState extends State<Options> {
         withWordAnimation = setProv.withWordAnimation;
       });
     });
+    //
+  }
+
+  void loadInterstitialAd() {
     InterstitialAd.load(
         adUnitId: useTestAds
             ? AdHelper.testInterstitialAdUnitId
             : AdHelper.interstitialAdUnitId,
         request: const AdRequest(),
         adLoadCallback: InterstitialAdLoadCallback(onAdLoaded: (ad) {
-          _interstitialAd = ad;
-          _isInterstitialAdReady = true;
+          setState(() {
+            _interstitialAd = ad;
+            _isInterstitialAdReady = true;
+            debugPrint("adReady: $_isInterstitialAdReady");
+          });
         }, onAdFailedToLoad: (LoadAdError error) {
           debugPrint("Failed to Load Interstitial Ad ${error.message}");
-        })); //
+        }));
+  }
+
+  @override
+  void didChangeDependencies() {
+    loadInterstitialAd();
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    _interstitialAd?.dispose();
+    super.dispose();
   }
 
   final Uri _url = Uri.parse('https://dailyquote.ca');
@@ -529,7 +548,7 @@ class _OptionsState extends State<Options> {
                                           sp.removeAds))
                                       ? null
                                       : _isInterstitialAdReady
-                                          ? _interstitialAd.show()
+                                          ? _interstitialAd?.show()
                                           : null;
 
                                   Navigator.pushReplacement(context,

@@ -35,10 +35,10 @@ showOutOfWords(BuildContext context) {
 
 newGame(BuildContext context) {
   keysMap.updateAll((key, value) => value = KeyState.unselected);
-
+  var settings = Provider.of<SettingsProvider>(context, listen: false);
   Provider.of<Controller>(context, listen: false).resetGame();
   var gameSounds = GameSounds();
-  gameSounds.playSound();
+  settings.withSound ? gameSounds.playSound() : null;
   Navigator.pushReplacement(context, FadeRoute(page: const GameBoard()));
 }
 

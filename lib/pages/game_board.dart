@@ -41,7 +41,7 @@ class GameBoard extends StatefulWidget {
 
 class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
   BannerAdContainer bannerAdContainer = const BannerAdContainer();
-  late InterstitialAd _interstitialAd;
+  InterstitialAd? _interstitialAd;
   bool _isInterstitialAdReady = false;
 
   late String currentWord = "";
@@ -189,15 +189,19 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
     tabletLine = Image.asset('assets/images/tabletLine.png');
     _controllerCenter =
         ConfettiController(duration: const Duration(seconds: 1));
+  }
 
+  void loadInterstitialAd() {
     InterstitialAd.load(
         adUnitId: useTestAds
             ? AdHelper.testInterstitialAdUnitId
             : AdHelper.interstitialAdUnitId,
         request: const AdRequest(),
         adLoadCallback: InterstitialAdLoadCallback(onAdLoaded: (ad) {
-          _interstitialAd = ad;
-          _isInterstitialAdReady = true;
+          setState(() {
+            _interstitialAd = ad;
+            _isInterstitialAdReady = true;
+          });
         }, onAdFailedToLoad: (LoadAdError error) {
           debugPrint("Failed to Load Interstitial Ad ${error.message}");
         })); //
@@ -205,6 +209,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
 
   @override
   void didChangeDependencies() {
+    loadInterstitialAd();
     super.didChangeDependencies();
     var controller = Provider.of<Controller>(context, listen: false);
     if (controller.isPhone) {
@@ -284,6 +289,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
   @override
   void dispose() {
     _controllerCenter.dispose();
+    _interstitialAd?.dispose();
     gameSounds.disposeGameSound();
 
     super.dispose();
@@ -411,7 +417,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                                 onPressed: () {
                                                   toggleMenu();
                                                   if (_isInterstitialAdReady) {
-                                                    _interstitialAd.show();
+                                                    _interstitialAd?.show();
                                                   }
                                                   Navigator.pushReplacement(
                                                       context,

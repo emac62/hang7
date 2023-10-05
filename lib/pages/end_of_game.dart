@@ -38,7 +38,7 @@ class _EndOfGameState extends State<EndOfGame> {
   int? coins;
 
   BannerAdContainer bannerAdContainer = const BannerAdContainer();
-  late InterstitialAd _interstitialAd;
+  InterstitialAd? _interstitialAd;
   bool _isInterstitialAdReady = false;
 
   void loadCoins() {
@@ -74,6 +74,7 @@ class _EndOfGameState extends State<EndOfGame> {
     loadCoins();
     winner = Provider.of<Controller>(context, listen: false).gameWon;
     getGamesPlayed();
+    loadInterstitialAd();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await rateMyApp.init();
 
@@ -117,23 +118,29 @@ class _EndOfGameState extends State<EndOfGame> {
       }
     });
 
+    //
+  }
+
+  void loadInterstitialAd() {
     InterstitialAd.load(
         adUnitId: useTestAds
             ? AdHelper.testInterstitialAdUnitId
             : AdHelper.interstitialAdUnitId,
         request: const AdRequest(),
         adLoadCallback: InterstitialAdLoadCallback(onAdLoaded: (ad) {
-          _interstitialAd = ad;
-          _isInterstitialAdReady = true;
+          setState(() {
+            _interstitialAd = ad;
+            _isInterstitialAdReady = true;
+          });
         }, onAdFailedToLoad: (LoadAdError error) {
           debugPrint("Failed to Load Interstitial Ad ${error.message}");
-        })); //
+        }));
   }
 
   @override
   void dispose() {
     super.dispose();
-    _interstitialAd.dispose();
+    _interstitialAd?.dispose();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   }
 
@@ -314,13 +321,15 @@ class _EndOfGameState extends State<EndOfGame> {
                                   backgroundColor: AppColors.green,
                                 ),
                                 onPressed: () {
-                                  if (gamesPlayed % 8 == 0) {
+                                  debugPrint(
+                                      "adReady: $_isInterstitialAdReady, games: $gamesPlayed");
+                                  if (gamesPlayed % 4 == 0) {
                                     SystemChrome.setEnabledSystemUIMode(
                                       SystemUiMode.immersive,
                                     );
 
                                     if (_isInterstitialAdReady) {
-                                      _interstitialAd.show();
+                                      _interstitialAd!.show();
                                     }
                                   }
 
