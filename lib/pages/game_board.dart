@@ -313,12 +313,12 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                   begin: Alignment.center,
                   end: Alignment.bottomCenter,
                   colors: [AppColors.backgroundColor, AppColors.lightGray])),
-          child: Scaffold(
-            backgroundColor: Colors.transparent,
-            body: SafeArea(
-              child: Center(
+          child: SafeArea(
+            child: Scaffold(
+              backgroundColor: Colors.transparent,
+              body: Center(
                 child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    // mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
                         decoration: BoxDecoration(
@@ -327,7 +327,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                         height: context.select((Controller c) => c.isPhone)
                             ? 60
                             : orientation == Orientation.portrait
-                                ? SizeConfig.blockSizeVertical * 12
+                                ? SizeConfig.blockSizeVertical * 10
                                 : SizeConfig.blockSizeVertical * 9,
                         child: Stack(
                           children: [
@@ -800,7 +800,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                 ? SizeConfig.blockSizeVertical * 16
                                 : SizeConfig.screenHeight < 740
                                     ? SizeConfig.blockSizeVertical * 10
-                                    : SizeConfig.blockSizeVertical * 16,
+                                    : SizeConfig.blockSizeVertical * 14,
                         child: Align(
                           alignment: Alignment.center,
                           child: WordGrid(
@@ -992,8 +992,8 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                       ),
                     ]),
               ),
+              bottomNavigationBar: removeAds ? null : bannerAdContainer,
             ),
-            bottomNavigationBar: removeAds ? null : bannerAdContainer,
           ),
         );
       }),

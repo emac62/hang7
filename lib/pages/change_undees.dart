@@ -176,135 +176,71 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [AppColors.backgroundColor, AppColors.lightGray])),
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            backgroundColor: AppColors.lightGray,
-            toolbarHeight: orientation == Orientation.portrait
-                ? SizeConfig.blockSizeVertical * 6
-                : SizeConfig.blockSizeVertical * 8,
-            flexibleSpace: Container(
-                decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                  AppColors.lightGray,
-                  AppColors.backgroundColor,
-                ]))),
-            title: Text(
-              "Change My Undees",
-              style: TextStyle(
-                  color: AppColors.darkBlue,
-                  fontSize: orientation == Orientation.portrait
-                      ? SizeConfig.blockSizeVertical * 3.5
-                      : SizeConfig.blockSizeVertical * 6),
+        child: SafeArea(
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              backgroundColor: AppColors.lightGray,
+              toolbarHeight: orientation == Orientation.portrait
+                  ? SizeConfig.blockSizeVertical * 6
+                  : SizeConfig.blockSizeVertical * 5,
+              flexibleSpace: Container(
+                  decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                    AppColors.lightGray,
+                    AppColors.backgroundColor,
+                  ]))),
+              title: Text(
+                "Change My Undees",
+                style: TextStyle(
+                    color: AppColors.darkBlue,
+                    fontSize: orientation == Orientation.portrait
+                        ? SizeConfig.blockSizeVertical * 3.5
+                        : SizeConfig.blockSizeVertical * 4),
+              ),
             ),
-          ),
-          body: Consumer<Controller>(
-            builder: (_, notifier, __) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Padding(
-                      padding:
-                          EdgeInsets.all(SizeConfig.blockSizeHorizontal * 1),
-                      child: Text(
-                        "My Undees",
-                        style: TextStyle(
-                          fontSize: SizeConfig.blockSizeVertical * 4,
+            body: Consumer<Controller>(
+              builder: (_, notifier, __) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Padding(
+                        padding:
+                            EdgeInsets.all(SizeConfig.blockSizeHorizontal * 1),
+                        child: Text(
+                          "My Undees",
+                          style: TextStyle(
+                            fontSize: SizeConfig.blockSizeVertical * 4,
+                          ),
                         ),
                       ),
-                    ),
-                    Text(
-                      "Current Undees are highlighted.",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: SizeConfig.blockSizeVertical * 2,
-                      ),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                          border:
-                              Border.all(color: Colors.transparent, width: 2)),
-                      height: orientation == Orientation.portrait
-                          ? SizeConfig.blockSizeVertical * 12
-                          : SizeConfig.blockSizeVertical * 12,
-                      alignment: Alignment.center,
-                      child: ScrollablePositionedList.builder(
-                          itemCount: myUndees.length,
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          itemScrollController: myUndeesPostitionedController,
-                          itemPositionsListener: myUndeesPositionsListener,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 2),
-                              child: Card(
-                                color: AppColors.backgroundColor,
-                                elevation: 8,
-                                margin: const EdgeInsets.all(8.0),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(6),
-                                  side: undeesStr == undColour[index]
-                                      ? const BorderSide(
-                                          color: AppColors.darkBlue, width: 4)
-                                      : const BorderSide(
-                                          color: Colors.transparent, width: 2),
-                                ),
-                                child: Center(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            settingsProvider.setGameUndees(
-                                                undColour[index]);
-
-                                            undeesStr =
-                                                settingsProvider.gameUndees;
-                                          });
-                                        },
-                                        child: myUndees[index]),
-                                  ),
-                                ),
-                              ),
-                            );
-                          }),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Text(
-                        "Available Styles and Colours",
+                      Text(
+                        "Current Undees are highlighted.",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: SizeConfig.blockSizeVertical * 4,
+                          fontSize: SizeConfig.blockSizeVertical * 2,
                         ),
                       ),
-                    ),
-                    Text(
-                      "Purchase for 100 coins each.",
-                      style: TextStyle(
-                        fontSize: SizeConfig.blockSizeVertical * 2,
-                      ),
-                    ),
-                    Container(
-                      height: SizeConfig.blockSizeVertical * 15,
-                      alignment: Alignment.center,
-                      child: Scrollbar(
-                        controller: undeesScrollController,
-                        thumbVisibility: true,
-                        thickness: 3,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ListView.builder(
+                      Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                color: Colors.transparent, width: 2)),
+                        height: orientation == Orientation.portrait
+                            ? SizeConfig.blockSizeVertical * 12
+                            : SizeConfig.blockSizeVertical * 10,
+                        alignment: Alignment.center,
+                        child: ScrollablePositionedList.builder(
+                            itemCount: myUndees.length,
+                            shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
-                            controller: undeesScrollController,
-                            itemCount: availableUndeeImages.length,
+                            itemScrollController: myUndeesPostitionedController,
+                            itemPositionsListener: myUndeesPositionsListener,
                             itemBuilder: (context, index) {
                               return Padding(
                                 padding:
@@ -312,292 +248,373 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                                 child: Card(
                                   color: AppColors.backgroundColor,
                                   elevation: 8,
-                                  child: GestureDetector(
-                                      onTap: () {
-                                        showDialog(
-                                            context: context,
-                                            builder: (context) {
-                                              return AlertDialog(
-                                                title: Text(
-                                                  "Buy these for 100 coins?",
-                                                  style: TextStyle(
-                                                    fontSize: notifier.isPhone
-                                                        ? SizeConfig
-                                                                .blockSizeHorizontal *
-                                                            4
-                                                        : orientation ==
-                                                                Orientation
-                                                                    .portrait
-                                                            ? SizeConfig
-                                                                    .blockSizeHorizontal *
-                                                                3
-                                                            : SizeConfig
-                                                                    .blockSizeVertical *
-                                                                3,
-                                                  ),
-                                                ),
-                                                content: coins >= 100
-                                                    ? availableUndeeImages[
-                                                        index]
-                                                    : Text(
-                                                        "You don't have enough coins! Keep playing to win more.",
-                                                        style: TextStyle(
-                                                          fontSize: notifier
-                                                                  .isPhone
-                                                              ? SizeConfig
-                                                                      .blockSizeHorizontal *
-                                                                  4
-                                                              : orientation ==
-                                                                      Orientation
-                                                                          .portrait
-                                                                  ? SizeConfig
-                                                                          .blockSizeHorizontal *
-                                                                      3
-                                                                  : SizeConfig
-                                                                          .blockSizeVertical *
-                                                                      3,
-                                                        ),
-                                                      ),
-                                                actions: [
-                                                  ElevatedButton(
-                                                      onPressed: coins >= 100
-                                                          ? () {
-                                                              coins =
-                                                                  coins - 100;
-                                                              settingsProvider
-                                                                  .setCoins(
-                                                                      coins);
-                                                              selectUndees(
-                                                                  index);
+                                  margin: const EdgeInsets.all(8.0),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(6),
+                                    side: undeesStr == undColour[index]
+                                        ? const BorderSide(
+                                            color: AppColors.darkBlue, width: 4)
+                                        : const BorderSide(
+                                            color: Colors.transparent,
+                                            width: 2),
+                                  ),
+                                  child: Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              settingsProvider.setGameUndees(
+                                                  undColour[index]);
 
-                                                              Navigator
-                                                                  .pushReplacement(
-                                                                context,
-                                                                PageRouteBuilder(
-                                                                  pageBuilder: (c,
-                                                                          a1,
-                                                                          a2) =>
-                                                                      const ChangeUndees(),
-                                                                  transitionsBuilder: (c,
-                                                                          anim,
-                                                                          a2,
-                                                                          child) =>
-                                                                      FadeTransition(
-                                                                          opacity:
-                                                                              anim,
-                                                                          child:
-                                                                              child),
-                                                                  transitionDuration:
-                                                                      const Duration(
-                                                                          milliseconds:
-                                                                              500),
-                                                                ),
-                                                              );
-                                                            }
-                                                          : () {
-                                                              // Go Back
-                                                              Navigator.pop(
-                                                                  context);
-                                                            },
-                                                      child: coins >= 100
-                                                          ? Text(
-                                                              "Yes",
-                                                              style: TextStyle(
-                                                                fontSize: notifier
-                                                                        .isPhone
-                                                                    ? SizeConfig
-                                                                            .blockSizeHorizontal *
-                                                                        4
-                                                                    : orientation ==
-                                                                            Orientation
-                                                                                .portrait
-                                                                        ? SizeConfig.blockSizeHorizontal *
-                                                                            3
-                                                                        : SizeConfig.blockSizeVertical *
-                                                                            3,
-                                                              ),
-                                                            )
-                                                          : Text(
-                                                              "OK",
-                                                              style: TextStyle(
-                                                                fontSize: notifier
-                                                                        .isPhone
-                                                                    ? SizeConfig
-                                                                            .blockSizeHorizontal *
-                                                                        4
-                                                                    : orientation ==
-                                                                            Orientation
-                                                                                .portrait
-                                                                        ? SizeConfig.blockSizeHorizontal *
-                                                                            3
-                                                                        : SizeConfig.blockSizeVertical *
-                                                                            3,
-                                                              ),
-                                                            )),
-                                                  OutlinedButton(
-                                                      onPressed: () {
-                                                        // Go Back
-                                                        Navigator.pop(context);
-                                                      },
-                                                      child: Text(
-                                                        "Cancel",
-                                                        style: TextStyle(
-                                                          fontSize: notifier
-                                                                  .isPhone
-                                                              ? SizeConfig
-                                                                      .blockSizeHorizontal *
-                                                                  4
-                                                              : orientation ==
-                                                                      Orientation
-                                                                          .portrait
-                                                                  ? SizeConfig
-                                                                          .blockSizeHorizontal *
-                                                                      3
-                                                                  : SizeConfig
-                                                                          .blockSizeVertical *
-                                                                      3,
-                                                        ),
-                                                      ))
-                                                ],
-                                              );
+                                              undeesStr =
+                                                  settingsProvider.gameUndees;
                                             });
-                                      },
-                                      child: Container(
-                                        //
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(6),
-                                          border: Border.all(
-                                              color: AppColors.darkBlue,
-                                              width: 1),
-                                          //
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: availableUndeeImages[index],
-                                        ),
-                                      )),
+                                          },
+                                          child: myUndees[index]),
+                                    ),
+                                  ),
                                 ),
                               );
-                            },
+                            }),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Text(
+                          "Available Styles and Colours",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: SizeConfig.blockSizeVertical * 4,
                           ),
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                          vertical: SizeConfig.blockSizeVertical * 3),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "You have",
-                            style: TextStyle(
-                              fontSize: SizeConfig.blockSizeVertical * 4,
-                            ),
-                          ),
-                          Container(
-                              height: SizeConfig.blockSizeVertical * 8,
-                              width: SizeConfig.blockSizeHorizontal * 40,
-                              decoration: const BoxDecoration(
-                                  image: DecorationImage(
-                                image: AssetImage(
-                                    "assets/images/BasketOfCoins.png"),
-                                fit: BoxFit.scaleDown,
-                              )),
-                              child: Center(
-                                child: Text(
-                                  "$coins",
-                                  style: TextStyle(
-                                    fontSize: SizeConfig.blockSizeVertical * 6,
+                      Text(
+                        "Purchase for 100 coins each.",
+                        style: TextStyle(
+                          fontSize: SizeConfig.blockSizeVertical * 2,
+                        ),
+                      ),
+                      Container(
+                        height: orientation == Orientation.portrait
+                            ? SizeConfig.blockSizeVertical * 12
+                            : SizeConfig.blockSizeVertical * 10,
+                        alignment: Alignment.center,
+                        child: Scrollbar(
+                          controller: undeesScrollController,
+                          thumbVisibility: true,
+                          thickness: 3,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              controller: undeesScrollController,
+                              itemCount: availableUndeeImages.length,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 2),
+                                  child: Card(
+                                    color: AppColors.backgroundColor,
+                                    elevation: 8,
+                                    child: GestureDetector(
+                                        onTap: () {
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return AlertDialog(
+                                                  title: Text(
+                                                    "Buy these for 100 coins?",
+                                                    style: TextStyle(
+                                                      fontSize: notifier.isPhone
+                                                          ? SizeConfig
+                                                                  .blockSizeHorizontal *
+                                                              4
+                                                          : orientation ==
+                                                                  Orientation
+                                                                      .portrait
+                                                              ? SizeConfig
+                                                                      .blockSizeHorizontal *
+                                                                  3
+                                                              : SizeConfig
+                                                                      .blockSizeVertical *
+                                                                  3,
+                                                    ),
+                                                  ),
+                                                  content: coins >= 100
+                                                      ? availableUndeeImages[
+                                                          index]
+                                                      : Text(
+                                                          "You don't have enough coins! Keep playing to win more.",
+                                                          style: TextStyle(
+                                                            fontSize: notifier
+                                                                    .isPhone
+                                                                ? SizeConfig
+                                                                        .blockSizeHorizontal *
+                                                                    4
+                                                                : orientation ==
+                                                                        Orientation
+                                                                            .portrait
+                                                                    ? SizeConfig
+                                                                            .blockSizeHorizontal *
+                                                                        3
+                                                                    : SizeConfig
+                                                                            .blockSizeVertical *
+                                                                        3,
+                                                          ),
+                                                        ),
+                                                  actions: [
+                                                    ElevatedButton(
+                                                        onPressed: coins >= 100
+                                                            ? () {
+                                                                coins =
+                                                                    coins - 100;
+                                                                settingsProvider
+                                                                    .setCoins(
+                                                                        coins);
+                                                                selectUndees(
+                                                                    index);
+
+                                                                Navigator
+                                                                    .pushReplacement(
+                                                                  context,
+                                                                  PageRouteBuilder(
+                                                                    pageBuilder: (c,
+                                                                            a1,
+                                                                            a2) =>
+                                                                        const ChangeUndees(),
+                                                                    transitionsBuilder: (c,
+                                                                            anim,
+                                                                            a2,
+                                                                            child) =>
+                                                                        FadeTransition(
+                                                                            opacity:
+                                                                                anim,
+                                                                            child:
+                                                                                child),
+                                                                    transitionDuration:
+                                                                        const Duration(
+                                                                            milliseconds:
+                                                                                500),
+                                                                  ),
+                                                                );
+                                                              }
+                                                            : () {
+                                                                // Go Back
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                        child: coins >= 100
+                                                            ? Text(
+                                                                "Yes",
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontSize: notifier
+                                                                          .isPhone
+                                                                      ? SizeConfig
+                                                                              .blockSizeHorizontal *
+                                                                          4
+                                                                      : orientation ==
+                                                                              Orientation
+                                                                                  .portrait
+                                                                          ? SizeConfig.blockSizeHorizontal *
+                                                                              3
+                                                                          : SizeConfig.blockSizeVertical *
+                                                                              3,
+                                                                ),
+                                                              )
+                                                            : Text(
+                                                                "OK",
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontSize: notifier
+                                                                          .isPhone
+                                                                      ? SizeConfig
+                                                                              .blockSizeHorizontal *
+                                                                          4
+                                                                      : orientation ==
+                                                                              Orientation
+                                                                                  .portrait
+                                                                          ? SizeConfig.blockSizeHorizontal *
+                                                                              3
+                                                                          : SizeConfig.blockSizeVertical *
+                                                                              3,
+                                                                ),
+                                                              )),
+                                                    OutlinedButton(
+                                                        onPressed: () {
+                                                          // Go Back
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: Text(
+                                                          "Cancel",
+                                                          style: TextStyle(
+                                                            fontSize: notifier
+                                                                    .isPhone
+                                                                ? SizeConfig
+                                                                        .blockSizeHorizontal *
+                                                                    4
+                                                                : orientation ==
+                                                                        Orientation
+                                                                            .portrait
+                                                                    ? SizeConfig
+                                                                            .blockSizeHorizontal *
+                                                                        3
+                                                                    : SizeConfig
+                                                                            .blockSizeVertical *
+                                                                        3,
+                                                          ),
+                                                        ))
+                                                  ],
+                                                );
+                                              });
+                                        },
+                                        child: Container(
+                                          //
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(6),
+                                            border: Border.all(
+                                                color: AppColors.darkBlue,
+                                                width: 1),
+                                            //
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: availableUndeeImages[index],
+                                          ),
+                                        )),
                                   ),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: SizeConfig.blockSizeVertical * 3),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "You have",
+                              style: TextStyle(
+                                fontSize: orientation == Orientation.portrait
+                                    ? SizeConfig.blockSizeVertical * 4
+                                    : SizeConfig.blockSizeVertical * 3,
+                              ),
+                            ),
+                            Container(
+                                height: orientation == Orientation.portrait
+                                    ? SizeConfig.blockSizeVertical * 8
+                                    : SizeConfig.blockSizeVertical * 6,
+                                width: SizeConfig.blockSizeHorizontal * 40,
+                                decoration: const BoxDecoration(
+                                    image: DecorationImage(
+                                  image: AssetImage(
+                                      "assets/images/BasketOfCoins.png"),
+                                  fit: BoxFit.scaleDown,
+                                )),
+                                child: Center(
+                                  child: Text(
+                                    "$coins",
+                                    style: TextStyle(
+                                      fontSize: orientation ==
+                                              Orientation.portrait
+                                          ? SizeConfig.blockSizeVertical * 4
+                                          : SizeConfig.blockSizeVertical * 3,
+                                    ),
+                                  ),
+                                )),
+                            Text(
+                              "coins!",
+                              style: TextStyle(
+                                fontSize: orientation == Orientation.portrait
+                                    ? SizeConfig.blockSizeVertical * 4
+                                    : SizeConfig.blockSizeVertical * 3,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                elevation: 10,
+                                padding: EdgeInsets.all(
+                                  notifier.isPhone
+                                      ? SizeConfig.blockSizeHorizontal * 2
+                                      : orientation == Orientation.portrait
+                                          ? SizeConfig.blockSizeHorizontal * 2
+                                          : SizeConfig.blockSizeVertical * 1,
                                 ),
-                              )),
-                          Text(
-                            "coins!",
-                            style: TextStyle(
-                              fontSize: SizeConfig.blockSizeVertical * 4,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              elevation: 10,
-                              padding: EdgeInsets.all(
-                                notifier.isPhone
-                                    ? SizeConfig.blockSizeHorizontal * 2
-                                    : orientation == Orientation.portrait
-                                        ? SizeConfig.blockSizeHorizontal * 2
-                                        : SizeConfig.blockSizeVertical * 1,
+                              ),
+                              onPressed: () {
+                                Navigator.pushReplacement(context,
+                                    SlideLeftRoute(page: const Options()));
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal:
+                                        SizeConfig.blockSizeHorizontal * 3),
+                                child: Text(
+                                  "Back to Options",
+                                  style: TextStyle(
+                                      fontSize:
+                                          SizeConfig.blockSizeVertical * 2.5),
+                                ),
                               ),
                             ),
-                            onPressed: () {
-                              Navigator.pushReplacement(context,
-                                  SlideLeftRoute(page: const Options()));
-                            },
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal:
-                                      SizeConfig.blockSizeHorizontal * 3),
-                              child: Text(
-                                "Back to Options",
-                                style: TextStyle(
-                                    fontSize:
-                                        SizeConfig.blockSizeVertical * 2.5),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                elevation: 10,
+                                padding: EdgeInsets.all(
+                                  notifier.isPhone
+                                      ? SizeConfig.blockSizeHorizontal * 2
+                                      : orientation == Orientation.portrait
+                                          ? SizeConfig.blockSizeHorizontal * 2
+                                          : SizeConfig.blockSizeVertical * 1,
+                                ),
+                              ),
+                              onPressed: () {
+                                checkRemainingWords(context);
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal:
+                                        SizeConfig.blockSizeHorizontal * 3),
+                                child: Text(
+                                  "Play",
+                                  style: TextStyle(
+                                      fontSize:
+                                          SizeConfig.blockSizeVertical * 2.5),
+                                ),
                               ),
                             ),
-                          ),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              elevation: 10,
-                              padding: EdgeInsets.all(
-                                notifier.isPhone
-                                    ? SizeConfig.blockSizeHorizontal * 2
-                                    : orientation == Orientation.portrait
-                                        ? SizeConfig.blockSizeHorizontal * 2
-                                        : SizeConfig.blockSizeVertical * 1,
-                              ),
-                            ),
-                            onPressed: () {
-                              checkRemainingWords(context);
-                            },
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal:
-                                      SizeConfig.blockSizeHorizontal * 3),
-                              child: Text(
-                                "Play",
-                                style: TextStyle(
-                                    fontSize:
-                                        SizeConfig.blockSizeVertical * 2.5),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              );
-            },
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                );
+              },
+            ),
+            bottomNavigationBar:
+                (context.select((SettingsProvider sp) => sp.removeAds))
+                    ? Container(
+                        color: AppColors.lightGray,
+                        height: 10,
+                      )
+                    : bannerAdContainer,
           ),
-          bottomNavigationBar:
-              (context.select((SettingsProvider sp) => sp.removeAds))
-                  ? Container(
-                      color: AppColors.lightGray,
-                      height: 10,
-                    )
-                  : bannerAdContainer,
         ),
       );
     });

@@ -156,205 +156,216 @@ class _EndOfGameState extends State<EndOfGame> {
                     begin: Alignment.center,
                     end: Alignment.bottomCenter,
                     colors: [Color(0xFF66B8FE), AppColors.lightGray])),
-            child: Scaffold(
-              backgroundColor: Colors.transparent,
-              body: SafeArea(
-                minimum: const EdgeInsets.only(top: 10),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: SizeConfig.safeBlockHorizontal * 10),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: SizeConfig.blockSizeHorizontal * 2),
-                        child: Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.transparent),
-                          ),
-                          child: winner
-                              ? Column(
-                                  children: [
-                                    Text(
-                                      '${widget.coinsEarned} coins won',
-                                      style: TextStyle(
-                                        fontSize: orientation ==
-                                                Orientation.portrait
-                                            ? SizeConfig.blockSizeHorizontal * 6
-                                            : SizeConfig.blockSizeVertical * 4,
+            child: SafeArea(
+              child: Scaffold(
+                backgroundColor: Colors.transparent,
+                body: SafeArea(
+                  minimum: const EdgeInsets.only(top: 10),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: SizeConfig.safeBlockHorizontal * 10),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(
+                              top: SizeConfig.blockSizeHorizontal * 2),
+                          child: Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.transparent),
+                            ),
+                            child: winner
+                                ? Column(
+                                    children: [
+                                      Text(
+                                        '${widget.coinsEarned} coins won',
+                                        style: TextStyle(
+                                          fontSize: orientation ==
+                                                  Orientation.portrait
+                                              ? SizeConfig.blockSizeHorizontal *
+                                                  6
+                                              : SizeConfig.blockSizeVertical *
+                                                  4,
+                                        ),
                                       ),
-                                    ),
-                                    settings.withWordAnimation
-                                        ? SizedBox(
-                                            height:
-                                                SizeConfig.blockSizeVertical *
-                                                    10,
-                                            child:
-                                                CoinSpinAnimation(coins: coins))
-                                        : Container(
-                                            height:
-                                                SizeConfig.blockSizeVertical *
-                                                    10,
-                                            width: double.infinity,
-                                            decoration: const BoxDecoration(
-                                                image: DecorationImage(
-                                              image: AssetImage(
-                                                  "assets/images/BasketOfCoins.png"),
-                                              fit: BoxFit.scaleDown,
-                                            )),
-                                            child: Center(
-                                              child: Text(
-                                                "$coins",
-                                                style: TextStyle(
-                                                  fontSize: SizeConfig
-                                                          .blockSizeVertical *
-                                                      6,
+                                      settings.withWordAnimation
+                                          ? SizedBox(
+                                              height:
+                                                  SizeConfig.blockSizeVertical *
+                                                      10,
+                                              child: CoinSpinAnimation(
+                                                  coins: coins))
+                                          : Container(
+                                              height:
+                                                  SizeConfig.blockSizeVertical *
+                                                      10,
+                                              width: double.infinity,
+                                              decoration: const BoxDecoration(
+                                                  image: DecorationImage(
+                                                image: AssetImage(
+                                                    "assets/images/BasketOfCoins.png"),
+                                                fit: BoxFit.scaleDown,
+                                              )),
+                                              child: Center(
+                                                child: Text(
+                                                  "$coins",
+                                                  style: TextStyle(
+                                                    fontSize: SizeConfig
+                                                            .blockSizeVertical *
+                                                        6,
+                                                  ),
                                                 ),
-                                              ),
-                                            )),
-                                    Text(
-                                      "for a total of $coins in the basket!",
-                                      style: TextStyle(
-                                        fontSize: orientation ==
-                                                Orientation.portrait
-                                            ? SizeConfig.blockSizeHorizontal * 6
-                                            : SizeConfig.blockSizeVertical * 4,
+                                              )),
+                                      Text(
+                                        "for a total of $coins in the basket!",
+                                        style: TextStyle(
+                                          fontSize: orientation ==
+                                                  Orientation.portrait
+                                              ? SizeConfig.blockSizeHorizontal *
+                                                  6
+                                              : SizeConfig.blockSizeVertical *
+                                                  4,
+                                        ),
+                                      )
+                                    ],
+                                  )
+                                : Column(
+                                    children: [
+                                      Text(
+                                        "YOU GOT A ",
+                                        style: TextStyle(
+                                          fontSize: orientation ==
+                                                  Orientation.portrait
+                                              ? SizeConfig.blockSizeHorizontal *
+                                                  6
+                                              : SizeConfig.blockSizeVertical *
+                                                  4,
+                                        ),
                                       ),
-                                    )
-                                  ],
-                                )
-                              : Column(
-                                  children: [
-                                    Text(
-                                      "YOU GOT A ",
-                                      style: TextStyle(
-                                        fontSize: orientation ==
-                                                Orientation.portrait
-                                            ? SizeConfig.blockSizeHorizontal * 6
-                                            : SizeConfig.blockSizeVertical * 4,
+                                      Image.asset(
+                                        "assets/images/wedgie.png",
+                                        height:
+                                            SizeConfig.blockSizeVertical * 10,
+                                        fit: BoxFit.fitHeight,
                                       ),
-                                    ),
-                                    Image.asset(
-                                      "assets/images/wedgie.png",
-                                      height: SizeConfig.blockSizeVertical * 10,
-                                      fit: BoxFit.fitHeight,
-                                    ),
-                                    Text(
-                                      "Better luck next game!",
-                                      style: TextStyle(
-                                        fontSize: orientation ==
-                                                Orientation.portrait
-                                            ? SizeConfig.blockSizeHorizontal * 6
-                                            : SizeConfig.blockSizeVertical * 4,
+                                      Text(
+                                        "Better luck next game!",
+                                        style: TextStyle(
+                                          fontSize: orientation ==
+                                                  Orientation.portrait
+                                              ? SizeConfig.blockSizeHorizontal *
+                                                  6
+                                              : SizeConfig.blockSizeVertical *
+                                                  4,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: SizeConfig.blockSizeVertical * 2),
-                        child: Text(
-                          'STATISTICS',
-                          style: TextStyle(
-                            fontSize: orientation == Orientation.portrait
-                                ? SizeConfig.blockSizeHorizontal * 6
-                                : SizeConfig.blockSizeVertical * 4,
+                                    ],
+                                  ),
                           ),
                         ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Colors.transparent, width: 2)),
-                          child: StatsRow(
-                            orientation: orientation,
+                        Padding(
+                          padding: EdgeInsets.only(
+                              top: SizeConfig.blockSizeVertical * 2),
+                          child: Text(
+                            'STATISTICS',
+                            style: TextStyle(
+                              fontSize: orientation == Orientation.portrait
+                                  ? SizeConfig.blockSizeHorizontal * 6
+                                  : SizeConfig.blockSizeVertical * 4,
+                            ),
                           ),
                         ),
-                      ),
-                      Expanded(
-                          flex: orientation == Orientation.portrait ? 4 : 4,
+                        Expanded(
+                          flex: 2,
                           child: Container(
                             decoration: BoxDecoration(
                                 border: Border.all(
                                     color: Colors.transparent, width: 2)),
-                            child: StatsBarChart(
+                            child: StatsRow(
                               orientation: orientation,
                             ),
-                          )),
-                      Expanded(
-                          child: Padding(
-                        padding: const EdgeInsets.only(bottom: 10.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.green,
-                                ),
-                                onPressed: () {
-                                  keysMap.updateAll((key, value) =>
-                                      value = KeyState.unselected);
-
-                                  notifier.resetGame();
-                                  Navigator.pushReplacement(context,
-                                      SlideRoute(page: const Options()));
-                                },
-                                child: Text(
-                                  'Options',
-                                  style: TextStyle(
-                                    fontSize:
-                                        orientation == Orientation.portrait
-                                            ? SizeConfig.blockSizeHorizontal * 5
-                                            : SizeConfig.blockSizeVertical * 4,
-                                  ),
-                                )),
-                            ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.green,
-                                ),
-                                onPressed: () {
-                                  debugPrint(
-                                      "adReady: $_isInterstitialAdReady, games: $gamesPlayed");
-                                  if (gamesPlayed % 4 == 0) {
-                                    SystemChrome.setEnabledSystemUIMode(
-                                      SystemUiMode.immersive,
-                                    );
-
-                                    if (_isInterstitialAdReady) {
-                                      _interstitialAd!.show();
-                                    }
-                                  }
-
-                                  checkRemainingWords(context);
-                                },
-                                child: Text(
-                                  'New Game',
-                                  style: TextStyle(
-                                    fontSize:
-                                        orientation == Orientation.portrait
-                                            ? SizeConfig.blockSizeHorizontal * 5
-                                            : SizeConfig.blockSizeVertical * 4,
-                                  ),
-                                )),
-                          ],
+                          ),
                         ),
-                      ))
-                    ],
+                        Expanded(
+                            flex: orientation == Orientation.portrait ? 4 : 4,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: Colors.transparent, width: 2)),
+                              child: StatsBarChart(
+                                orientation: orientation,
+                              ),
+                            )),
+                        Expanded(
+                            child: Padding(
+                          padding: const EdgeInsets.only(bottom: 10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppColors.green,
+                                  ),
+                                  onPressed: () {
+                                    keysMap.updateAll((key, value) =>
+                                        value = KeyState.unselected);
+
+                                    notifier.resetGame();
+                                    Navigator.pushReplacement(context,
+                                        SlideRoute(page: const Options()));
+                                  },
+                                  child: Text(
+                                    'Options',
+                                    style: TextStyle(
+                                      fontSize: orientation ==
+                                              Orientation.portrait
+                                          ? SizeConfig.blockSizeHorizontal * 5
+                                          : SizeConfig.blockSizeVertical * 4,
+                                    ),
+                                  )),
+                              ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppColors.green,
+                                  ),
+                                  onPressed: () {
+                                    debugPrint(
+                                        "adReady: $_isInterstitialAdReady, games: $gamesPlayed");
+                                    if (gamesPlayed % 4 == 0) {
+                                      SystemChrome.setEnabledSystemUIMode(
+                                        SystemUiMode.immersive,
+                                      );
+
+                                      if (_isInterstitialAdReady) {
+                                        _interstitialAd!.show();
+                                      }
+                                    }
+
+                                    checkRemainingWords(context);
+                                  },
+                                  child: Text(
+                                    'New Game',
+                                    style: TextStyle(
+                                      fontSize: orientation ==
+                                              Orientation.portrait
+                                          ? SizeConfig.blockSizeHorizontal * 5
+                                          : SizeConfig.blockSizeVertical * 4,
+                                    ),
+                                  )),
+                            ],
+                          ),
+                        ))
+                      ],
+                    ),
                   ),
                 ),
+                bottomNavigationBar:
+                    (context.select((SettingsProvider sp) => sp.removeAds))
+                        ? null
+                        : bannerAdContainer,
               ),
-              bottomNavigationBar:
-                  (context.select((SettingsProvider sp) => sp.removeAds))
-                      ? null
-                      : bannerAdContainer,
             ),
           );
         }),
