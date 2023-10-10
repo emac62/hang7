@@ -94,7 +94,7 @@ class _LetterTileState extends State<LetterTile>
                                 : widget.orientation == Orientation.portrait
                                     ? SizeConfig.blockSizeVertical * 9
                                     : SizeConfig.screenHeight < 740
-                                        ? SizeConfig.blockSizeVertical * 5
+                                        ? SizeConfig.blockSizeVertical * 6
                                         : SizeConfig.blockSizeVertical * 7),
                       ),
                     ),

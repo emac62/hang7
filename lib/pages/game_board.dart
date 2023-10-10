@@ -297,9 +297,10 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     var settingsProvider = Provider.of<SettingsProvider>(context);
     removeAds = settingsProvider.removeAds;
-
+    debugPrint("screenHeight: ${SizeConfig.screenHeight}");
     hWRatio = SizeConfig.screenHeight / SizeConfig.screenWidth;
 
     return OrientationBuilder(
@@ -511,12 +512,13 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                                           2
                                                       : SizeConfig
                                                               .blockSizeVertical *
-                                                          2,
+                                                          2.5,
                                             ),
                                           ),
                                         ),
                                         Padding(
                                           padding: EdgeInsets.only(
+                                              top: 5,
                                               right: orientation ==
                                                       Orientation.portrait
                                                   ? SizeConfig
@@ -543,7 +545,7 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                                                           2.5
                                                       : SizeConfig
                                                               .blockSizeVertical *
-                                                          2,
+                                                          3,
                                             ),
                                           ),
                                         ),
@@ -789,25 +791,14 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
                               ]),
                             ),
                           ]),
-                      Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                color: Colors.transparent, width: 2)),
-                        width: SizeConfig.blockSizeHorizontal * 100,
-                        height: context.select((Controller c) => c.isPhone)
-                            ? SizeConfig.blockSizeVertical * 15
-                            : orientation == Orientation.portrait
-                                ? SizeConfig.blockSizeVertical * 16
-                                : SizeConfig.screenHeight < 740
-                                    ? SizeConfig.blockSizeVertical * 10
-                                    : SizeConfig.blockSizeVertical * 14,
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: WordGrid(
-                            orientation: orientation,
-                          ),
-                        ),
-                      ),
+                      orientation == Orientation.portrait
+                          ? WordCtn(
+                              orientation: orientation,
+                            )
+                          : Expanded(
+                              child: WordCtn(
+                              orientation: orientation,
+                            )),
                       SizedBox(
                         height: context.select((Controller c) => c.isPhone)
                             ? SizeConfig.blockSizeVertical * 1.5
@@ -1014,5 +1005,35 @@ class GameBoardState extends State<GameBoard> with TickerProviderStateMixin {
           icon,
           color: AppColors.lightGray,
         ));
+  }
+}
+
+class WordCtn extends StatelessWidget {
+  const WordCtn({
+    Key? key,
+    required this.orientation,
+  }) : super(key: key);
+  final Orientation orientation;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+          border: Border.all(color: Colors.transparent, width: 2)),
+      width: SizeConfig.blockSizeHorizontal * 100,
+      height: context.select((Controller c) => c.isPhone)
+          ? SizeConfig.blockSizeVertical * 15
+          : orientation == Orientation.portrait
+              ? SizeConfig.blockSizeVertical * 16
+              : SizeConfig.screenHeight < 740
+                  ? SizeConfig.blockSizeVertical * 10
+                  : SizeConfig.blockSizeVertical * 14,
+      child: Align(
+        alignment: Alignment.center,
+        child: WordGrid(
+          orientation: orientation,
+        ),
+      ),
+    );
   }
 }

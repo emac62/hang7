@@ -14,6 +14,8 @@ class SizeConfig {
   static late double physicalWidth;
   static late double physicalHeight;
 
+  static late bool isSmallHeight;
+
   void init(BuildContext context) {
     _mediaQueryData = MediaQuery.of(context);
     screenWidth = _mediaQueryData.size.width;
@@ -37,5 +39,7 @@ class SizeConfig {
 
     physicalWidth = screenWidth * _mediaQueryData.devicePixelRatio;
     physicalHeight = screenHeight * _mediaQueryData.devicePixelRatio;
+
+    isSmallHeight = blockSizeVertical < 7.5;
   }
 }

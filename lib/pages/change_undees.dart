@@ -13,6 +13,8 @@ import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../widgets/basket_count.dart';
+
 class ChangeUndees extends StatefulWidget {
   const ChangeUndees({
     Key? key,
@@ -167,6 +169,7 @@ class _ChangeUndeesState extends State<ChangeUndees> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     var settingsProvider = Provider.of<SettingsProvider>(context);
 
     return OrientationBuilder(builder: (context, orientation) {
@@ -176,36 +179,40 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [AppColors.backgroundColor, AppColors.lightGray])),
-        child: SafeArea(
-          child: Scaffold(
-            backgroundColor: Colors.transparent,
-            appBar: AppBar(
-              automaticallyImplyLeading: false,
-              backgroundColor: AppColors.lightGray,
-              toolbarHeight: orientation == Orientation.portrait
-                  ? SizeConfig.blockSizeVertical * 6
-                  : SizeConfig.blockSizeVertical * 5,
-              flexibleSpace: Container(
-                  decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                    AppColors.lightGray,
-                    AppColors.backgroundColor,
-                  ]))),
-              title: Text(
-                "Change My Undees",
-                style: TextStyle(
-                    color: AppColors.darkBlue,
-                    fontSize: orientation == Orientation.portrait
-                        ? SizeConfig.blockSizeVertical * 3.5
-                        : SizeConfig.blockSizeVertical * 4),
-              ),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            backgroundColor: AppColors.lightGray,
+            toolbarHeight: orientation == Orientation.portrait
+                ? SizeConfig.blockSizeVertical * 6
+                : SizeConfig.isSmallHeight
+                    ? SizeConfig.blockSizeVertical * 6
+                    : SizeConfig.blockSizeVertical * 4,
+            flexibleSpace: Container(
+                decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                  AppColors.lightGray,
+                  AppColors.backgroundColor,
+                ]))),
+            title: Text(
+              "Change My Undees",
+              style: TextStyle(
+                  color: AppColors.darkBlue,
+                  fontSize: orientation == Orientation.portrait
+                      ? SizeConfig.blockSizeVertical * 3.5
+                      : SizeConfig.isSmallHeight
+                          ? SizeConfig.blockSizeVertical * 4.5
+                          : SizeConfig.blockSizeVertical * 3),
             ),
-            body: Consumer<Controller>(
-              builder: (_, notifier, __) {
-                return Padding(
+          ),
+          body: Consumer<Controller>(
+            builder: (_, notifier, __) {
+              return SafeArea(
+                child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -216,7 +223,13 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                         child: Text(
                           "My Undees",
                           style: TextStyle(
-                            fontSize: SizeConfig.blockSizeVertical * 4,
+                            fontSize: notifier.isPhone
+                                ? SizeConfig.blockSizeHorizontal * 6
+                                : orientation == Orientation.portrait
+                                    ? SizeConfig.blockSizeVertical * 3.5
+                                    : SizeConfig.isSmallHeight
+                                        ? SizeConfig.blockSizeVertical * 4.5
+                                        : SizeConfig.blockSizeVertical * 3,
                           ),
                         ),
                       ),
@@ -224,16 +237,28 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                         "Current Undees are highlighted.",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: SizeConfig.blockSizeVertical * 2,
+                          fontSize: notifier.isPhone
+                              ? SizeConfig.blockSizeHorizontal * 4
+                              : orientation == Orientation.portrait
+                                  ? SizeConfig.blockSizeVertical * 2.5
+                                  : SizeConfig.isSmallHeight
+                                      ? SizeConfig.blockSizeVertical * 3
+                                      : SizeConfig.blockSizeVertical * 2.5,
                         ),
                       ),
                       Container(
+                        margin: EdgeInsets.symmetric(
+                            horizontal: orientation == Orientation.portrait
+                                ? 0
+                                : SizeConfig.blockSizeHorizontal * 10),
                         decoration: BoxDecoration(
                             border: Border.all(
                                 color: Colors.transparent, width: 2)),
                         height: orientation == Orientation.portrait
                             ? SizeConfig.blockSizeVertical * 12
-                            : SizeConfig.blockSizeVertical * 10,
+                            : SizeConfig.isSmallHeight
+                                ? SizeConfig.blockSizeVertical * 14
+                                : SizeConfig.blockSizeVertical * 12,
                         alignment: Alignment.center,
                         child: ScrollablePositionedList.builder(
                             itemCount: myUndees.length,
@@ -279,25 +304,44 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                             }),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
+                        padding: EdgeInsets.only(
+                            top: !SizeConfig.isSmallHeight ? 25.0 : 8.0),
                         child: Text(
                           "Available Styles and Colours",
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: SizeConfig.blockSizeVertical * 4,
+                            fontSize: notifier.isPhone
+                                ? SizeConfig.blockSizeHorizontal * 6
+                                : orientation == Orientation.portrait
+                                    ? SizeConfig.blockSizeVertical * 2.5
+                                    : SizeConfig.isSmallHeight
+                                        ? SizeConfig.blockSizeVertical * 4
+                                        : SizeConfig.blockSizeVertical * 3,
                           ),
                         ),
                       ),
                       Text(
                         "Purchase for 100 coins each.",
                         style: TextStyle(
-                          fontSize: SizeConfig.blockSizeVertical * 2,
+                          fontSize: notifier.isPhone
+                              ? SizeConfig.blockSizeHorizontal * 4
+                              : orientation == Orientation.portrait
+                                  ? SizeConfig.blockSizeVertical * 2.5
+                                  : SizeConfig.isSmallHeight
+                                      ? SizeConfig.blockSizeVertical * 3
+                                      : SizeConfig.blockSizeVertical * 2.5,
                         ),
                       ),
                       Container(
+                        margin: EdgeInsets.symmetric(
+                            horizontal: orientation == Orientation.portrait
+                                ? 0
+                                : SizeConfig.blockSizeHorizontal * 15),
                         height: orientation == Orientation.portrait
                             ? SizeConfig.blockSizeVertical * 12
-                            : SizeConfig.blockSizeVertical * 10,
+                            : SizeConfig.isSmallHeight
+                                ? SizeConfig.blockSizeVertical * 14
+                                : SizeConfig.blockSizeVertical * 12,
                         alignment: Alignment.center,
                         child: Scrollbar(
                           controller: undeesScrollController,
@@ -491,53 +535,10 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: SizeConfig.blockSizeVertical * 3),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "You have",
-                              style: TextStyle(
-                                fontSize: orientation == Orientation.portrait
-                                    ? SizeConfig.blockSizeVertical * 4
-                                    : SizeConfig.blockSizeVertical * 3,
-                              ),
-                            ),
-                            Container(
-                                height: orientation == Orientation.portrait
-                                    ? SizeConfig.blockSizeVertical * 8
-                                    : SizeConfig.blockSizeVertical * 6,
-                                width: SizeConfig.blockSizeHorizontal * 40,
-                                decoration: const BoxDecoration(
-                                    image: DecorationImage(
-                                  image: AssetImage(
-                                      "assets/images/BasketOfCoins.png"),
-                                  fit: BoxFit.scaleDown,
-                                )),
-                                child: Center(
-                                  child: Text(
-                                    "$coins",
-                                    style: TextStyle(
-                                      fontSize: orientation ==
-                                              Orientation.portrait
-                                          ? SizeConfig.blockSizeVertical * 4
-                                          : SizeConfig.blockSizeVertical * 3,
-                                    ),
-                                  ),
-                                )),
-                            Text(
-                              "coins!",
-                              style: TextStyle(
-                                fontSize: orientation == Orientation.portrait
-                                    ? SizeConfig.blockSizeVertical * 4
-                                    : SizeConfig.blockSizeVertical * 3,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      BasketCount(
+                          coins: coins,
+                          orientation: orientation,
+                          notifier: notifier),
                       Expanded(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -566,8 +567,16 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                                 child: Text(
                                   "Back to Options",
                                   style: TextStyle(
-                                      fontSize:
-                                          SizeConfig.blockSizeVertical * 2.5),
+                                    fontSize: notifier.isPhone
+                                        ? SizeConfig.blockSizeHorizontal * 5
+                                        : orientation == Orientation.portrait
+                                            ? SizeConfig.blockSizeVertical * 2.5
+                                            : SizeConfig.isSmallHeight
+                                                ? SizeConfig.blockSizeVertical *
+                                                    4
+                                                : SizeConfig.blockSizeVertical *
+                                                    3,
+                                  ),
                                 ),
                               ),
                             ),
@@ -594,8 +603,16 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                                 child: Text(
                                   "Play",
                                   style: TextStyle(
-                                      fontSize:
-                                          SizeConfig.blockSizeVertical * 2.5),
+                                    fontSize: notifier.isPhone
+                                        ? SizeConfig.blockSizeHorizontal * 5
+                                        : orientation == Orientation.portrait
+                                            ? SizeConfig.blockSizeVertical * 2.5
+                                            : SizeConfig.isSmallHeight
+                                                ? SizeConfig.blockSizeVertical *
+                                                    4
+                                                : SizeConfig.blockSizeVertical *
+                                                    3,
+                                  ),
                                 ),
                               ),
                             ),
@@ -604,17 +621,17 @@ class _ChangeUndeesState extends State<ChangeUndees> {
                       )
                     ],
                   ),
-                );
-              },
-            ),
-            bottomNavigationBar:
-                (context.select((SettingsProvider sp) => sp.removeAds))
-                    ? Container(
-                        color: AppColors.lightGray,
-                        height: 10,
-                      )
-                    : bannerAdContainer,
+                ),
+              );
+            },
           ),
+          bottomNavigationBar:
+              (context.select((SettingsProvider sp) => sp.removeAds))
+                  ? Container(
+                      color: AppColors.lightGray,
+                      height: 10,
+                    )
+                  : bannerAdContainer,
         ),
       );
     });

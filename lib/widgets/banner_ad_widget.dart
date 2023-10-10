@@ -12,7 +12,7 @@ class BannerAdContainer extends StatefulWidget {
 }
 
 class BannerAdContainerState extends State<BannerAdContainer> {
-  late BannerAd _bottomBannerAd;
+  BannerAd? _bottomBannerAd;
 
   bool _isBottomBannerAdLoaded = false;
 
@@ -33,7 +33,7 @@ class BannerAdContainerState extends State<BannerAdContainer> {
         },
       ),
     );
-    _bottomBannerAd.load();
+    _bottomBannerAd?.load();
   }
 
   @override
@@ -45,7 +45,7 @@ class BannerAdContainerState extends State<BannerAdContainer> {
   @override
   void dispose() {
     super.dispose();
-    _bottomBannerAd.dispose();
+    _bottomBannerAd!.dispose();
   }
 
   @override
@@ -60,9 +60,9 @@ class BannerAdContainerState extends State<BannerAdContainer> {
         Container(
           child: _isBottomBannerAdLoaded
               ? SizedBox(
-                  height: _bottomBannerAd.size.height.toDouble(),
-                  width: _bottomBannerAd.size.width.toDouble(),
-                  child: AdWidget(ad: _bottomBannerAd),
+                  height: _bottomBannerAd!.size.height.toDouble(),
+                  width: _bottomBannerAd!.size.width.toDouble(),
+                  child: AdWidget(ad: _bottomBannerAd!),
                 )
               : const SizedBox(
                   height: 60,

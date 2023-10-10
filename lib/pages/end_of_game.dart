@@ -146,6 +146,7 @@ class _EndOfGameState extends State<EndOfGame> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Consumer2<Controller, SettingsProvider>(
         builder: (context, notifier, settings, __) {
       return OrientationBuilder(

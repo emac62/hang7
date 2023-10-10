@@ -81,7 +81,7 @@ class _WelcomePageState extends State<WelcomePage> {
               image: isPhone
                   ? const DecorationImage(
                       image: AssetImage('assets/images/phoneGrass.png'),
-                      fit: BoxFit.cover)
+                      fit: BoxFit.fill)
                   : orientation == Orientation.portrait
                       ? const DecorationImage(
                           image: AssetImage(
