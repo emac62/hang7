@@ -142,7 +142,7 @@ class _PaywallWidgetState extends State<PaywallWidget> {
                       } on PlatformException catch (e) {
                         debugPrint("Error in restoring purchase: $e");
                       }
-                      if (!mounted) return;
+                      if (!context.mounted) return;
                       Navigator.pop(context);
                     },
                     child: const Text("Restore Remove Ads Purchase"),

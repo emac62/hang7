@@ -17,7 +17,6 @@ import 'package:hang7/widgets/stats_bar_chart.dart';
 import 'package:hang7/widgets/stats_row.dart';
 import 'package:provider/provider.dart';
 import 'package:rate_my_app/rate_my_app.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../widgets/ad_helper.dart';
 import '../widgets/check_remaining_words.dart';
@@ -105,7 +104,7 @@ class _EndOfGameState extends State<EndOfGame> {
                   if (launchAppStore) {
                     rateMyApp.launchStore();
                   }
-                  if (!mounted) return;
+                  if (!context.mounted) return;
                   Navigator.of(context).pop();
                 },
                 child: const Text("OK"),

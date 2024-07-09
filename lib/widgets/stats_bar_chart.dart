@@ -39,7 +39,7 @@ class StatsBarChart extends StatelessWidget {
               }
 
               return SfCartesianChart(
-                series: <ChartSeries>[
+                series: <CartesianSeries>[
                   BarSeries<ChartModel, String>(
                       animationDelay: controller.gameWon ? 1750 : 0,
                       animationDuration: 1000,
@@ -51,9 +51,9 @@ class StatsBarChart extends StatelessWidget {
                       borderRadius: const BorderRadius.only(
                           topRight: Radius.circular(6),
                           bottomRight: Radius.circular(6)),
-                      onCreateRenderer:
-                          (ChartSeries<ChartModel, String> series) =>
-                              CustomBarColor(chartData),
+                      onCreateRenderer: (series) {
+                        return CustomBarColor();
+                      },
                       dataLabelSettings: DataLabelSettings(
                           labelAlignment: ChartDataLabelAlignment.top,
                           isVisible: true,
@@ -73,7 +73,7 @@ class StatsBarChart extends StatelessWidget {
                         color: AppColors.darkBlue,
                         fontFamily: "Boogaloo",
                         fontSize: SizeConfig.blockSizeVertical * 2)),
-                primaryYAxis: NumericAxis(isVisible: false),
+                primaryYAxis: const NumericAxis(isVisible: false),
                 title: ChartTitle(
                     text: "Remaining Undees",
                     textStyle: TextStyle(
@@ -107,15 +107,15 @@ class StatsBarChart extends StatelessWidget {
   }
 }
 
-class CustomBarColor extends BarSeriesRenderer {
-  CustomBarColor(List<ChartModel> chartData);
+class CustomBarColor extends BarSeriesRenderer<ChartModel, String> {
+  CustomBarColor();
   @override
-  BarSegment createSegment() {
+  BarSegment<ChartModel, String> createSegment() {
     return BarCustomPainter();
   }
 }
 
-class BarCustomPainter extends BarSegment {
+class BarCustomPainter extends BarSegment<ChartModel, String> {
   final colorList = [AppColors.greenGray, AppColors.green];
 
   @override

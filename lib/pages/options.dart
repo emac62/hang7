@@ -515,7 +515,7 @@ class _OptionsState extends State<Options> {
                     final pkg = package.storeProduct.title;
 
                     if (customerInfo.entitlements.all['no_ads']!.isActive) {
-                      if (!mounted) return;
+                      if (!context.mounted) return;
                       removeAds(context);
                     }
 
@@ -544,7 +544,7 @@ class _OptionsState extends State<Options> {
                   } catch (e) {
                     debugPrint("Failed to purchase product. $e");
                   }
-                  if (!mounted) return;
+                  if (!context.mounted) return;
                   Navigator.pop(context);
                 },
               ));
